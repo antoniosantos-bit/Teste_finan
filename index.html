@@ -3,104 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Finanças Color Pro</title>
+    <title>Guima Strategy</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; padding-bottom: 100px; }
-        .card-bank { transition: all 0.3s ease; border-left: 6px solid transparent; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fcfcfd; padding-bottom: 100px; }
+        .card-bank { transition: all 0.3s ease; }
         .tab-active { color: #4f46e5; border-bottom: 3px solid #4f46e5; }
-        .dot { height: 12px; width: 12px; border-radius: 50%; display: inline-block; }
+        .dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; }
+        /* Ajuste para inputs no iOS */
+        input, select { font-size: 16px !important; }
     </style>
 </head>
 <body>
 
-    <div id="login-screen" class="min-h-screen flex flex-col justify-center px-8 space-y-6">
-        <div class="text-center">
-            <h1 class="text-4xl font-black text-indigo-600 tracking-tighter">FINANÇAS<br>COLOR PRO</h1>
+    <div id="login-screen" class="min-h-screen flex flex-col justify-center px-8 space-y-8 bg-white">
+        <div class="text-center space-y-2">
+            <div class="w-20 h-20 bg-slate-900 rounded-[24px] flex items-center justify-center mx-auto shadow-2xl mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+            </div>
+            <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase">Guima Strategy</h1>
+            <p class="text-slate-400 text-sm font-medium">Gestão Inteligente de Patrimônio</p>
         </div>
-        <input id="user-name" type="text" placeholder="Nome do Perfil" class="w-full p-5 rounded-2xl ring-1 ring-gray-200 outline-none focus:ring-2 focus:ring-indigo-600 bg-white shadow-sm">
-        <button onclick="fazerLogin()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-bold shadow-xl">Acessar</button>
+        <div class="space-y-4">
+            <input id="user-name" type="text" placeholder="Nome de Acesso" class="w-full p-5 rounded-2xl bg-slate-50 border-0 ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-slate-900 transition-all">
+            <button onclick="fazerLogin()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-bold shadow-xl active:scale-95 transition-transform">Acessar Painel</button>
+        </div>
     </div>
 
     <div id="main-app" class="hidden animate-in fade-in duration-500">
-        <nav class="flex justify-around bg-white border-b sticky top-0 z-50">
+        <nav class="flex justify-around bg-white border-b sticky top-0 z-50 shadow-sm">
             <button onclick="mudarAba('resumo')" id="btn-resumo" class="p-4 font-bold text-[10px] uppercase tracking-widest tab-active">Início</button>
-            <button onclick="mudarAba('bancos')" id="btn-bancos" class="p-4 font-bold text-[10px] uppercase tracking-widest text-gray-400">Bancos</button>
-            <button onclick="mudarAba('metas')" id="btn-metas" class="p-4 font-bold text-[10px] uppercase tracking-widest text-gray-400">Cofres</button>
+            <button onclick="mudarAba('bancos')" id="btn-bancos" class="p-4 font-bold text-[10px] uppercase tracking-widest text-gray-400">Contas</button>
+            <button onclick="mudarAba('metas')" id="btn-metas" class="p-4 font-bold text-[10px] uppercase tracking-widest text-gray-400">Objetivos</button>
         </nav>
 
         <section id="aba-resumo" class="p-6 space-y-6">
-            <div class="bg-slate-900 p-8 rounded-[32px] text-white shadow-2xl">
-                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Saldo Total Combinado</p>
+            <div class="bg-slate-900 p-8 rounded-[32px] text-white shadow-2xl relative overflow-hidden">
+                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Patrimônio Consolidado</p>
                 <h2 id="saldo-geral" class="text-4xl font-black mt-1">R$ 0,00</h2>
+                <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-white/5 rounded-full"></div>
             </div>
 
             <div class="space-y-4">
-                <h3 class="font-extrabold text-gray-800 flex justify-between items-center">
-                    Atividade Recente
-                    <button onclick="exportarDados()" class="text-[9px] bg-gray-200 px-2 py-1 rounded">Backup</button>
-                </h3>
-                <div id="movimentacoes" class="space-y-3"></div>
+                <div class="flex justify-between items-center">
+                    <h3 class="font-extrabold text-gray-800">Fluxo de Caixa</h3>
+                    <button onclick="exportarDados()" class="text-[9px] bg-gray-100 text-gray-500 font-bold px-3 py-1 rounded-full uppercase tracking-tighter">Backup Dados</button>
+                </div>
+                <div id="movimentacoes" class="space-y-3">
+                    </div>
             </div>
         </section>
 
         <section id="aba-bancos" class="hidden p-6 space-y-4">
-            <h3 class="font-extrabold text-gray-800">Minhas Contas</h3>
+            <h3 class="font-extrabold text-gray-800">Instituições Financeiras</h3>
             <div id="lista-bancos" class="space-y-3"></div>
             
-            <div class="bg-white p-5 rounded-[24px] shadow-sm border border-gray-100 space-y-3">
-                <p class="text-[10px] font-bold text-gray-400 uppercase">Novo Banco / Cartão</p>
-                <input id="nome-banco" type="text" placeholder="Nome (Ex: Nubank)" class="w-full p-3 bg-gray-50 rounded-xl outline-none">
-                <input id="saldo-inicial" type="number" placeholder="Saldo Atual (R$)" class="w-full p-3 bg-gray-50 rounded-xl outline-none">
-                
-                <p class="text-[10px] font-bold text-gray-400 uppercase mt-2">Escolha a Cor</p>
-                <div class="flex justify-between gap-2">
-                    <input type="color" id="cor-banco" value="#4f46e5" class="w-full h-10 rounded-lg cursor-pointer bg-transparent border-0">
+            <div class="bg-white p-6 rounded-[28px] shadow-sm border border-gray-100 space-y-3 mt-6">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Adicionar Nova Conta</p>
+                <input id="nome-banco" type="text" placeholder="Nome do Banco" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-0 ring-1 ring-gray-100 focus:ring-indigo-500">
+                <input id="saldo-inicial" type="number" inputmode="decimal" placeholder="Saldo Atual" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-0 ring-1 ring-gray-100">
+                <div class="flex items-center gap-3 p-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase">Identidade Visual:</span>
+                    <input type="color" id="cor-banco" value="#0f172a" class="w-12 h-8 rounded cursor-pointer bg-transparent border-0">
                 </div>
-
-                <button onclick="adicionarBanco()" class="w-full bg-gray-900 text-white p-4 rounded-xl font-bold text-sm">Criar Conta</button>
+                <button onclick="adicionarBanco()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold text-sm shadow-lg">Vincular Conta</button>
             </div>
         </section>
 
         <section id="aba-metas" class="hidden p-6 space-y-4">
-            <h3 class="font-extrabold text-gray-800">Cofres</h3>
+            <h3 class="font-extrabold text-gray-800">Cofres Estratégicos</h3>
             <div id="lista-metas" class="space-y-4"></div>
-            <div class="bg-white p-5 rounded-[24px] shadow-sm border border-gray-100 space-y-3">
-                <input id="nome-meta" type="text" placeholder="Nome do Objetivo" class="w-full p-3 bg-gray-50 rounded-xl outline-none">
-                <input id="valor-meta" type="number" placeholder="Valor Alvo (R$)" class="w-full p-3 bg-gray-50 rounded-xl outline-none">
-                <button onclick="adicionarMeta()" class="w-full bg-indigo-600 text-white p-4 rounded-xl font-bold">Criar Cofre</button>
+            <div class="bg-white p-6 rounded-[28px] shadow-sm border border-gray-100 space-y-3 mt-6">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Nova Meta de Acúmulo</p>
+                <input id="nome-meta" type="text" placeholder="Ex: Aposentadoria, Reserva" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-0 ring-1 ring-gray-100">
+                <input id="valor-meta" type="number" inputmode="decimal" placeholder="Valor Alvo (R$)" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-0 ring-1 ring-gray-100">
+                <button onclick="adicionarMeta()" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold text-sm">Iniciar Planejamento</button>
             </div>
         </section>
 
-        <button onclick="abrirModal()" class="fixed bottom-8 right-6 w-16 h-16 bg-indigo-600 text-white rounded-full text-3xl shadow-2xl flex items-center justify-center z-50 active:scale-90 transition-all">
-            +
+        <button onclick="abrirModal()" class="fixed bottom-8 right-6 w-16 h-16 bg-indigo-600 text-white rounded-2xl text-3xl shadow-2xl shadow-indigo-200 flex items-center justify-center z-50 active:scale-90 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
         </button>
     </div>
 
     <div id="modal" class="fixed inset-0 bg-black/60 hidden z-[60] flex items-end">
-        <div class="bg-white w-full rounded-t-[40px] p-8 space-y-4 animate-in slide-in-from-bottom duration-300">
-            <h3 class="text-xl font-black text-center">Registrar Valor</h3>
-            <input id="m-desc" type="text" placeholder="Descrição" class="w-full p-4 bg-gray-50 rounded-2xl outline-none">
-            <input id="m-valor" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold text-indigo-600">
+        <div class="bg-white w-full rounded-t-[40px] p-8 pb-12 space-y-4 animate-in slide-in-from-bottom duration-300">
+            <div class="w-12 h-1 bg-gray-200 rounded-full mx-auto mb-2"></div>
+            <h3 class="text-xl font-extrabold text-center text-slate-800">Nova Operação</h3>
+            
+            <input id="m-desc" type="text" placeholder="O que foi feito?" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-0 ring-1 ring-gray-100">
+            <input id="m-valor" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold text-indigo-600 text-xl">
             
             <div class="grid grid-cols-2 gap-3">
-                <select id="m-tipo" class="p-4 bg-gray-50 rounded-2xl outline-none font-bold text-gray-600">
-                    <option value="despesa">➖ Gasto</option>
-                    <option value="receita">➕ Ganhei</option>
+                <select id="m-tipo" class="p-4 bg-gray-50 rounded-2xl outline-none font-bold text-gray-500 border-0 ring-1 ring-gray-100">
+                    <option value="despesa">➖ Débito</option>
+                    <option value="receita">➕ Crédito</option>
                 </select>
-                <select id="m-banco" class="p-4 bg-gray-50 rounded-2xl outline-none font-bold text-gray-600">
-                </select>
+                <select id="m-banco" class="p-4 bg-gray-50 rounded-2xl outline-none font-bold text-gray-500 border-0 ring-1 ring-gray-100">
+                    </select>
             </div>
             
-            <button onclick="confirmarLancamento()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-bold shadow-lg">Confirmar</button>
-            <button onclick="fecharModal()" class="w-full text-gray-400 font-bold">Voltar</button>
+            <button onclick="confirmarLancamento()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-bold shadow-xl">Processar Operação</button>
+            <button onclick="fecharModal()" class="w-full text-gray-400 font-bold p-2 text-sm uppercase tracking-widest">Cancelar</button>
         </div>
     </div>
 
     <script>
-        let u = "";
-        let db = JSON.parse(localStorage.getItem('financas_color_v8')) || {};
+        let currentUser = "";
+        let db = JSON.parse(localStorage.getItem('guima_strategy_v1')) || {};
 
         function mudarAba(aba) {
             ['resumo', 'bancos', 'metas'].forEach(a => {
@@ -116,8 +131,8 @@
         function fazerLogin() {
             const name = document.getElementById('user-name').value.trim();
             if (!name) return;
-            u = name.toLowerCase();
-            if (!db[u]) db[u] = { bancos: [], historico: [], metas: [] };
+            currentUser = name.toLowerCase();
+            if (!db[currentUser]) db[currentUser] = { bancos: [], historico: [], metas: [] };
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('main-app').classList.remove('hidden');
             render();
@@ -128,7 +143,7 @@
             const saldo = parseFloat(document.getElementById('saldo-inicial').value);
             const cor = document.getElementById('cor-banco').value;
             if(!nome || isNaN(saldo)) return;
-            db[u].bancos.push({ nome, saldo, cor });
+            db[currentUser].bancos.push({ nome, saldo, cor });
             salvar();
             document.getElementById('nome-banco').value = ""; document.getElementById('saldo-inicial').value = "";
         }
@@ -137,15 +152,15 @@
             const nome = document.getElementById('nome-meta').value;
             const valor = parseFloat(document.getElementById('valor-meta').value);
             if(!nome || isNaN(valor)) return;
-            db[u].metas.push({ nome, total: valor, atual: 0 });
+            db[currentUser].metas.push({ nome, total: valor, atual: 0 });
             salvar();
             document.getElementById('nome-meta').value = ""; document.getElementById('valor-meta').value = "";
         }
 
         function abrirModal() {
-            if(db[u].bancos.length === 0) return alert("Cadastre um banco primeiro na aba Bancos!");
+            if(db[currentUser].bancos.length === 0) return alert("Vincule uma conta primeiro na aba Contas!");
             const select = document.getElementById('m-banco');
-            select.innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
+            select.innerHTML = db[currentUser].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
             document.getElementById('modal').classList.remove('hidden');
         }
 
@@ -156,62 +171,63 @@
             const valor = parseFloat(document.getElementById('m-valor').value);
             const tipo = document.getElementById('m-tipo').value;
             const bancoNome = document.getElementById('m-banco').value;
+            const u = db[currentUser];
 
             if(!desc || isNaN(valor)) return;
 
-            const banco = db[u].bancos.find(b => b.nome === bancoNome);
+            const banco = u.bancos.find(b => b.nome === bancoNome);
             if (tipo === 'receita') banco.saldo += valor;
             else banco.saldo -= valor;
 
-            db[u].historico.unshift({ desc, valor, tipo, banco: bancoNome, cor: banco.cor, data: new Date().toLocaleDateString('pt-BR') });
+            u.historico.unshift({ desc, valor, tipo, banco: bancoNome, cor: banco.cor, data: new Date().toLocaleDateString('pt-BR') });
             fecharModal();
             salvar();
         }
 
         function salvar() {
-            localStorage.setItem('financas_color_v8', JSON.stringify(db));
+            localStorage.setItem('guima_strategy_v1', JSON.stringify(db));
             render();
         }
 
         function render() {
-            const user = db[u];
-            
-            const totalGeral = user.bancos.reduce((acc, b) => acc + b.saldo, 0);
+            const u = db[currentUser];
+            const totalGeral = u.bancos.reduce((acc, b) => acc + b.saldo, 0);
             document.getElementById('saldo-geral').innerText = `R$ ${totalGeral.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
 
             const listaB = document.getElementById('lista-bancos');
-            listaB.innerHTML = user.bancos.map(b => `
-                <div class="bg-white p-5 rounded-2xl shadow-sm border-l-8 flex justify-between items-center" style="border-color: ${b.cor}">
+            listaB.innerHTML = u.bancos.map(b => `
+                <div class="bg-white p-5 rounded-2xl shadow-sm border-l-[6px] flex justify-between items-center" style="border-color: ${b.cor}">
                     <div>
-                        <p class="font-black text-gray-800 text-lg">${b.nome}</p>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase">Saldo em Conta</p>
+                        <p class="font-extrabold text-slate-800 text-lg">${b.nome}</p>
+                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest italic">Disponível</p>
                     </div>
-                    <span class="font-black text-lg ${b.saldo < 0 ? 'text-red-500' : 'text-gray-900'}">R$ ${b.saldo.toFixed(2)}</span>
+                    <span class="font-black text-lg ${b.saldo < 0 ? 'text-red-500' : 'text-slate-900'}">R$ ${b.saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
                 </div>
             `).join('');
 
             const listaH = document.getElementById('movimentacoes');
-            listaH.innerHTML = user.historico.slice(0, 15).map(h => `
-                <div class="bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center border border-gray-50">
+            listaH.innerHTML = u.historico.length === 0 ? '<div class="text-center py-10 text-gray-300 font-medium">Nenhum fluxo registrado.</div>' : 
+            u.historico.slice(0, 15).map(h => `
+                <div class="bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center border border-gray-50 active:bg-gray-50 transition-colors">
                     <div class="flex items-center gap-3">
                         <span class="dot" style="background-color: ${h.cor}"></span>
                         <div>
-                            <p class="text-sm font-bold text-gray-800">${h.desc}</p>
-                            <p class="text-[9px] text-gray-400 font-bold uppercase">${h.data} • ${h.banco}</p>
+                            <p class="text-sm font-bold text-slate-800 leading-none">${h.desc}</p>
+                            <p class="text-[9px] text-slate-400 font-bold uppercase mt-1 tracking-tighter">${h.data} • ${h.banco}</p>
                         </div>
                     </div>
-                    <span class="font-black ${h.tipo === 'receita' ? 'text-green-500' : 'text-gray-900'}">${h.tipo === 'receita' ? '+' : '-'} R$ ${h.valor.toFixed(2)}</span>
+                    <span class="font-black ${h.tipo === 'receita' ? 'text-green-500' : 'text-slate-900'}">${h.tipo === 'receita' ? '+' : '-'} R$ ${h.valor.toFixed(2)}</span>
                 </div>
             `).join('');
 
             const listaM = document.getElementById('lista-metas');
-            listaM.innerHTML = user.metas.map(m => {
+            listaM.innerHTML = u.metas.map(m => {
                 const perc = Math.min(100, (m.atual / m.total) * 100);
                 return `
-                    <div class="bg-white p-5 rounded-2xl shadow-sm space-y-2">
-                        <div class="flex justify-between font-bold text-xs uppercase tracking-tighter"><span>${m.nome}</span><span>${perc.toFixed(0)}%</span></div>
-                        <div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-indigo-600" style="width: ${perc}%"></div></div>
-                        <p class="text-[9px] text-gray-400 font-bold">R$ ${m.atual.toFixed(2)} / R$ ${m.total.toFixed(2)}</p>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm space-y-3">
+                        <div class="flex justify-between font-extrabold text-xs uppercase tracking-tighter text-slate-700"><span>${m.nome}</span><span>${perc.toFixed(0)}%</span></div>
+                        <div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-indigo-600 transition-all duration-1000" style="width: ${perc}%"></div></div>
+                        <p class="text-[9px] text-slate-400 font-bold tracking-widest">OBJETIVO: R$ ${m.total.toLocaleString('pt-BR')}</p>
                     </div>
                 `;
             }).join('');
@@ -221,8 +237,15 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
             const dlAnchorElem = document.createElement('a');
             dlAnchorElem.setAttribute("href", dataStr);
-            dlAnchorElem.setAttribute("download", "meu_backup_financas.json");
+            dlAnchorElem.setAttribute("download", "guima_strategy_backup.json");
             dlAnchorElem.click();
+        }
+
+        function fecharMes() {
+            if(confirm("Deseja arquivar os dados e iniciar um novo ciclo estratégico?")) {
+                db[currentUser].historico = [];
+                salvar();
+            }
         }
     </script>
 </body>
