@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Finanças Smart Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fcfcfd; }
+        .safe-area { padding-bottom: env(safe-area-inset-bottom); }
+        .modal-open { overflow: hidden; }
+        input[type="date"] { appearance: none; -webkit-appearance: none; }
+    </style>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+
+    <div id="login-screen" class="flex-1 flex flex-col justify-center px-8 space-y-8">
+        <div class="text-center space-y-2">
+            <div class="bg-indigo-600 w-20 h-20 rounded-[28px] flex items-center justify-center mx-auto shadow-2xl shadow-indigo-200">
+                <span class="text-4xl">📊</span>
+            </div>
+            <h1 class="text-3xl font-extrabold text-gray-900">Meu Controle</h1>
+            <p class="text-gray-500">Gestão financeira com clareza total.</p>
+        </div>
+        <div class="space-y-4">
+            <input id="user-name" type="text" placeholder="Nome do perfil" class="w-full p-5 rounded-2xl bg-white border-0 ring-1 ring-gray-200 focus:ring-2 focus:ring-indigo-600 outline-none shadow-sm">
+            <button onclick="fazerLogin()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-bold text-lg shadow-lg active:scale-95 transition-transform">Entrar</button>
+        </div>
+    </div>
+
+    <div id="main-app" class="hidden flex-1 flex flex-col">
+        <header class="p-6 flex justify-between items-center bg-white border-b border-gray-100 sticky top-0 z-40">
+            <div>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Perfil Ativo</p>
+                <h2 id="display-user" class="text-lg font-extrabold text-indigo-600 uppercase"></h2>
+            </div>
+            <button onclick="sair()" class="bg-gray-100 p-2 rounded-lg text-gray-400 text-xs font-bold uppercase">Sair</button>
+        </header>
+
+        <div class="p-6 space-y-4">
+            <div class="bg-slate-900 rounded-[32px] p-6 text-white shadow-2xl relative overflow-hidden">
+                <p class="text-slate-400 text-xs font-bold uppercase">Saldo Atual</p>
+                <h3 id="valor-poupado" class="text-4xl font-black mt-1">R$ 0,00</h3>
+                
+                <div class="mt-6 p-4 bg-white/5 rounded-2xl border border-white/10">
+                    <p id="analise-superfluo" class="text-[11px] leading-relaxed text-slate-300 italic">
+                        Lançando dados para analisar supérfluos...
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-[10px] font-bold text-gray-500 uppercase">
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between mb-2"><span>Essencial</span><span id="perc-essencial">0%</span></div>
+                    <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden"><div id="bar-essencial" class="h-full bg-blue-500 transition-all duration-700"></div></div>
+                </div>
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between mb-2"><span>Lazer</span><span id="perc-lazer">0%</span></div>
+                    <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden"><div id="bar-lazer" class="h-full bg-orange-400 transition-all duration-700"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-1 bg-white rounded-t-[40px] p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h4 class="font-extrabold text-gray-800">Linha do Tempo</h4>
+                <button onclick="fecharMes()" class="text-[10px] font-bold bg-indigo-50 text-indigo-600 px-3 py-2 rounded-full uppercase">Zerar Mês</button>
+            </div>
+            <div id="lista" class="space-y-6 pb-28"></div>
+        </div>
+
+        <div class="fixed bottom-8 left-0 right-0 px-8 safe-area">
+            <button onclick="abrirModal()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-extrabold text-lg shadow-2xl shadow-indigo-200 flex items-center justify-center gap-3 active:scale-95 transition-transform">
+                <span>➕</span> Novo Lançamento
+            </button>
+        </div>
+    </div>
+
+    <div id="modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-end">
+        <div class="bg-white w-full rounded-t-[40px] p-8 space-y-5 animate-in slide-in-from-bottom duration-300">
+            <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-4"></div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div class="col-span-2">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase ml-2">O que foi?</label>
+                    <input id="modal-desc" type="text" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase ml-2">Valor</label>
+                    <input id="modal-valor" type="number" inputmode="decimal" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold text-indigo-600">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase ml-2">Data</label>
+                    <input id="modal-data" type="date" class="w-full p-4 bg-gray-50 rounded-2xl outline-none text-sm font-bold">
+                </div>
+            </div>
+
+            <select id="modal-tipo" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold text-gray-600">
+                <option value="receita">➕ Entrada (Salário/Renda)</option>
+                <option value="Essencial">🏠 Gasto Essencial (Fixo)</option>
+                <option value="Lazer">🍿 Lazer / Estilo de Vida</option>
+                <option value="Outros">⚙️ Outros Gastos</option>
+            </select>
+
+            <div class="flex items-center justify-between p-4 bg-indigo-50 rounded-2xl">
+                <span class="text-sm font-bold text-indigo-900">É um gasto necessário?</span>
+                <input type="checkbox" id="modal-essencial" checked class="w-6 h-6 accent-indigo-600">
+            </div>
+
+            <div class="flex gap-4 pt-4">
+                <button onclick="fecharModal()" class="flex-1 p-4 text-gray-400 font-bold">Cancelar</button>
+                <button onclick="confirmarLancamento()" class="flex-[2] bg-indigo-600 text-white p-4 rounded-2xl font-bold shadow-lg shadow-indigo-100">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = "";
+        let db = JSON.parse(localStorage.getItem('financas_timeline_v1')) || {};
+
+        // Inicia com a data de hoje no modal
+        document.getElementById('modal-data').valueAsDate = new Date();
+
+        function fazerLogin() {
+            const name = document.getElementById('user-name').value.trim();
+            if (!name) return;
+            currentUser = name.toLowerCase();
+            if (!db[currentUser]) {
+                db[currentUser] = { receitas: 0, gastos: { Essencial: 0, Lazer: 0, Outros: 0 }, historico: [] };
+            }
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('display-user').innerText = name;
+            render();
+        }
+
+        function abrirModal() { document.getElementById('modal').classList.remove('hidden'); }
+        function fecharModal() { document.getElementById('modal').classList.add('hidden'); }
+
+        function confirmarLancamento() {
+            const desc = document.getElementById('modal-desc').value;
+            const valor = parseFloat(document.getElementById('modal-valor').value);
+            const tipo = document.getElementById('modal-tipo').value;
+            const dataRaw = document.getElementById('modal-data').value;
+            const isEssencial = document.getElementById('modal-essencial').checked;
+            const u = db[currentUser];
+
+            if(!desc || isNaN(valor)) return;
+
+            // Formatar data para exibição
+            const dataParts = dataRaw.split('-');
+            const dataFormatada = `${dataParts[2]}/${dataParts[1]}`;
+
+            if (tipo === 'receita') u.receitas += valor;
+            else u.gastos[tipo] += valor;
+
+            u.historico.push({ desc, valor, tipo, data: dataFormatada, dataFull: dataRaw, essencial: isEssencial });
+            
+            // Ordenar por data (mais recente primeiro)
+            u.historico.sort((a, b) => new Date(b.dataFull) - new Date(a.dataFull));
+            
+            document.getElementById('modal-desc').value = "";
+            document.getElementById('modal-valor').value = "";
+            fecharModal();
+            salvar();
+        }
+
+        function salvar() {
+            localStorage.setItem('financas_timeline_v1', JSON.stringify(db));
+            render();
+        }
+
+        function render() {
+            const u = db[currentUser];
+            const totalG = Object.values(u.gastos).reduce((a,b) => a+b, 0);
+            const poupado = u.receitas - totalG;
+            
+            document.getElementById('valor-poupado').innerText = `R$ ${poupado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+
+            // Análise de Supérfluos
+            const superfluos = u.historico.filter(i => !i.essencial && i.tipo !== 'receita');
+            const totalSup = superfluos.reduce((a, b) => a + b.valor, 0);
+            const analiseText = document.getElementById('analise-superfluo');
+            
+            if (totalSup > 0) {
+                analiseText.innerHTML = `⚠️ Você gastou <strong>R$ ${totalSup.toFixed(2)}</strong> com itens não essenciais. Economizando metade disso, você ganha <strong>R$ ${(totalSup*6).toFixed(0)}</strong> extras em 6 meses!`;
+            }
+
+            // Barras
+            const pEss = u.receitas > 0 ? (u.gastos.Essencial / u.receitas) * 100 : 0;
+            const pLaz = u.receitas > 0 ? (u.gastos.Lazer / u.receitas) * 100 : 0;
+            document.getElementById('perc-essencial').innerText = `${pEss.toFixed(0)}%`;
+            document.getElementById('bar-essencial').style.width = `${Math.min(pEss, 100)}%`;
+            document.getElementById('perc-lazer').innerText = `${pLaz.toFixed(0)}%`;
+            document.getElementById('bar-lazer').style.width = `${Math.min(pLaz, 100)}%`;
+
+            // Lista
+            const lista = document.getElementById('lista');
+            lista.innerHTML = "";
+            
+            u.historico.forEach(i => {
+                const isRec = i.tipo === 'receita';
+                lista.innerHTML += `
+                    <div class="flex justify-between items-center bg-gray-50/50 p-4 rounded-2xl border border-gray-100">
+                        <div class="flex items-center gap-4">
+                            <div class="text-center bg-white w-10 py-1 rounded-lg shadow-sm border border-gray-100">
+                                <p class="text-[8px] font-bold text-indigo-400 uppercase">${i.data.split('/')[1]}</p>
+                                <p class="text-sm font-black text-gray-700 leading-none">${i.data.split('/')[0]}</p>
+                            </div>
+                            <div>
+                                <p class="font-extrabold text-gray-800 text-sm leading-tight">${i.desc}</p>
+                                <div class="flex gap-2 mt-1">
+                                    <span class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">${i.tipo}</span>
+                                    ${!i.essencial && !isRec ? '<span class="text-[8px] bg-amber-100 text-amber-600 px-1 rounded font-bold uppercase italic">Supérfluo</span>' : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <p class="font-black ${isRec ? 'text-green-600' : 'text-gray-900'}">${isRec ? '+' : '-'} R$ ${i.valor.toFixed(2)}</p>
+                    </div>
+                `;
+            });
+        }
+
+        function fecharMes() {
+            if (confirm("Confirmar fechamento do mês atual?")) {
+                db[currentUser].receitas = 0;
+                db[currentUser].gastos = { Essencial: 0, Lazer: 0, Outros: 0 };
+                db[currentUser].historico = [];
+                salvar();
+            }
+        }
+
+        function sair() {
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('main-app').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
