@@ -3,237 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Finanças Smart Pro</title>
+    <title>Finanças Color Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fcfcfd; }
-        .safe-area { padding-bottom: env(safe-area-inset-bottom); }
-        .modal-open { overflow: hidden; }
-        input[type="date"] { appearance: none; -webkit-appearance: none; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; padding-bottom: 100px; }
+        .card-bank { transition: all 0.3s ease; border-left: 6px solid transparent; }
+        .tab-active { color: #4f46e5; border-bottom: 3px solid #4f46e5; }
+        .dot { height: 12px; width: 12px; border-radius: 50%; display: inline-block; }
     </style>
 </head>
-<body class="bg-gray-50 flex flex-col min-h-screen">
+<body>
 
-    <div id="login-screen" class="flex-1 flex flex-col justify-center px-8 space-y-8">
-        <div class="text-center space-y-2">
-            <div class="bg-indigo-600 w-20 h-20 rounded-[28px] flex items-center justify-center mx-auto shadow-2xl shadow-indigo-200">
-                <span class="text-4xl">📊</span>
-            </div>
-            <h1 class="text-3xl font-extrabold text-gray-900">Meu Controle</h1>
-            <p class="text-gray-500">Gestão financeira com clareza total.</p>
+    <div id="login-screen" class="min-h-screen flex flex-col justify-center px-8 space-y-6">
+        <div class="text-center">
+            <h1 class="text-4xl font-black text-indigo-600 tracking-tighter">FINANÇAS<br>COLOR PRO</h1>
         </div>
-        <div class="space-y-4">
-            <input id="user-name" type="text" placeholder="Nome do perfil" class="w-full p-5 rounded-2xl bg-white border-0 ring-1 ring-gray-200 focus:ring-2 focus:ring-indigo-600 outline-none shadow-sm">
-            <button onclick="fazerLogin()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-bold text-lg shadow-lg active:scale-95 transition-transform">Entrar</button>
-        </div>
+        <input id="user-name" type="text" placeholder="Nome do Perfil" class="w-full p-5 rounded-2xl ring-1 ring-gray-200 outline-none focus:ring-2 focus:ring-indigo-600 bg-white shadow-sm">
+        <button onclick="fazerLogin()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-bold shadow-xl">Acessar</button>
     </div>
 
-    <div id="main-app" class="hidden flex-1 flex flex-col">
-        <header class="p-6 flex justify-between items-center bg-white border-b border-gray-100 sticky top-0 z-40">
-            <div>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Perfil Ativo</p>
-                <h2 id="display-user" class="text-lg font-extrabold text-indigo-600 uppercase"></h2>
-            </div>
-            <button onclick="sair()" class="bg-gray-100 p-2 rounded-lg text-gray-400 text-xs font-bold uppercase">Sair</button>
-        </header>
+    <div id="main-app" class="hidden animate-in fade-in duration-500">
+        <nav class="flex justify-around bg-white border-b sticky top-0 z-50">
+            <button onclick="mudarAba('resumo')" id="btn-resumo" class="p-4 font-bold text-[10px] uppercase tracking-widest tab-active">Início</button>
+            <button onclick="mudarAba('bancos')" id="btn-bancos" class="p-4 font-bold text-[10px] uppercase tracking-widest text-gray-400">Bancos</button>
+            <button onclick="mudarAba('metas')" id="btn-metas" class="p-4 font-bold text-[10px] uppercase tracking-widest text-gray-400">Cofres</button>
+        </nav>
 
-        <div class="p-6 space-y-4">
-            <div class="bg-slate-900 rounded-[32px] p-6 text-white shadow-2xl relative overflow-hidden">
-                <p class="text-slate-400 text-xs font-bold uppercase">Saldo Atual</p>
-                <h3 id="valor-poupado" class="text-4xl font-black mt-1">R$ 0,00</h3>
-                
-                <div class="mt-6 p-4 bg-white/5 rounded-2xl border border-white/10">
-                    <p id="analise-superfluo" class="text-[11px] leading-relaxed text-slate-300 italic">
-                        Lançando dados para analisar supérfluos...
-                    </p>
-                </div>
+        <section id="aba-resumo" class="p-6 space-y-6">
+            <div class="bg-slate-900 p-8 rounded-[32px] text-white shadow-2xl">
+                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Saldo Total Combinado</p>
+                <h2 id="saldo-geral" class="text-4xl font-black mt-1">R$ 0,00</h2>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 text-[10px] font-bold text-gray-500 uppercase">
-                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                    <div class="flex justify-between mb-2"><span>Essencial</span><span id="perc-essencial">0%</span></div>
-                    <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden"><div id="bar-essencial" class="h-full bg-blue-500 transition-all duration-700"></div></div>
-                </div>
-                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                    <div class="flex justify-between mb-2"><span>Lazer</span><span id="perc-lazer">0%</span></div>
-                    <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden"><div id="bar-lazer" class="h-full bg-orange-400 transition-all duration-700"></div></div>
-                </div>
+            <div class="space-y-4">
+                <h3 class="font-extrabold text-gray-800 flex justify-between items-center">
+                    Atividade Recente
+                    <button onclick="exportarDados()" class="text-[9px] bg-gray-200 px-2 py-1 rounded">Backup</button>
+                </h3>
+                <div id="movimentacoes" class="space-y-3"></div>
             </div>
-        </div>
+        </section>
 
-        <div class="flex-1 bg-white rounded-t-[40px] p-6 shadow-2xl">
-            <div class="flex justify-between items-center mb-6">
-                <h4 class="font-extrabold text-gray-800">Linha do Tempo</h4>
-                <button onclick="fecharMes()" class="text-[10px] font-bold bg-indigo-50 text-indigo-600 px-3 py-2 rounded-full uppercase">Zerar Mês</button>
-            </div>
-            <div id="lista" class="space-y-6 pb-28"></div>
-        </div>
-
-        <div class="fixed bottom-8 left-0 right-0 px-8 safe-area">
-            <button onclick="abrirModal()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-extrabold text-lg shadow-2xl shadow-indigo-200 flex items-center justify-center gap-3 active:scale-95 transition-transform">
-                <span>➕</span> Novo Lançamento
-            </button>
-        </div>
-    </div>
-
-    <div id="modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-end">
-        <div class="bg-white w-full rounded-t-[40px] p-8 space-y-5 animate-in slide-in-from-bottom duration-300">
-            <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-4"></div>
+        <section id="aba-bancos" class="hidden p-6 space-y-4">
+            <h3 class="font-extrabold text-gray-800">Minhas Contas</h3>
+            <div id="lista-bancos" class="space-y-3"></div>
             
-            <div class="grid grid-cols-2 gap-4">
-                <div class="col-span-2">
-                    <label class="text-[10px] font-bold text-gray-400 uppercase ml-2">O que foi?</label>
-                    <input id="modal-desc" type="text" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold">
+            <div class="bg-white p-5 rounded-[24px] shadow-sm border border-gray-100 space-y-3">
+                <p class="text-[10px] font-bold text-gray-400 uppercase">Novo Banco / Cartão</p>
+                <input id="nome-banco" type="text" placeholder="Nome (Ex: Nubank)" class="w-full p-3 bg-gray-50 rounded-xl outline-none">
+                <input id="saldo-inicial" type="number" placeholder="Saldo Atual (R$)" class="w-full p-3 bg-gray-50 rounded-xl outline-none">
+                
+                <p class="text-[10px] font-bold text-gray-400 uppercase mt-2">Escolha a Cor</p>
+                <div class="flex justify-between gap-2">
+                    <input type="color" id="cor-banco" value="#4f46e5" class="w-full h-10 rounded-lg cursor-pointer bg-transparent border-0">
                 </div>
-                <div>
-                    <label class="text-[10px] font-bold text-gray-400 uppercase ml-2">Valor</label>
-                    <input id="modal-valor" type="number" inputmode="decimal" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold text-indigo-600">
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold text-gray-400 uppercase ml-2">Data</label>
-                    <input id="modal-data" type="date" class="w-full p-4 bg-gray-50 rounded-2xl outline-none text-sm font-bold">
-                </div>
-            </div>
 
-            <select id="modal-tipo" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold text-gray-600">
-                <option value="receita">➕ Entrada (Salário/Renda)</option>
-                <option value="Essencial">🏠 Gasto Essencial (Fixo)</option>
-                <option value="Lazer">🍿 Lazer / Estilo de Vida</option>
-                <option value="Outros">⚙️ Outros Gastos</option>
-            </select>
-
-            <div class="flex items-center justify-between p-4 bg-indigo-50 rounded-2xl">
-                <span class="text-sm font-bold text-indigo-900">É um gasto necessário?</span>
-                <input type="checkbox" id="modal-essencial" checked class="w-6 h-6 accent-indigo-600">
+                <button onclick="adicionarBanco()" class="w-full bg-gray-900 text-white p-4 rounded-xl font-bold text-sm">Criar Conta</button>
             </div>
+        </section>
 
-            <div class="flex gap-4 pt-4">
-                <button onclick="fecharModal()" class="flex-1 p-4 text-gray-400 font-bold">Cancelar</button>
-                <button onclick="confirmarLancamento()" class="flex-[2] bg-indigo-600 text-white p-4 rounded-2xl font-bold shadow-lg shadow-indigo-100">Salvar</button>
+        <section id="aba-metas" class="hidden p-6 space-y-4">
+            <h3 class="font-extrabold text-gray-800">Cofres</h3>
+            <div id="lista-metas" class="space-y-4"></div>
+            <div class="bg-white p-5 rounded-[24px] shadow-sm border border-gray-100 space-y-3">
+                <input id="nome-meta" type="text" placeholder="Nome do Objetivo" class="w-full p-3 bg-gray-50 rounded-xl outline-none">
+                <input id="valor-meta" type="number" placeholder="Valor Alvo (R$)" class="w-full p-3 bg-gray-50 rounded-xl outline-none">
+                <button onclick="adicionarMeta()" class="w-full bg-indigo-600 text-white p-4 rounded-xl font-bold">Criar Cofre</button>
             </div>
+        </section>
+
+        <button onclick="abrirModal()" class="fixed bottom-8 right-6 w-16 h-16 bg-indigo-600 text-white rounded-full text-3xl shadow-2xl flex items-center justify-center z-50 active:scale-90 transition-all">
+            +
+        </button>
+    </div>
+
+    <div id="modal" class="fixed inset-0 bg-black/60 hidden z-[60] flex items-end">
+        <div class="bg-white w-full rounded-t-[40px] p-8 space-y-4 animate-in slide-in-from-bottom duration-300">
+            <h3 class="text-xl font-black text-center">Registrar Valor</h3>
+            <input id="m-desc" type="text" placeholder="Descrição" class="w-full p-4 bg-gray-50 rounded-2xl outline-none">
+            <input id="m-valor" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold text-indigo-600">
+            
+            <div class="grid grid-cols-2 gap-3">
+                <select id="m-tipo" class="p-4 bg-gray-50 rounded-2xl outline-none font-bold text-gray-600">
+                    <option value="despesa">➖ Gasto</option>
+                    <option value="receita">➕ Ganhei</option>
+                </select>
+                <select id="m-banco" class="p-4 bg-gray-50 rounded-2xl outline-none font-bold text-gray-600">
+                </select>
+            </div>
+            
+            <button onclick="confirmarLancamento()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-bold shadow-lg">Confirmar</button>
+            <button onclick="fecharModal()" class="w-full text-gray-400 font-bold">Voltar</button>
         </div>
     </div>
 
     <script>
-        let currentUser = "";
-        let db = JSON.parse(localStorage.getItem('financas_timeline_v1')) || {};
+        let u = "";
+        let db = JSON.parse(localStorage.getItem('financas_color_v8')) || {};
 
-        // Inicia com a data de hoje no modal
-        document.getElementById('modal-data').valueAsDate = new Date();
+        function mudarAba(aba) {
+            ['resumo', 'bancos', 'metas'].forEach(a => {
+                document.getElementById('aba-'+a).classList.add('hidden');
+                document.getElementById('btn-'+a).classList.remove('tab-active');
+                document.getElementById('btn-'+a).classList.add('text-gray-400');
+            });
+            document.getElementById('aba-'+aba).classList.remove('hidden');
+            document.getElementById('btn-'+aba).classList.add('tab-active');
+            render();
+        }
 
         function fazerLogin() {
             const name = document.getElementById('user-name').value.trim();
             if (!name) return;
-            currentUser = name.toLowerCase();
-            if (!db[currentUser]) {
-                db[currentUser] = { receitas: 0, gastos: { Essencial: 0, Lazer: 0, Outros: 0 }, historico: [] };
-            }
+            u = name.toLowerCase();
+            if (!db[u]) db[u] = { bancos: [], historico: [], metas: [] };
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('main-app').classList.remove('hidden');
-            document.getElementById('display-user').innerText = name;
             render();
         }
 
-        function abrirModal() { document.getElementById('modal').classList.remove('hidden'); }
+        function adicionarBanco() {
+            const nome = document.getElementById('nome-banco').value;
+            const saldo = parseFloat(document.getElementById('saldo-inicial').value);
+            const cor = document.getElementById('cor-banco').value;
+            if(!nome || isNaN(saldo)) return;
+            db[u].bancos.push({ nome, saldo, cor });
+            salvar();
+            document.getElementById('nome-banco').value = ""; document.getElementById('saldo-inicial').value = "";
+        }
+
+        function adicionarMeta() {
+            const nome = document.getElementById('nome-meta').value;
+            const valor = parseFloat(document.getElementById('valor-meta').value);
+            if(!nome || isNaN(valor)) return;
+            db[u].metas.push({ nome, total: valor, atual: 0 });
+            salvar();
+            document.getElementById('nome-meta').value = ""; document.getElementById('valor-meta').value = "";
+        }
+
+        function abrirModal() {
+            if(db[u].bancos.length === 0) return alert("Cadastre um banco primeiro na aba Bancos!");
+            const select = document.getElementById('m-banco');
+            select.innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
         function fecharModal() { document.getElementById('modal').classList.add('hidden'); }
 
         function confirmarLancamento() {
-            const desc = document.getElementById('modal-desc').value;
-            const valor = parseFloat(document.getElementById('modal-valor').value);
-            const tipo = document.getElementById('modal-tipo').value;
-            const dataRaw = document.getElementById('modal-data').value;
-            const isEssencial = document.getElementById('modal-essencial').checked;
-            const u = db[currentUser];
+            const desc = document.getElementById('m-desc').value;
+            const valor = parseFloat(document.getElementById('m-valor').value);
+            const tipo = document.getElementById('m-tipo').value;
+            const bancoNome = document.getElementById('m-banco').value;
 
             if(!desc || isNaN(valor)) return;
 
-            // Formatar data para exibição
-            const dataParts = dataRaw.split('-');
-            const dataFormatada = `${dataParts[2]}/${dataParts[1]}`;
+            const banco = db[u].bancos.find(b => b.nome === bancoNome);
+            if (tipo === 'receita') banco.saldo += valor;
+            else banco.saldo -= valor;
 
-            if (tipo === 'receita') u.receitas += valor;
-            else u.gastos[tipo] += valor;
-
-            u.historico.push({ desc, valor, tipo, data: dataFormatada, dataFull: dataRaw, essencial: isEssencial });
-            
-            // Ordenar por data (mais recente primeiro)
-            u.historico.sort((a, b) => new Date(b.dataFull) - new Date(a.dataFull));
-            
-            document.getElementById('modal-desc').value = "";
-            document.getElementById('modal-valor').value = "";
+            db[u].historico.unshift({ desc, valor, tipo, banco: bancoNome, cor: banco.cor, data: new Date().toLocaleDateString('pt-BR') });
             fecharModal();
             salvar();
         }
 
         function salvar() {
-            localStorage.setItem('financas_timeline_v1', JSON.stringify(db));
+            localStorage.setItem('financas_color_v8', JSON.stringify(db));
             render();
         }
 
         function render() {
-            const u = db[currentUser];
-            const totalG = Object.values(u.gastos).reduce((a,b) => a+b, 0);
-            const poupado = u.receitas - totalG;
+            const user = db[u];
             
-            document.getElementById('valor-poupado').innerText = `R$ ${poupado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            const totalGeral = user.bancos.reduce((acc, b) => acc + b.saldo, 0);
+            document.getElementById('saldo-geral').innerText = `R$ ${totalGeral.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
 
-            // Análise de Supérfluos
-            const superfluos = u.historico.filter(i => !i.essencial && i.tipo !== 'receita');
-            const totalSup = superfluos.reduce((a, b) => a + b.valor, 0);
-            const analiseText = document.getElementById('analise-superfluo');
-            
-            if (totalSup > 0) {
-                analiseText.innerHTML = `⚠️ Você gastou <strong>R$ ${totalSup.toFixed(2)}</strong> com itens não essenciais. Economizando metade disso, você ganha <strong>R$ ${(totalSup*6).toFixed(0)}</strong> extras em 6 meses!`;
-            }
+            const listaB = document.getElementById('lista-bancos');
+            listaB.innerHTML = user.bancos.map(b => `
+                <div class="bg-white p-5 rounded-2xl shadow-sm border-l-8 flex justify-between items-center" style="border-color: ${b.cor}">
+                    <div>
+                        <p class="font-black text-gray-800 text-lg">${b.nome}</p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase">Saldo em Conta</p>
+                    </div>
+                    <span class="font-black text-lg ${b.saldo < 0 ? 'text-red-500' : 'text-gray-900'}">R$ ${b.saldo.toFixed(2)}</span>
+                </div>
+            `).join('');
 
-            // Barras
-            const pEss = u.receitas > 0 ? (u.gastos.Essencial / u.receitas) * 100 : 0;
-            const pLaz = u.receitas > 0 ? (u.gastos.Lazer / u.receitas) * 100 : 0;
-            document.getElementById('perc-essencial').innerText = `${pEss.toFixed(0)}%`;
-            document.getElementById('bar-essencial').style.width = `${Math.min(pEss, 100)}%`;
-            document.getElementById('perc-lazer').innerText = `${pLaz.toFixed(0)}%`;
-            document.getElementById('bar-lazer').style.width = `${Math.min(pLaz, 100)}%`;
-
-            // Lista
-            const lista = document.getElementById('lista');
-            lista.innerHTML = "";
-            
-            u.historico.forEach(i => {
-                const isRec = i.tipo === 'receita';
-                lista.innerHTML += `
-                    <div class="flex justify-between items-center bg-gray-50/50 p-4 rounded-2xl border border-gray-100">
-                        <div class="flex items-center gap-4">
-                            <div class="text-center bg-white w-10 py-1 rounded-lg shadow-sm border border-gray-100">
-                                <p class="text-[8px] font-bold text-indigo-400 uppercase">${i.data.split('/')[1]}</p>
-                                <p class="text-sm font-black text-gray-700 leading-none">${i.data.split('/')[0]}</p>
-                            </div>
-                            <div>
-                                <p class="font-extrabold text-gray-800 text-sm leading-tight">${i.desc}</p>
-                                <div class="flex gap-2 mt-1">
-                                    <span class="text-[9px] font-bold text-gray-400 uppercase tracking-tighter">${i.tipo}</span>
-                                    ${!i.essencial && !isRec ? '<span class="text-[8px] bg-amber-100 text-amber-600 px-1 rounded font-bold uppercase italic">Supérfluo</span>' : ''}
-                                </div>
-                            </div>
+            const listaH = document.getElementById('movimentacoes');
+            listaH.innerHTML = user.historico.slice(0, 15).map(h => `
+                <div class="bg-white p-4 rounded-2xl shadow-sm flex justify-between items-center border border-gray-50">
+                    <div class="flex items-center gap-3">
+                        <span class="dot" style="background-color: ${h.cor}"></span>
+                        <div>
+                            <p class="text-sm font-bold text-gray-800">${h.desc}</p>
+                            <p class="text-[9px] text-gray-400 font-bold uppercase">${h.data} • ${h.banco}</p>
                         </div>
-                        <p class="font-black ${isRec ? 'text-green-600' : 'text-gray-900'}">${isRec ? '+' : '-'} R$ ${i.valor.toFixed(2)}</p>
+                    </div>
+                    <span class="font-black ${h.tipo === 'receita' ? 'text-green-500' : 'text-gray-900'}">${h.tipo === 'receita' ? '+' : '-'} R$ ${h.valor.toFixed(2)}</span>
+                </div>
+            `).join('');
+
+            const listaM = document.getElementById('lista-metas');
+            listaM.innerHTML = user.metas.map(m => {
+                const perc = Math.min(100, (m.atual / m.total) * 100);
+                return `
+                    <div class="bg-white p-5 rounded-2xl shadow-sm space-y-2">
+                        <div class="flex justify-between font-bold text-xs uppercase tracking-tighter"><span>${m.nome}</span><span>${perc.toFixed(0)}%</span></div>
+                        <div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-indigo-600" style="width: ${perc}%"></div></div>
+                        <p class="text-[9px] text-gray-400 font-bold">R$ ${m.atual.toFixed(2)} / R$ ${m.total.toFixed(2)}</p>
                     </div>
                 `;
-            });
+            }).join('');
         }
 
-        function fecharMes() {
-            if (confirm("Confirmar fechamento do mês atual?")) {
-                db[currentUser].receitas = 0;
-                db[currentUser].gastos = { Essencial: 0, Lazer: 0, Outros: 0 };
-                db[currentUser].historico = [];
-                salvar();
-            }
-        }
-
-        function sair() {
-            document.getElementById('login-screen').classList.remove('hidden');
-            document.getElementById('main-app').classList.add('hidden');
+        function exportarDados() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", "meu_backup_financas.json");
+            dlAnchorElem.click();
         }
     </script>
 </body>
