@@ -12,20 +12,18 @@
         .dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; }
         .hide-val { filter: blur(8px); pointer-events: none; }
         .card-extrato { border-radius: 20px; border: 1px solid #f1f5f9; background: white; padding: 16px; margin-bottom: 10px; }
-        section { display: none; } /* Esconde todas por padrão */
-        #aba-resumo { display: block; } /* Mostra a inicial se logado */
+        section { display: none; }
+        #aba-resumo { display: block; }
     </style>
 </head>
 <body>
 
-    <div id="login-screen" class="min-h-screen flex flex-col justify-center px-8 bg-white z-[100] relative">
-        <div class="text-center mb-10">
-            <div class="w-20 h-20 bg-indigo-600 rounded-[28px] flex items-center justify-center mx-auto shadow-2xl mb-4 text-white text-3xl font-black italic">G</div>
-            <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase">Guima Strategy</h1>
-            <p class="text-slate-400 text-sm font-medium uppercase tracking-widest italic">Elite Edition v12.3</p>
-        </div>
-        <input id="user-name" type="text" placeholder="Seu Nome de Acesso" class="w-full p-5 rounded-2xl bg-slate-50 border-0 ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-indigo-600 mb-4 font-bold text-lg">
-        <button onclick="fazerLogin()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-bold shadow-xl active:scale-95 transition-transform uppercase tracking-widest">Entrar</button>
+    <div id="login-screen" class="min-h-screen flex flex-col justify-center px-8 bg-white z-[100] relative text-center">
+        <div class="w-20 h-20 bg-slate-900 rounded-[28px] flex items-center justify-center mx-auto shadow-2xl mb-4 text-white text-3xl font-black italic">G</div>
+        <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase">Guima Strategy</h1>
+        <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-10">Elite Identity v12.4</p>
+        <input id="user-name" type="text" placeholder="Nome de Acesso" class="w-full p-5 rounded-2xl bg-slate-50 border-0 ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-indigo-600 mb-4 font-bold">
+        <button onclick="fazerLogin()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-bold uppercase tracking-widest shadow-xl">Entrar</button>
     </div>
 
     <div id="main-app" class="hidden">
@@ -43,9 +41,7 @@
                         <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Patrimônio Líquido</p>
                         <h2 id="saldo-geral" class="text-4xl font-black mt-1 tracking-tight val-privacidade">R$ 0,00</h2>
                     </div>
-                    <button onclick="togglePrivacidade()" class="p-2 bg-white/10 rounded-full">
-                        <span id="icon-privacidade">👁️</span>
-                    </button>
+                    <button onclick="togglePrivacidade()" class="p-2 bg-white/10 rounded-full"><span id="icon-privacidade">👁️</span></button>
                 </div>
                 <div class="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-white/10 text-center">
                     <div><p class="text-[8px] font-bold text-green-400 uppercase">Entradas</p><p id="perf-entradas" class="font-black text-sm val-privacidade">R$ 0,00</p></div>
@@ -53,8 +49,8 @@
                 </div>
             </div>
             <div class="flex gap-2">
-                <button onclick="abrirModal()" class="flex-1 bg-white border p-4 rounded-2xl font-black text-[10px] uppercase shadow-sm">+ Operação</button>
-                <button onclick="abrirModalTransferencia()" class="flex-1 bg-white border p-4 rounded-2xl font-black text-[10px] uppercase shadow-sm">⇄ Transferir</button>
+                <button onclick="abrirModal()" class="flex-1 bg-white border p-4 rounded-2xl font-black text-[10px] uppercase shadow-sm text-slate-800">+ Operação</button>
+                <button onclick="abrirModalTransferencia()" class="flex-1 bg-white border p-4 rounded-2xl font-black text-[10px] uppercase shadow-sm text-slate-800">⇄ Transferir</button>
             </div>
             <h3 class="font-extrabold text-gray-800 px-2 italic">Atividade Recente</h3>
             <div id="movimentacoes-resumo" class="space-y-3"></div>
@@ -64,7 +60,7 @@
             <h3 class="font-extrabold text-gray-800 text-xl tracking-tight italic">Auditoria</h3>
             <div class="flex gap-2">
                 <select id="filtro-banco" onchange="render()" class="p-3 bg-white border rounded-xl text-[10px] font-bold outline-none flex-1"></select>
-                <input type="text" id="busca-desc" onkeyup="render()" placeholder="Buscar..." class="p-3 bg-white border rounded-xl text-[10px] font-bold outline-none flex-grow">
+                <input type="text" id="busca-desc" onkeyup="render()" placeholder="Buscar..." class="p-3 bg-white border rounded-xl text-[10px] font-bold flex-grow">
             </div>
             <div id="lista-extrato-full" class="space-y-3"></div>
         </section>
@@ -73,55 +69,65 @@
             <h3 class="font-extrabold text-gray-800 italic">Gestão de Contas</h3>
             <div id="lista-bancos" class="space-y-3"></div>
             <div class="bg-white p-6 rounded-[28px] border border-gray-100 space-y-3 mt-4">
-                <p class="text-[10px] font-bold text-gray-400 uppercase">Novo Banco</p>
-                <input id="nome-banco" type="text" placeholder="Nome do Banco" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold border border-gray-100">
-                <input id="saldo-inicial" type="number" inputmode="decimal" placeholder="Saldo R$" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold border border-gray-100">
-                <div class="flex items-center gap-4">
-                    <span class="text-[10px] font-bold text-gray-400 uppercase">Cor:</span>
-                    <input type="color" id="cor-banco" value="#4f46e5" class="w-full h-10 rounded-xl bg-transparent border-0 cursor-pointer">
+                <input id="nome-banco" type="text" placeholder="Nome do Banco" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold">
+                <input id="saldo-inicial" type="number" inputmode="decimal" placeholder="Saldo Atual" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold">
+                <div class="flex items-center justify-between px-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Identidade Cor:</span>
+                    <input type="color" id="cor-banco" value="#4f46e5" class="h-10 w-20 rounded-lg bg-transparent border-0 cursor-pointer">
                 </div>
-                <button onclick="adicionarBanco()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold uppercase tracking-widest text-sm shadow-xl">Salvar Conta</button>
+                <button onclick="adicionarBanco()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold uppercase text-sm">Vincular Banco</button>
             </div>
         </section>
 
         <section id="aba-metas" class="p-6 space-y-4">
-            <h3 class="font-extrabold text-gray-800 italic">Objetivos</h3>
+            <h3 class="font-extrabold text-gray-800 italic text-center">Objetivos & Reservas</h3>
             <div id="lista-metas" class="space-y-6"></div>
             <div class="bg-white p-6 rounded-[28px] border border-gray-100 space-y-3 mt-4">
-                <input id="nome-meta" type="text" placeholder="Nome do Alvo" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold border border-gray-100">
-                <input id="valor-meta" type="number" placeholder="Valor Total R$" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold border border-gray-100">
-                <button onclick="adicionarMeta()" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold uppercase tracking-widest text-sm shadow-xl">Criar Meta</button>
+                <input id="nome-meta" type="text" placeholder="Nome da Meta" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold">
+                <input id="valor-meta" type="number" placeholder="Alvo R$" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold">
+                <button onclick="adicionarMeta()" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold uppercase text-xs">Criar Objetivo</button>
             </div>
         </section>
     </div>
 
-    <div id="modal" class="fixed inset-0 bg-black/70 hidden z-[200] flex items-end backdrop-blur-sm">
+    <div id="modal-aporte" class="fixed inset-0 bg-black/70 hidden z-[200] flex items-end backdrop-blur-sm">
         <div class="bg-white w-full rounded-t-[40px] p-8 pb-12 space-y-4">
-            <h3 class="text-xl font-black text-center text-slate-800 uppercase italic">Nova Operação</h3>
-            <input id="m-desc" type="text" placeholder="Descrição" class="w-full p-5 bg-gray-50 rounded-[22px] outline-none font-bold border border-gray-100">
-            <input id="m-valor" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-gray-50 rounded-[22px] outline-none font-black text-indigo-600 text-2xl">
-            <div class="grid grid-cols-2 gap-3">
-                <select id="m-tipo" class="p-5 bg-gray-50 rounded-[22px] font-bold text-gray-500 border border-gray-100"><option value="despesa">➖ Saída</option><option value="receita">➕ Entrada</option></select>
-                <select id="m-categoria" class="p-5 bg-gray-50 rounded-[22px] font-bold text-gray-500 border border-gray-100">
-                    <option value="Essencial">🏠 Essencial</option><option value="Lazer">🍿 Lazer</option><option value="Alimentação">🍔 Alimentação</option><option value="Outros">⚙️ Outros</option>
-                </select>
-            </div>
-            <select id="m-banco" class="p-5 bg-gray-50 rounded-[22px] font-bold text-gray-500 w-full border border-gray-100"></select>
-            <button onclick="confirmarLancamento()" class="w-full bg-slate-900 text-white p-5 rounded-[22px] font-black text-lg">Confirmar</button>
-            <button onclick="fecharModal()" class="w-full text-gray-400 font-bold p-2 text-sm uppercase text-center">Cancelar</button>
+            <h3 id="titulo-aporte" class="text-xl font-black text-center uppercase italic">Aportar em Meta</h3>
+            <input id="a-valor" type="number" inputmode="decimal" placeholder="Quanto guardar?" class="w-full p-5 bg-gray-50 rounded-[22px] outline-none font-black text-green-600 text-2xl text-center">
+            <p class="text-[9px] font-black text-gray-400 uppercase text-center">De qual conta sairão os fundos?</p>
+            <select id="a-origem" class="w-full p-5 bg-gray-50 rounded-[22px] font-bold text-gray-500"></select>
+            <button onclick="confirmarAporte()" class="w-full bg-indigo-600 text-white p-5 rounded-[22px] font-black text-lg">Confirmar Reserva</button>
+            <button onclick="fecharModalAporte()" class="w-full text-gray-400 font-bold p-2 text-xs uppercase text-center">Cancelar</button>
         </div>
     </div>
 
-    <div id="modal-transferencia" class="fixed inset-0 bg-black/70 hidden z-[200] flex items-end backdrop-blur-sm">
+    <div id="modal" class="fixed inset-0 bg-black/70 hidden z-[200] flex items-end backdrop-blur-sm">
+        <div class="bg-white w-full rounded-t-[40px] p-8 pb-12 space-y-4 animate-in slide-in-from-bottom duration-300">
+            <h3 class="text-xl font-black text-center text-slate-800 uppercase italic">Nova Operação</h3>
+            <input id="m-desc" type="text" placeholder="Descrição" class="w-full p-5 bg-gray-50 rounded-[22px] outline-none font-bold border border-gray-50">
+            <input id="m-valor" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-gray-50 rounded-[22px] outline-none font-black text-indigo-600 text-2xl">
+            <div class="grid grid-cols-2 gap-3">
+                <select id="m-tipo" class="p-5 bg-gray-50 rounded-[22px] font-bold text-gray-500"><option value="despesa">➖ Saída</option><option value="receita">➕ Entrada</option></select>
+                <select id="m-categoria" class="p-5 bg-gray-50 rounded-[22px] font-bold text-gray-500">
+                    <option value="Essencial">🏠 Essencial</option><option value="Lazer">🍿 Lazer</option><option value="Alimentação">🍔 Alimentação</option><option value="Saúde">🏥 Saúde</option><option value="Outros">⚙️ Outros</option>
+                </select>
+            </div>
+            <select id="m-banco" class="p-5 bg-gray-50 rounded-[22px] font-bold text-gray-500 w-full"></select>
+            <button onclick="confirmarLancamento()" class="w-full bg-slate-900 text-white p-5 rounded-[22px] font-black text-lg shadow-xl">Processar</button>
+            <button onclick="fecharModal()" class="w-full text-gray-400 font-bold p-2 text-sm uppercase text-center">Voltar</button>
+        </div>
+    </div>
+
+    <div id="modal-transferencia" class="fixed inset-0 bg-black/70 hidden z-[200] flex items-end backdrop-blur-sm text-center">
         <div class="bg-white w-full rounded-t-[40px] p-8 pb-12 space-y-4">
-            <h3 class="text-xl font-black text-center uppercase italic">Transferência</h3>
+            <h3 class="text-xl font-black uppercase italic">Transferência</h3>
             <input id="t-valor" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-gray-50 rounded-[22px] font-black text-indigo-600 text-2xl text-center">
-            <div class="grid grid-cols-2 gap-2 text-center">
+            <div class="grid grid-cols-2 gap-2">
                 <div><p class="text-[8px] font-bold text-gray-400 uppercase mb-1">Origem</p><select id="t-origem" class="w-full p-4 bg-gray-50 rounded-xl font-bold"></select></div>
                 <div><p class="text-[8px] font-bold text-gray-400 uppercase mb-1">Destino</p><select id="t-destino" class="w-full p-4 bg-gray-50 rounded-xl font-bold"></select></div>
             </div>
-            <button onclick="confirmarTransferencia()" class="w-full bg-slate-900 text-white p-5 rounded-[22px] font-black text-lg">Executar</button>
-            <button onclick="fecharModalTransferencia()" class="w-full text-gray-400 font-bold p-2 text-sm uppercase text-center">Cancelar</button>
+            <button onclick="confirmarTransferencia()" class="w-full bg-slate-900 text-white p-5 rounded-[22px] font-black text-lg uppercase tracking-widest">Executar</button>
+            <button onclick="fecharModalTransferencia()" class="w-full text-gray-400 font-bold p-2 text-xs uppercase">Cancelar</button>
         </div>
     </div>
 
@@ -129,27 +135,16 @@
         let u = "";
         let db = JSON.parse(localStorage.getItem('guima_elite_v12')) || {};
         let privacidade = false;
+        let idMetaSelecionada = null;
 
-        // FUNÇÃO DE NAVEGAÇÃO REESCRITA DO ZERO
-        function mudarAba(abaDestino) {
-            console.log("Mudando para aba:", abaDestino); // Para debug
-            
-            // 1. Lista de todas as seções
-            const secoes = ['aba-resumo', 'aba-extrato', 'aba-bancos', 'aba-metas'];
-            const botoes = ['btn-resumo', 'btn-extrato', 'btn-bancos', 'btn-metas'];
-
-            // 2. Esconde todas e remove destaques dos botões
-            secoes.forEach(id => document.getElementById(id).style.display = 'none');
-            botoes.forEach(id => {
-                document.getElementById(id).classList.remove('tab-active');
-                document.getElementById(id).classList.add('text-gray-400');
+        function mudarAba(id) {
+            ['resumo', 'extrato', 'bancos', 'metas'].forEach(a => {
+                document.getElementById('aba-'+a).style.display = 'none';
+                document.getElementById('btn-'+a).classList.remove('tab-active');
+                document.getElementById('btn-'+a).classList.add('text-gray-400');
             });
-
-            // 3. Mostra a aba clicada e ativa o botão
-            document.getElementById('aba-' + abaDestino).style.display = 'block';
-            document.getElementById('btn-' + abaDestino).classList.add('tab-active');
-            document.getElementById('btn-' + abaDestino).classList.remove('text-gray-400');
-
+            document.getElementById('aba-'+id).style.display = 'block';
+            document.getElementById('btn-'+id).classList.add('tab-active');
             render();
         }
 
@@ -158,18 +153,77 @@
             if (!name) return;
             u = name.toLowerCase();
             if (!db[u]) db[u] = { bancos: [], historico: [], metas: [] };
-            
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('main-app').classList.remove('hidden');
-            
-            // Garante que comece no resumo
             mudarAba('resumo');
         }
 
-        function togglePrivacidade() {
-            privacidade = !privacidade;
-            document.getElementById('icon-privacidade').innerText = privacidade ? '🙈' : '👁️';
-            render();
+        function togglePrivacidade() { privacidade = !privacidade; render(); }
+
+        function render() {
+            const user = db[u]; if(!user) return;
+            const mesAtual = new Date().getMonth();
+            const anoAtual = new Date().getFullYear();
+
+            // Patrimônio
+            const total = user.bancos.reduce((acc, b) => acc + b.saldo, 0);
+            const saldoEl = document.getElementById('saldo-geral');
+            saldoEl.innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            privacidade ? saldoEl.classList.add('hide-val') : saldoEl.classList.remove('hide-val');
+
+            // Perf
+            const movMes = user.historico.filter(h => { const d = new Date(h.dataIso); return d.getMonth() === mesAtual && d.getFullYear() === anoAtual; });
+            document.getElementById('perf-entradas').innerText = `+ R$ ${movMes.filter(h => h.tipo === 'receita').reduce((a, b) => a + b.valor, 0).toLocaleString('pt-BR')}`;
+            document.getElementById('perf-saidas').innerText = `- R$ ${movMes.filter(h => h.tipo === 'despesa').reduce((a, b) => a + b.valor, 0).toLocaleString('pt-BR')}`;
+
+            // Listas
+            const bancoF = document.getElementById('filtro-banco').value || 'todos';
+            const busca = (document.getElementById('busca-desc').value || '').toLowerCase();
+            const filtrados = user.historico.filter(h => (bancoF === 'todos' || h.banco === bancoF) && h.desc.toLowerCase().includes(busca));
+
+            const cardHtml = (h) => `
+                <div class="card-extrato border-l-4" style="border-left-color: ${h.cor}">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm font-extrabold text-slate-800 leading-none">${h.desc}</p>
+                            <p class="text-[9px] text-slate-400 font-bold uppercase mt-1 tracking-tighter">${h.data} • ${h.banco} • ${h.categoria || 'Geral'}</p>
+                        </div>
+                        <span class="font-black text-sm ${privacidade?'hide-val':''} ${h.tipo === 'receita' ? 'text-green-600' : 'text-slate-900'}">
+                            R$ ${h.valor.toFixed(2)}
+                        </span>
+                    </div>
+                </div>`;
+
+            document.getElementById('movimentacoes-resumo').innerHTML = user.historico.slice(0, 5).map(cardHtml).join('');
+            document.getElementById('lista-extrato-full').innerHTML = filtrados.map(cardHtml).join('');
+
+            // Bancos
+            const selF = document.getElementById('filtro-banco');
+            const valAnt = selF.value;
+            selF.innerHTML = '<option value="todos">Todos Bancos</option>' + user.bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
+            selF.value = valAnt;
+
+            document.getElementById('lista-bancos').innerHTML = user.bancos.map(b => `
+                <div class="bg-white p-5 rounded-2xl shadow-sm border-l-[10px]" style="border-left-color: ${b.cor}">
+                    <div class="flex justify-between items-center">
+                        <span class="font-black text-slate-800 uppercase text-[10px] italic">${b.nome}</span>
+                        <span class="font-black text-lg ${privacidade?'hide-val':''} ${b.saldo < 0 ? 'text-red-500' : ''}">R$ ${b.saldo.toFixed(2)}</span>
+                    </div>
+                </div>`).join('');
+
+            // Metas
+            document.getElementById('lista-metas').innerHTML = user.metas.map(m => {
+                const perc = Math.min(100, (m.atual / m.total) * 100);
+                return `
+                    <div class="bg-white p-6 rounded-[32px] shadow-sm border border-gray-50 space-y-4">
+                        <div class="flex justify-between font-black text-[10px] uppercase"><span>${m.nome}</span><span class="text-indigo-600">${perc.toFixed(1)}%</span></div>
+                        <div class="h-3 bg-gray-100 rounded-full overflow-hidden shadow-inner"><div class="h-full bg-indigo-600" style="width: ${perc}%"></div></div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-[9px] text-slate-400 font-black tracking-widest uppercase italic">R$ ${m.atual.toFixed(2)} / ${m.total.toFixed(0)}</p>
+                            <button onclick="abrirModalAporte(${m.id})" class="bg-indigo-600 text-white px-5 py-2 rounded-xl text-[9px] font-black uppercase shadow-lg shadow-indigo-100">📥 Aportar</button>
+                        </div>
+                    </div>`;
+            }).join('');
         }
 
         function adicionarBanco() {
@@ -179,8 +233,7 @@
             if(!nome || isNaN(saldo)) return;
             db[u].bancos.push({ nome, saldo, cor });
             salvar();
-            document.getElementById('nome-banco').value = "";
-            document.getElementById('saldo-inicial').value = "";
+            document.getElementById('nome-banco').value = ""; document.getElementById('saldo-inicial').value = "";
         }
 
         function adicionarMeta() {
@@ -189,22 +242,43 @@
             if(!nome || isNaN(valor)) return;
             db[u].metas.push({ id: Date.now(), nome, total: valor, atual: 0 });
             salvar();
-            document.getElementById('nome-meta').value = "";
-            document.getElementById('valor-meta').value = "";
+            document.getElementById('nome-meta').value = ""; document.getElementById('valor-meta').value = "";
+        }
+
+        function abrirModalAporte(id) {
+            idMetaSelecionada = id;
+            const meta = db[u].metas.find(m => m.id === id);
+            document.getElementById('titulo-aporte').innerText = `Aportar: ${meta.nome}`;
+            document.getElementById('a-origem').innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
+            document.getElementById('modal-aporte').classList.remove('hidden');
+        }
+        function fecharModalAporte() { document.getElementById('modal-aporte').classList.add('hidden'); }
+
+        function confirmarAporte() {
+            const valor = parseFloat(document.getElementById('a-valor').value);
+            const de = document.getElementById('a-origem').value;
+            if(isNaN(valor) || valor <= 0) return;
+            const banco = db[u].bancos.find(b => b.nome === de);
+            const meta = db[u].metas.find(m => m.id === idMetaSelecionada);
+            if(banco.saldo < valor) return alert("Saldo insuficiente");
+            banco.saldo -= valor;
+            meta.atual += valor;
+            db[u].historico.unshift({ desc: `Aporte: ${meta.nome}`, valor, tipo: 'despesa', categoria: 'Reserva', banco: de, cor: '#4f46e5', data: new Date().toLocaleDateString('pt-BR'), dataIso: new Date().toISOString() });
+            document.getElementById('a-valor').value = "";
+            fecharModalAporte(); salvar();
         }
 
         function abrirModal() {
-            if(db[u].bancos.length === 0) return alert("Cadastre um banco na aba 'Contas' primeiro!");
+            if(db[u].bancos.length === 0) return alert("Cadastre um banco primeiro!");
             document.getElementById('m-banco').innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
             document.getElementById('modal').classList.remove('hidden');
         }
         function fecharModal() { document.getElementById('modal').classList.add('hidden'); }
 
         function abrirModalTransferencia() {
-            if(db[u].bancos.length < 2) return alert("Precisa de 2 bancos para transferir!");
-            const html = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
-            document.getElementById('t-origem').innerHTML = html;
-            document.getElementById('t-destino').innerHTML = html;
+            if(db[u].bancos.length < 2) return alert("Precisa de 2 bancos!");
+            const h = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
+            document.getElementById('t-origem').innerHTML = h; document.getElementById('t-destino').innerHTML = h;
             document.getElementById('modal-transferencia').classList.remove('hidden');
         }
         function fecharModalTransferencia() { document.getElementById('modal-transferencia').classList.add('hidden'); }
@@ -226,84 +300,16 @@
             const valor = parseFloat(document.getElementById('t-valor').value);
             const de = document.getElementById('t-origem').value;
             const para = document.getElementById('t-destino').value;
-            if(de === para || isNaN(valor)) return alert("Transferência inválida");
+            if(de === para || isNaN(valor)) return alert("Inválido");
             const bO = db[u].bancos.find(b => b.nome === de);
             const bD = db[u].bancos.find(b => b.nome === para);
-            if(bO.saldo < valor) return alert("Saldo insuficiente");
+            if(bO.saldo < valor) return alert("Sem saldo");
             bO.saldo -= valor; bD.saldo += valor;
             db[u].historico.unshift({ desc: `${de} ➔ ${para}`, valor, tipo: 'transferencia', banco: de, cor: '#94a3b8', data: new Date().toLocaleDateString('pt-BR'), dataIso: new Date().toISOString() });
             fecharModalTransferencia(); salvar();
         }
 
         function salvar() { localStorage.setItem('guima_elite_v12', JSON.stringify(db)); render(); }
-
-        function render() {
-            const user = db[u]; if(!user) return;
-            const mesAtual = new Date().getMonth();
-            const anoAtual = new Date().getFullYear();
-
-            // Patrimonio e Privacidade
-            const totalGeral = user.bancos.reduce((acc, b) => acc + b.saldo, 0);
-            const saldoEl = document.getElementById('saldo-geral');
-            saldoEl.innerText = `R$ ${totalGeral.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            privacidade ? saldoEl.classList.add('hide-val') : saldoEl.classList.remove('hide-val');
-
-            // Performance Mensal
-            const movMes = user.historico.filter(h => { const d = new Date(h.dataIso); return d.getMonth() === mesAtual && d.getFullYear() === anoAtual; });
-            const ent = movMes.filter(h => h.tipo === 'receita').reduce((a, b) => a + b.valor, 0);
-            const sai = movMes.filter(h => h.tipo === 'despesa').reduce((a, b) => a + b.valor, 0);
-            document.getElementById('perf-entradas').innerText = `+ R$ ${ent.toLocaleString('pt-BR')}`;
-            document.getElementById('perf-saidas').innerText = `- R$ ${sai.toLocaleString('pt-BR')}`;
-
-            // Listas
-            const bancoF = document.getElementById('filtro-banco').value || 'todos';
-            const busca = (document.getElementById('busca-desc').value || '').toLowerCase();
-            const filtrados = user.historico.filter(h => (bancoF === 'todos' || h.banco === bancoF) && h.desc.toLowerCase().includes(busca));
-
-            const card = (h) => `
-                <div class="card-extrato">
-                    <div class="flex justify-between items-center">
-                        <div class="flex gap-3 items-center">
-                            <span class="dot" style="background-color: ${h.cor}"></span>
-                            <div>
-                                <p class="text-sm font-extrabold text-slate-800 leading-none">${h.desc}</p>
-                                <p class="text-[9px] text-slate-400 font-bold uppercase mt-1 tracking-tighter">${h.data} • ${h.banco}</p>
-                            </div>
-                        </div>
-                        <span class="font-black text-sm ${privacidade?'hide-val':''} ${h.tipo === 'receita' ? 'text-green-600' : 'text-slate-900'}">
-                            R$ ${h.valor.toFixed(2)}
-                        </span>
-                    </div>
-                </div>`;
-
-            document.getElementById('movimentacoes-resumo').innerHTML = user.historico.slice(0, 5).map(card).join('');
-            document.getElementById('lista-extrato-full').innerHTML = filtrados.map(card).join('');
-
-            // Bancos (Aba Contas)
-            const selF = document.getElementById('filtro-banco');
-            const vAt = selF.value;
-            selF.innerHTML = '<option value="todos">Todos Bancos</option>' + user.bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
-            if(vAt) selF.value = vAt;
-
-            document.getElementById('lista-bancos').innerHTML = user.bancos.map(b => `
-                <div class="bg-white p-5 rounded-2xl shadow-sm border-l-[6px]" style="border-color: ${b.cor}">
-                    <div class="flex justify-between items-center">
-                        <span class="font-black text-slate-800 uppercase text-[10px] italic">${b.nome}</span>
-                        <span class="font-black text-lg ${privacidade?'hide-val':''} ${b.saldo < 0 ? 'text-red-500' : ''}">R$ ${b.saldo.toFixed(2)}</span>
-                    </div>
-                </div>`).join('');
-
-            // Metas (Aba Cofres)
-            document.getElementById('lista-metas').innerHTML = user.metas.map(m => {
-                const perc = Math.min(100, (m.atual / m.total) * 100);
-                return `
-                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-50 space-y-4">
-                        <div class="flex justify-between font-black text-[10px] uppercase"><span>${m.nome}</span><span class="text-indigo-600">${perc.toFixed(1)}%</span></div>
-                        <div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-indigo-600" style="width: ${perc}%"></div></div>
-                        <p class="text-[9px] text-slate-400 font-black tracking-widest uppercase italic text-center">Alvo: R$ ${m.total.toFixed(2)}</p>
-                    </div>`;
-            }).join('');
-        }
     </script>
 </body>
 </html>
