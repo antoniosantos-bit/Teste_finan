@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Guima Strategy | Audit</title>
+    <title>Guima Strategy | Elite</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fcfcfd; padding-bottom: 120px; }
         .tab-active { color: #4f46e5; border-bottom: 3px solid #4f46e5; }
         .dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; }
-        input, select { font-size: 16px !important; }
+        .hide-val { filter: blur(5px); pointer-events: none; }
         .card-extrato { transition: all 0.2s ease; border-radius: 20px; border: 1px solid #f1f5f9; background: white; padding: 16px; margin-bottom: 10px; }
     </style>
 </head>
@@ -18,16 +18,16 @@
 
     <div id="login-screen" class="min-h-screen flex flex-col justify-center px-8 bg-white">
         <div class="text-center mb-10">
-            <div class="w-20 h-20 bg-slate-900 rounded-[28px] flex items-center justify-center mx-auto shadow-2xl mb-4 text-white text-3xl font-black italic">G</div>
+            <div class="w-20 h-20 bg-indigo-600 rounded-[28px] flex items-center justify-center mx-auto shadow-2xl mb-4 text-white text-3xl font-black italic">G</div>
             <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase">Guima Strategy</h1>
-            <p class="text-slate-400 text-sm font-medium uppercase tracking-widest italic">Audit Edition v11</p>
+            <p class="text-slate-400 text-sm font-medium uppercase tracking-widest italic">Elite Edition v12</p>
         </div>
-        <input id="user-name" type="text" placeholder="Acessar Painel" class="w-full p-5 rounded-2xl bg-slate-50 border-0 ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-slate-900 mb-4">
-        <button onclick="fazerLogin()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-bold shadow-xl active:scale-95 transition-transform">Entrar</button>
+        <input id="user-name" type="text" placeholder="Nome de Acesso" class="w-full p-5 rounded-2xl bg-slate-50 border-0 ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-indigo-600 mb-4">
+        <button onclick="fazerLogin()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-bold shadow-xl">Entrar</button>
     </div>
 
     <div id="main-app" class="hidden">
-        <nav class="grid grid-cols-4 bg-white border-b sticky top-0 z-50 shadow-sm text-[9px] font-black uppercase tracking-tighter">
+        <nav class="grid grid-cols-4 bg-white border-b sticky top-0 z-50 shadow-sm text-[9px] font-black uppercase">
             <button onclick="mudarAba('resumo')" id="btn-resumo" class="p-4 tab-active">Início</button>
             <button onclick="mudarAba('extrato')" id="btn-extrato" class="p-4 text-gray-400">Extrato</button>
             <button onclick="mudarAba('bancos')" id="btn-bancos" class="p-4 text-gray-400">Contas</button>
@@ -35,98 +35,120 @@
         </nav>
 
         <section id="aba-resumo" class="p-6 space-y-6">
-            <div class="bg-slate-900 p-8 rounded-[32px] text-white shadow-2xl">
-                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Patrimônio Atual</p>
-                <h2 id="saldo-geral" class="text-4xl font-black mt-1 tracking-tight">R$ 0,00</h2>
+            <div class="bg-slate-900 p-8 rounded-[32px] text-white shadow-2xl relative">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Patrimônio Líquido</p>
+                        <h2 id="saldo-geral" class="text-4xl font-black mt-1 tracking-tight val-privacidade">R$ 0,00</h2>
+                    </div>
+                    <button onclick="togglePrivacidade()" class="p-2 bg-white/10 rounded-full">
+                        <span id="icon-privacidade">👁️</span>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-white/10">
+                    <div>
+                        <p class="text-[8px] font-bold text-green-400 uppercase">Entradas (Mês)</p>
+                        <p id="perf-entradas" class="font-black text-sm val-privacidade">R$ 0,00</p>
+                    </div>
+                    <div>
+                        <p class="text-[8px] font-bold text-red-400 uppercase">Saídas (Mês)</p>
+                        <p id="perf-saidas" class="font-black text-sm val-privacidade">R$ 0,00</p>
+                    </div>
+                </div>
             </div>
-            <div class="flex justify-between items-center px-2">
-                <h3 class="font-extrabold text-gray-800">Últimas 5 Operações</h3>
-                <button onclick="mudarAba('extrato')" class="text-[10px] text-indigo-600 font-black uppercase">Ver Tudo</button>
+
+            <div class="flex justify-around gap-2">
+                <button onclick="abrirModal()" class="flex-1 bg-white border p-4 rounded-2xl font-black text-[10px] uppercase shadow-sm">+ Operação</button>
+                <button onclick="abrirModalTransferencia()" class="flex-1 bg-white border p-4 rounded-2xl font-black text-[10px] uppercase shadow-sm">⇄ Transferir</button>
             </div>
+
+            <h3 class="font-extrabold text-gray-800 px-2">Recentes</h3>
             <div id="movimentacoes-resumo" class="space-y-3"></div>
         </section>
 
         <section id="aba-extrato" class="hidden p-6 space-y-4">
-            <h3 class="font-extrabold text-gray-800 text-xl tracking-tight italic">Auditoria de Fluxo</h3>
-            
-            <div class="flex gap-2 overflow-x-auto pb-2 hide-scroll">
-                <select id="filtro-banco" onchange="renderExtrato()" class="p-3 bg-white border border-gray-200 rounded-xl text-[10px] font-bold uppercase outline-none min-w-[120px]">
-                    <option value="todos text-indigo-600">Todos os Bancos</option>
+            <h3 class="font-extrabold text-gray-800 text-xl tracking-tight italic">Auditoria</h3>
+            <div class="flex gap-2 overflow-x-auto pb-2">
+                <select id="filtro-banco" onchange="render()" class="p-3 bg-white border rounded-xl text-[10px] font-bold outline-none">
+                    <option value="todos">Todos Bancos</option>
                 </select>
-                <input type="text" id="busca-desc" onkeyup="renderExtrato()" placeholder="Buscar item..." class="p-3 bg-white border border-gray-200 rounded-xl text-[10px] font-bold outline-none flex-grow">
+                <input type="text" id="busca-desc" onkeyup="render()" placeholder="Buscar..." class="p-3 bg-white border rounded-xl text-[10px] font-bold outline-none flex-grow">
             </div>
-
             <div id="lista-extrato-full" class="space-y-3"></div>
         </section>
 
         <section id="aba-bancos" class="hidden p-6 space-y-4">
-            <h3 class="font-extrabold text-gray-800">Instituições</h3>
+            <h3 class="font-extrabold text-gray-800">Suas Contas</h3>
             <div id="lista-bancos" class="space-y-3"></div>
-            <div class="bg-white p-6 rounded-[28px] border border-gray-200 space-y-3 mt-4">
+            <div class="bg-white p-6 rounded-[28px] border border-gray-100 space-y-3 mt-4">
                 <input id="nome-banco" type="text" placeholder="Nome do Banco" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-0 ring-1 ring-gray-100 font-bold">
-                <input id="saldo-inicial" type="number" inputmode="decimal" placeholder="Saldo R$" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-0 ring-1 ring-gray-100 font-bold">
-                <div class="flex items-center gap-3">
-                    <span class="text-[10px] font-black text-gray-400 uppercase">Cor do Banco:</span>
-                    <input type="color" id="cor-banco" value="#0f172a" class="w-12 h-10 rounded-lg cursor-pointer bg-transparent border-0">
-                </div>
-                <button onclick="adicionarBanco()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold shadow-lg">Cadastrar Instituição</button>
+                <input id="saldo-inicial" type="number" inputmode="decimal" placeholder="Saldo Atual R$" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-0 ring-1 ring-gray-100 font-bold">
+                <input type="color" id="cor-banco" value="#4f46e5" class="w-full h-10 rounded-xl cursor-pointer bg-transparent border-0">
+                <button onclick="adicionarBanco()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold">Cadastrar</button>
             </div>
         </section>
 
         <section id="aba-metas" class="hidden p-6 space-y-4">
-            <h3 class="font-extrabold text-gray-800 tracking-tight">Cofres Estratégicos</h3>
+            <h3 class="font-extrabold text-gray-800 tracking-tight">Cofres</h3>
             <div id="lista-metas" class="space-y-6"></div>
-            <div class="bg-white p-6 rounded-[28px] border border-gray-200 space-y-3 mt-8">
-                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Nova Meta de Acúmulo</p>
-                <input id="nome-meta" type="text" placeholder="Ex: Investimento 2026" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-0 ring-1 ring-gray-100 font-bold">
-                <input id="valor-meta" type="number" inputmode="decimal" placeholder="Valor Alvo R$" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-0 ring-1 ring-gray-100 font-bold">
-                <button onclick="adicionarMeta()" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold">Criar Cofre</button>
+            <div class="bg-white p-6 rounded-[28px] border border-gray-100 space-y-3">
+                <input id="nome-meta" type="text" placeholder="Nome do Objetivo" class="w-full p-4 bg-gray-50 rounded-2xl outline-none border-0 ring-1 ring-gray-100 font-bold">
+                <input id="valor-meta" type="number" placeholder="Alvo R$" class="w-full p-4 bg-gray-50 rounded-2xl font-bold">
+                <button onclick="adicionarMeta()" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold italic text-sm">Criar Cofre Estratégico</button>
             </div>
         </section>
-
-        <button onclick="abrirModal()" class="fixed bottom-8 right-6 w-16 h-16 bg-slate-900 text-white rounded-2xl shadow-2xl flex items-center justify-center z-50">
-            <span class="text-3xl">+</span>
-        </button>
     </div>
 
     <div id="modal" class="fixed inset-0 bg-black/70 hidden z-[60] flex items-end backdrop-blur-sm">
         <div class="bg-white w-full rounded-t-[40px] p-8 pb-12 space-y-4 animate-in slide-in-from-bottom duration-300 shadow-2xl">
             <h3 class="text-xl font-black text-center text-slate-800 uppercase italic">Nova Operação</h3>
-            <input id="m-desc" type="text" placeholder="Descrição do Gasto/Entrada" class="w-full p-5 bg-gray-50 rounded-[22px] outline-none font-bold">
+            <input id="m-desc" type="text" placeholder="Descrição" class="w-full p-5 bg-gray-50 rounded-[22px] outline-none font-bold">
             <input id="m-valor" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-gray-50 rounded-[22px] outline-none font-black text-indigo-600 text-2xl border-0 ring-1 ring-gray-100">
             <div class="grid grid-cols-2 gap-3">
-                <select id="m-tipo" class="p-5 bg-gray-50 rounded-[22px] font-bold text-gray-500 border-0 ring-1 ring-gray-100"><option value="despesa">➖ Saída</option><option value="receita">➕ Entrada</option></select>
-                <select id="m-banco" class="p-5 bg-gray-50 rounded-[22px] font-bold text-gray-500 border-0 ring-1 ring-gray-100"></select>
+                <select id="m-tipo" class="p-5 bg-gray-50 rounded-[22px] font-bold text-gray-500 border-0 ring-1 ring-gray-100">
+                    <option value="despesa">➖ Saída</option>
+                    <option value="receita">➕ Entrada</option>
+                </select>
+                <select id="m-categoria" class="p-5 bg-gray-50 rounded-[22px] font-bold text-gray-500 border-0 ring-1 ring-gray-100">
+                    <option value="Essencial">🏠 Essencial</option>
+                    <option value="Lazer">Pop🍿 Lazer</option>
+                    <option value="Alimentação">🍔 Alimentação</option>
+                    <option value="Outros">⚙️ Outros</option>
+                </select>
             </div>
-            <button onclick="confirmarLancamento()" class="w-full bg-slate-900 text-white p-5 rounded-[22px] font-black text-lg">Processar Agora</button>
+            <select id="m-banco" class="p-5 bg-gray-50 rounded-[22px] font-bold text-gray-500 border-0 ring-1 ring-gray-100 w-full mb-2"></select>
+            <button onclick="confirmarLancamento()" class="w-full bg-slate-900 text-white p-5 rounded-[22px] font-black text-lg">Confirmar</button>
             <button onclick="fecharModal()" class="w-full text-gray-400 font-bold p-2 text-sm uppercase">Cancelar</button>
         </div>
     </div>
 
-    <div id="modal-cofre" class="fixed inset-0 bg-black/70 hidden z-[70] flex items-end backdrop-blur-sm">
-        <div class="bg-white w-full rounded-t-[40px] p-8 pb-12 space-y-4 animate-in slide-in-from-bottom duration-300">
-            <h3 id="titulo-modal-cofre" class="text-xl font-black text-center italic">Aportar no Cofre</h3>
-            <input id="v-cofre" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-6 bg-gray-50 rounded-[24px] outline-none font-black text-3xl text-indigo-600 text-center">
-            <select id="banco-origem-cofre" class="w-full p-5 bg-gray-50 rounded-[22px] font-bold text-gray-600"></select>
-            <button onclick="processarAporte()" class="w-full bg-indigo-600 text-white p-5 rounded-[22px] font-extrabold text-lg shadow-xl">Confirmar Aporte</button>
-            <button onclick="fecharModalCofre()" class="w-full text-gray-400 font-bold p-2 text-sm uppercase">Voltar</button>
+    <div id="modal-transferencia" class="fixed inset-0 bg-black/70 hidden z-[60] flex items-end backdrop-blur-sm">
+        <div class="bg-white w-full rounded-t-[40px] p-8 pb-12 space-y-4 animate-in slide-in-from-bottom duration-300 shadow-2xl text-center">
+            <h3 class="text-xl font-black uppercase italic">Mover Patrimônio</h3>
+            <input id="t-valor" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-gray-50 rounded-[22px] outline-none font-black text-indigo-600 text-2xl border-0 ring-1 ring-gray-100">
+            <div class="space-y-2">
+                <p class="text-[10px] font-bold text-gray-400 uppercase">Sai de:</p>
+                <select id="t-origem" class="w-full p-4 bg-gray-50 rounded-2xl font-bold"></select>
+                <p class="text-[10px] font-bold text-gray-400 uppercase mt-2">Para:</p>
+                <select id="t-destino" class="w-full p-4 bg-gray-50 rounded-2xl font-bold"></select>
+            </div>
+            <button onclick="confirmarTransferencia()" class="w-full bg-slate-900 text-white p-5 rounded-[22px] font-black text-lg">Executar Transferência</button>
+            <button onclick="fecharModalTransferencia()" class="w-full text-gray-400 font-bold p-2 text-sm uppercase">Cancelar</button>
         </div>
     </div>
 
     <script>
         let u = "";
-        let db = JSON.parse(localStorage.getItem('guima_audit_v11')) || {};
-        let cofreSelecionado = null;
+        let db = JSON.parse(localStorage.getItem('guima_elite_v12')) || {};
+        let privacidade = false;
 
-        function mudarAba(aba) {
-            ['resumo', 'extrato', 'bancos', 'metas'].forEach(a => {
-                document.getElementById('aba-'+a).classList.add('hidden');
-                document.getElementById('btn-'+a).classList.remove('tab-active');
-                document.getElementById('btn-'+a).classList.add('text-gray-400');
+        function togglePrivacidade() {
+            privacidade = !privacidade;
+            document.getElementById('icon-privacidade').innerText = privacidade ? '🙈' : '👁️';
+            document.querySelectorAll('.val-privacidade').forEach(el => {
+                privacidade ? el.classList.add('hide-val') : el.classList.remove('hide-val');
             });
-            document.getElementById('aba-'+aba).classList.remove('hidden');
-            document.getElementById('btn-'+aba).classList.add('tab-active');
-            render();
         }
 
         function fazerLogin() {
@@ -136,15 +158,118 @@
             if (!db[u]) db[u] = { bancos: [], historico: [], metas: [] };
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('main-app').classList.remove('hidden');
-            atualizarSelectBancosFiltro();
             render();
         }
 
-        function atualizarSelectBancosFiltro() {
-            const select = document.getElementById('filtro-banco');
+        function abrirModal() {
+            const select = document.getElementById('m-banco');
+            select.innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
+            document.getElementById('modal').classList.remove('hidden');
+        }
+        function fecharModal() { document.getElementById('modal').classList.add('hidden'); }
+
+        function abrirModalTransferencia() {
             const bancos = db[u].bancos;
-            select.innerHTML = '<option value="todos">Todos os Bancos</option>' + 
-                                bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
+            if(bancos.length < 2) return alert("Cadastre ao menos 2 bancos!");
+            const sO = document.getElementById('t-origem');
+            const sD = document.getElementById('t-destino');
+            const html = bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
+            sO.innerHTML = html; sD.innerHTML = html;
+            document.getElementById('modal-transferencia').classList.remove('hidden');
+        }
+        function fecharModalTransferencia() { document.getElementById('modal-transferencia').classList.add('hidden'); }
+
+        function confirmarLancamento() {
+            const desc = document.getElementById('m-desc').value;
+            const valor = parseFloat(document.getElementById('m-valor').value);
+            const tipo = document.getElementById('m-tipo').value;
+            const cat = document.getElementById('m-categoria').value;
+            const bancoNome = document.getElementById('m-banco').value;
+            if(!desc || isNaN(valor)) return;
+            const banco = db[u].bancos.find(b => b.nome === bancoNome);
+            if (tipo === 'receita') banco.saldo += valor; else banco.saldo -= valor;
+            
+            db[u].historico.unshift({ desc, valor, tipo, categoria: cat, banco: bancoNome, cor: banco.cor, data: new Date().toLocaleDateString('pt-BR'), dataIso: new Date().toISOString() });
+            fecharModal(); salvar();
+        }
+
+        function confirmarTransferencia() {
+            const valor = parseFloat(document.getElementById('t-valor').value);
+            const de = document.getElementById('t-origem').value;
+            const para = document.getElementById('t-destino').value;
+            if(de === para || isNaN(valor)) return alert("Transferência inválida");
+            
+            const bO = db[u].bancos.find(b => b.nome === de);
+            const bD = db[u].bancos.find(b => b.nome === para);
+            if(bO.saldo < valor) return alert("Saldo insuficiente");
+
+            bO.saldo -= valor; bD.saldo += valor;
+            db[u].historico.unshift({ desc: `Transf: ${de} ➔ ${para}`, valor, tipo: 'transferencia', banco: de, cor: '#94a3b8', data: new Date().toLocaleDateString('pt-BR'), dataIso: new Date().toISOString() });
+            fecharModalTransferencia(); salvar();
+        }
+
+        function salvar() { localStorage.setItem('guima_elite_v12', JSON.stringify(db)); render(); }
+
+        function render() {
+            const user = db[u];
+            if(!user) return;
+            const mesAtual = new Date().getMonth();
+            const anoAtual = new Date().getFullYear();
+
+            // Cálculos Patrimônio
+            const totalGeral = user.bancos.reduce((acc, b) => acc + b.saldo, 0);
+            document.getElementById('saldo-geral').innerText = `R$ ${totalGeral.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+
+            // Cálculos Performance (Ignora Transferências)
+            const movMes = user.historico.filter(h => {
+                const d = new Date(h.dataIso);
+                return d.getMonth() === mesAtual && d.getFullYear() === anoAtual;
+            });
+            const entradas = movMes.filter(h => h.tipo === 'receita').reduce((a, b) => a + b.valor, 0);
+            const saidas = movMes.filter(h => h.tipo === 'despesa').reduce((a, b) => a + b.valor, 0);
+            document.getElementById('perf-entradas').innerText = `+ R$ ${entradas.toLocaleString('pt-BR')}`;
+            document.getElementById('perf-saidas').innerText = `- R$ ${saidas.toLocaleString('pt-BR')}`;
+
+            // Renderização de Listas (Resumo e Extrato)
+            const listaResumo = document.getElementById('movimentacoes-resumo');
+            const listaExtrato = document.getElementById('lista-extrato-full');
+            const bancoFiltro = document.getElementById('filtro-banco').value;
+            const busca = document.getElementById('busca-desc').value.toLowerCase();
+
+            const filtrados = user.historico.filter(h => (bancoFiltro === 'todos' || h.banco === bancoFiltro) && h.desc.toLowerCase().includes(busca));
+
+            const htmlMap = (h) => `
+                <div class="card-extrato">
+                    <div class="flex justify-between items-center">
+                        <div class="flex gap-3 items-center">
+                            <span class="dot" style="background-color: ${h.cor}"></span>
+                            <div>
+                                <p class="text-sm font-extrabold text-slate-800 leading-none">${h.desc}</p>
+                                <p class="text-[9px] text-slate-400 font-black uppercase mt-1 tracking-tighter">${h.data} • ${h.banco} ${h.categoria ? '• '+h.categoria : ''}</p>
+                            </div>
+                        </div>
+                        <span class="font-black text-sm val-privacidade ${h.tipo === 'receita' ? 'text-green-600' : 'text-slate-900'} ${privacidade?'hide-val':''}">
+                            ${h.tipo === 'receita' ? '+' : '-'} R$ ${h.valor.toFixed(2)}
+                        </span>
+                    </div>
+                </div>`;
+
+            listaResumo.innerHTML = user.historico.slice(0, 5).map(htmlMap).join('');
+            listaExtrato.innerHTML = filtrados.map(htmlMap).join('');
+
+            // Bancos
+            const selectFiltro = document.getElementById('filtro-banco');
+            const atual = selectFiltro.value;
+            selectFiltro.innerHTML = '<option value="todos">Todos Bancos</option>' + user.bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
+            selectFiltro.value = atual;
+
+            document.getElementById('lista-bancos').innerHTML = user.bancos.map(b => `
+                <div class="bg-white p-5 rounded-2xl shadow-sm border-l-[6px]" style="border-color: ${b.cor}">
+                    <div class="flex justify-between items-center">
+                        <span class="font-black text-slate-800 uppercase text-xs">${b.nome}</span>
+                        <span class="font-black text-lg val-privacidade ${privacidade?'hide-val':''} ${b.saldo < 0 ? 'text-red-500' : ''}">R$ ${b.saldo.toFixed(2)}</span>
+                    </div>
+                </div>`).join('');
         }
 
         function adicionarBanco() {
@@ -154,151 +279,14 @@
             if(!nome || isNaN(saldo)) return;
             db[u].bancos.push({ nome, saldo, cor });
             salvar();
-            atualizarSelectBancosFiltro();
-            document.getElementById('nome-banco').value = ""; document.getElementById('saldo-inicial').value = "";
         }
 
         function adicionarMeta() {
             const nome = document.getElementById('nome-meta').value;
             const valor = parseFloat(document.getElementById('valor-meta').value);
             if(!nome || isNaN(valor)) return;
-            db[u].metas.push({ id: Date.now(), nome, total: valor, atual: 0, extrato: [] });
+            db[u].metas.push({ id: Date.now(), nome, total: valor, atual: 0 });
             salvar();
-            document.getElementById('nome-meta').value = ""; document.getElementById('valor-meta').value = "";
-        }
-
-        function abrirModalCofre(id) {
-            cofreSelecionado = db[u].metas.find(m => m.id === id);
-            document.getElementById('titulo-modal-cofre').innerText = `Aportar: ${cofreSelecionado.nome}`;
-            const select = document.getElementById('banco-origem-cofre');
-            select.innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
-            document.getElementById('modal-cofre').classList.remove('hidden');
-        }
-
-        function fecharModalCofre() { document.getElementById('modal-cofre').classList.add('hidden'); }
-
-        function processarAporte() {
-            const valor = parseFloat(document.getElementById('v-cofre').value);
-            const bancoNome = document.getElementById('banco-origem-cofre').value;
-            if (isNaN(valor) || valor <= 0) return;
-            const banco = db[u].bancos.find(b => b.nome === bancoNome);
-            if (banco.saldo < valor) { alert("Saldo insuficiente!"); return; }
-            const dataHoje = new Date().toLocaleDateString('pt-BR');
-            banco.saldo -= valor;
-            cofreSelecionado.atual += valor;
-            if(!cofreSelecionado.extrato) cofreSelecionado.extrato = [];
-            cofreSelecionado.extrato.unshift({ valor, banco: bancoNome, data: dataHoje });
-            db[u].historico.unshift({ desc: `Cofre: ${cofreSelecionado.nome}`, valor, tipo: 'despesa', banco: bancoNome, cor: '#4f46e5', data: dataHoje });
-            document.getElementById('v-cofre').value = "";
-            fecharModalCofre();
-            salvar();
-        }
-
-        function abrirModal() {
-            const select = document.getElementById('m-banco');
-            select.innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
-            document.getElementById('modal').classList.remove('hidden');
-        }
-
-        function fecharModal() { document.getElementById('modal').classList.add('hidden'); }
-
-        function confirmarLancamento() {
-            const desc = document.getElementById('m-desc').value;
-            const valor = parseFloat(document.getElementById('m-valor').value);
-            const tipo = document.getElementById('m-tipo').value;
-            const bancoNome = document.getElementById('m-banco').value;
-            if(!desc || isNaN(valor)) return;
-            const banco = db[u].bancos.find(b => b.nome === bancoNome);
-            if (tipo === 'receita') banco.saldo += valor; else banco.saldo -= valor;
-            db[u].historico.unshift({ desc, valor, tipo, banco: bancoNome, cor: banco.cor, data: new Date().toLocaleDateString('pt-BR') });
-            fecharModal();
-            salvar();
-        }
-
-        function salvar() { localStorage.setItem('guima_audit_v11', JSON.stringify(db)); render(); }
-
-        function render() {
-            const user = db[u];
-            const totalGeral = user.bancos.reduce((acc, b) => acc + b.saldo, 0);
-            document.getElementById('saldo-geral').innerText = `R$ ${totalGeral.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-
-            // Render Resumo (Últimos 5)
-            const resumoH = document.getElementById('movimentacoes-resumo');
-            resumoH.innerHTML = user.historico.slice(0, 5).map(h => criarCardExtrato(h)).join('');
-
-            // Render Bancos
-            const listaB = document.getElementById('lista-bancos');
-            listaB.innerHTML = user.bancos.map(b => `
-                <div class="bg-white p-5 rounded-2xl shadow-sm border-l-[6px]" style="border-color: ${b.cor}">
-                    <div class="flex justify-between items-center">
-                        <span class="font-black text-slate-800 uppercase text-xs italic">${b.nome}</span>
-                        <span class="font-black text-lg ${b.saldo < 0 ? 'text-red-500' : 'text-slate-900'}">R$ ${b.saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
-                    </div>
-                </div>
-            `).join('');
-
-            // Render Cofres
-            const listaM = document.getElementById('lista-metas');
-            listaM.innerHTML = user.metas.map(m => {
-                const perc = Math.min(100, (m.atual / m.total) * 100);
-                return `
-                    <div class="bg-white p-6 rounded-[28px] shadow-sm border border-gray-50 space-y-4">
-                        <div class="flex justify-between font-black text-[11px] uppercase text-slate-800"><span>${m.nome}</span><span class="text-indigo-600">${perc.toFixed(1)}%</span></div>
-                        <div class="h-3 bg-gray-50 rounded-full overflow-hidden border border-gray-100">
-                            <div class="h-full bg-indigo-600 transition-all duration-1000" style="width: ${perc}%"></div>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <p class="text-[9px] text-slate-400 font-black tracking-widest">R$ ${m.atual.toLocaleString('pt-BR')} / R$ ${m.total.toLocaleString('pt-BR')}</p>
-                            <button onclick="abrirModalCofre(${m.id})" class="bg-slate-900 text-white px-5 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest active:scale-95 transition-all">Aportar</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            renderExtrato();
-        }
-
-        function renderExtrato() {
-            const user = db[u];
-            const bancoFiltro = document.getElementById('filtro-banco').value;
-            const buscaDesc = document.getElementById('busca-desc').value.toLowerCase();
-            const listaE = document.getElementById('lista-extrato-full');
-
-            let filtrados = user.historico.filter(h => {
-                const matchBanco = bancoFiltro === 'todos' || h.banco === bancoFiltro;
-                const matchDesc = h.desc.toLowerCase().includes(buscaDesc);
-                return matchBanco && matchDesc;
-            });
-
-            listaE.innerHTML = filtrados.length === 0 ? '<div class="text-center py-20 text-gray-300 font-bold uppercase text-[10px]">Nenhum registro encontrado</div>' : 
-            filtrados.map(h => criarCardExtrato(h)).join('');
-        }
-
-        function criarCardExtrato(h) {
-            return `
-                <div class="card-extrato">
-                    <div class="flex justify-between items-start">
-                        <div class="flex gap-3 items-center">
-                            <span class="dot shadow-sm" style="background-color: ${h.cor}"></span>
-                            <div>
-                                <p class="text-sm font-extrabold text-slate-800 leading-none">${h.desc}</p>
-                                <p class="text-[9px] text-slate-400 font-black uppercase mt-1.5 tracking-tighter">${h.data} • ${h.banco}</p>
-                            </div>
-                        </div>
-                        <span class="font-black text-sm ${h.tipo === 'receita' ? 'text-green-600' : 'text-slate-900'}">
-                            ${h.tipo === 'receita' ? '+' : '-'} R$ ${h.valor.toFixed(2)}
-                        </span>
-                    </div>
-                </div>
-            `;
-        }
-
-        function exportarDados() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
-            const dlAnchorElem = document.createElement('a');
-            dlAnchorElem.setAttribute("href", dataStr);
-            dlAnchorElem.setAttribute("download", `guima_backup_${new Date().toLocaleDateString()}.json`);
-            dlAnchorElem.click();
         }
     </script>
 </body>
