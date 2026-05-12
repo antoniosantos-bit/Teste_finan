@@ -3,132 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Guima Strategy | Elite</title>
+    <title>Guima Strategy | Elite v14.2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fcfcfd; padding-bottom: 120px; }
         .tab-active { color: #4f46e5 !important; border-bottom: 3px solid #4f46e5 !important; opacity: 1 !important; }
-        .dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; }
-        .hide-val { filter: blur(8px); pointer-events: none; }
+        .dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; }
+        .hide-val { filter: blur(10px); pointer-events: none; }
         .card-extrato { border-radius: 20px; border: 1px solid #f1f5f9; background: white; padding: 16px; margin-bottom: 10px; }
+        
         section { display: none; }
         #aba-resumo { display: block; }
-        
-        /* Animação do Bonequinho */
-        .runner {
-            position: absolute;
-            top: -25px;
-            transition: left 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            font-size: 20px;
+
+        /* AJUSTE DO CARIOCA RUNNER PARA A DIREITA */
+        .runner { 
+            position: absolute; 
+            top: -25px; 
+            transition: left 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            font-size: 22px; 
+            z-index: 10;
+            transform: scaleX(-1); /* ISSO INVERTE O EMOJI PARA A DIREITA */
         }
-        .progress-container { position: relative; height: 12px; background: #e2e8f0; border-radius: 100px; margin-top: 30px; }
+        
+        .progress-container { position: relative; height: 12px; background: #e2e8f0; border-radius: 100px; margin-top: 35px; }
         .progress-bar { height: 100%; border-radius: 100px; transition: width 1s ease-in-out; }
-        .finished-glow { box-shadow: 0 0 15px #22c55e; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        .chart-donut { width: 140px; height: 140px; border-radius: 50%; position: relative; transition: all 1s; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .chart-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #64748b; text-align: center; }
+        .medal-slot { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; filter: grayscale(1); opacity: 0.2; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .medal-active { filter: grayscale(0); opacity: 1; transform: scale(1.1); background: white; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-color: #cbd5e1; }
     </style>
 </head>
 <body>
 
     <div id="login-screen" class="min-h-screen flex flex-col justify-center px-8 bg-white z-[100] relative text-center">
-        <div class="w-20 h-20 bg-slate-900 rounded-[28px] flex items-center justify-center mx-auto shadow-2xl mb-4 text-white text-3xl font-black italic">G</div>
-        <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase">Guima Strategy</h1>
-        <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-10">Elite Edition v13.1</p>
-        <input id="user-name" type="text" placeholder="Seu Nome" class="w-full p-5 rounded-2xl bg-slate-50 border-0 ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-indigo-600 mb-4 font-bold">
-        <button onclick="fazerLogin()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-bold uppercase tracking-widest shadow-xl">Acessar</button>
+        <div class="w-24 h-24 bg-slate-900 rounded-[32px] flex items-center justify-center mx-auto shadow-2xl mb-6 text-white text-4xl font-black italic">G</div>
+        <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase mb-2">Guima Strategy</h1>
+        <p class="text-slate-400 text-xs font-bold uppercase tracking-[0.2em] mb-10">Elite Edition v14.2</p>
+        <input id="user-name" type="text" placeholder="Digite seu nome" class="w-full p-5 rounded-2xl bg-slate-50 border-0 ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-indigo-600 mb-4 font-bold text-lg text-center">
+        <button onclick="fazerLogin()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-black uppercase tracking-widest shadow-xl active:scale-95 transition-all">Acessar Painel</button>
     </div>
 
     <div id="main-app" class="hidden">
         <nav class="grid grid-cols-4 bg-white border-b sticky top-0 z-[50] shadow-sm text-[9px] font-black uppercase">
-            <button onclick="mudarAba('resumo')" id="btn-resumo" class="p-4 tab-active">Início</button>
-            <button onclick="mudarAba('extrato')" id="btn-extrato" class="p-4 text-gray-400">Extrato</button>
+            <button onclick="mudarAba('resumo')" id="btn-resumo" class="p-4 tab-active">Fluxo</button>
+            <button onclick="mudarAba('insights')" id="btn-insights" class="p-4 text-gray-400">Insights</button>
             <button onclick="mudarAba('bancos')" id="btn-bancos" class="p-4 text-gray-400">Contas</button>
             <button onclick="mudarAba('metas')" id="btn-metas" class="p-4 text-gray-400">Cofres</button>
         </nav>
 
         <section id="aba-resumo" class="p-6 space-y-6">
-            <div class="bg-slate-900 p-8 rounded-[32px] text-white shadow-2xl relative">
+            <div class="bg-slate-900 p-8 rounded-[36px] text-white shadow-2xl relative overflow-hidden">
                 <div class="flex justify-between items-start">
                     <div>
-                        <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest italic">Olá, <span id="display-user-name">Usuário</span></p>
-                        <h2 id="saldo-geral" class="text-4xl font-black mt-1 tracking-tight val-privacidade">R$ 0,00</h2>
+                        <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest italic mb-1">Estratégia de <span id="display-user-name">...</span></p>
+                        <h2 id="saldo-geral" class="text-4xl font-black tracking-tight val-privacidade">R$ 0,00</h2>
                     </div>
                     <button onclick="togglePrivacidade()" class="p-2 bg-white/10 rounded-full"><span id="icon-privacidade">👁️</span></button>
                 </div>
                 <div class="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-white/10 text-center">
-                    <div><p class="text-[8px] font-bold text-green-400 uppercase">Ganhos (Mês)</p><p id="perf-entradas" class="font-black text-sm val-privacidade">R$ 0,00</p></div>
-                    <div><p class="text-[8px] font-bold text-red-400 uppercase">Gastos (Mês)</p><p id="perf-saidas" class="font-black text-sm val-privacidade">R$ 0,00</p></div>
+                    <div><p class="text-[8px] font-bold text-green-400 uppercase tracking-widest">Entradas Mês</p><p id="perf-entradas" class="font-black text-sm val-privacidade">R$ 0,00</p></div>
+                    <div><p class="text-[8px] font-bold text-red-400 uppercase tracking-widest">Saídas Mês</p><p id="perf-saidas" class="font-black text-sm val-privacidade">R$ 0,00</p></div>
                 </div>
             </div>
+
+            <div class="bg-white p-5 rounded-[28px] border border-gray-100 shadow-sm text-center">
+                <div class="flex justify-between items-center mb-4 px-1">
+                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Conquistas Elite</p>
+                    <span class="text-[9px] font-bold text-indigo-500 italic" id="txt-progresso-medalha">0/5</span>
+                </div>
+                <div class="flex justify-around items-center">
+                    <div id="m1" class="medal-slot">🏦</div>
+                    <div id="m2" class="medal-slot">📥</div>
+                    <div id="m3" class="medal-slot">🏆</div>
+                    <div id="m4" class="medal-slot">📈</div>
+                    <div id="m5" class="medal-slot">🎨</div>
+                </div>
+            </div>
+
             <div class="flex gap-2">
                 <button onclick="abrirModal()" class="flex-1 bg-white border p-4 rounded-2xl font-black text-[10px] uppercase shadow-sm">+ Operação</button>
                 <button onclick="abrirModalTransferencia()" class="flex-1 bg-white border p-4 rounded-2xl font-black text-[10px] uppercase shadow-sm">⇄ Transf.</button>
             </div>
-            <div id="movimentacoes-resumo" class="space-y-3 mt-4"></div>
+            <div id="movimentacoes-resumo" class="space-y-3"></div>
         </section>
 
-        <section id="aba-bancos" class="p-6 space-y-4">
-            <h3 class="font-extrabold text-gray-800 italic">Suas Contas</h3>
-            <div id="lista-bancos" class="space-y-3"></div>
-            <div class="bg-white p-6 rounded-[28px] border border-gray-100 space-y-3">
-                <input id="nome-banco" type="text" placeholder="Nome do Banco" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold">
-                <input id="saldo-inicial" type="number" placeholder="Saldo Atual" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold">
-                <input type="color" id="cor-banco" value="#4f46e5" class="h-10 w-full rounded-xl bg-transparent border-0 cursor-pointer">
-                <button onclick="adicionarBanco()" class="w-full bg-slate-900 text-white p-4 rounded-2xl font-bold uppercase text-xs">Vincular Conta</button>
+        <section id="aba-insights" class="p-6 space-y-6">
+            <div class="bg-white p-6 rounded-[32px] border border-gray-100 flex items-center gap-8 shadow-sm">
+                <div id="grafico-pizza" class="chart-donut">
+                    <div class="chart-center">GASTOS<br>POR TIPO</div>
+                </div>
+                <div class="flex-1 space-y-2">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between text-[10px] font-black"><span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-indigo-600"></span> CASA</span> <span id="perc-casa">0%</span></div>
+                        <div class="flex items-center justify-between text-[10px] font-black"><span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500"></span> LAZER</span> <span id="perc-lazer">0%</span></div>
+                        <div class="flex items-center justify-between text-[10px] font-black"><span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-orange-400"></span> COMIDA</span> <span id="perc-comida">0%</span></div>
+                        <div class="flex items-center justify-between text-[10px] font-black"><span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500"></span> OUTROS</span> <span id="perc-outros">0%</span></div>
+                    </div>
+                </div>
             </div>
-        </section>
-
-        <section id="aba-extrato" class="p-6 space-y-4">
+            <div class="bg-indigo-50 p-6 rounded-[32px] border border-indigo-100">
+                <div class="flex justify-between items-center mb-4"><p class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Assinaturas</p><span id="total-assinaturas" class="text-sm font-black text-indigo-700">R$ 0,00</span></div>
+                <div id="lista-assinaturas" class="space-y-2"></div>
+            </div>
             <div class="flex gap-2">
-                <select id="filtro-banco" onchange="render()" class="p-3 bg-white border rounded-xl text-[10px] font-bold outline-none flex-1"></select>
-                <input type="text" id="busca-desc" onkeyup="render()" placeholder="Busca..." class="p-3 bg-white border rounded-xl text-[10px] font-bold flex-grow">
+                <select id="filtro-banco" onchange="render()" class="p-4 bg-white border rounded-2xl text-[10px] font-bold outline-none flex-1"></select>
+                <input type="text" id="busca-desc" onkeyup="render()" placeholder="Busca..." class="p-4 bg-white border rounded-2xl text-[10px] font-bold flex-[2]">
             </div>
             <div id="lista-extrato-full" class="space-y-3"></div>
         </section>
 
-        <section id="aba-metas" class="p-6 space-y-4">
-            <h3 class="font-extrabold text-gray-800 italic text-center">Corrida para o Alvo 🏁</h3>
-            <div id="lista-metas" class="space-y-12 pt-6"></div>
-            <div class="bg-white p-6 rounded-[28px] border border-gray-100 space-y-3 mt-8">
-                <input id="nome-meta" type="text" placeholder="Nome do Objetivo" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold">
-                <input id="valor-meta" type="number" placeholder="Valor Alvo R$" class="w-full p-4 bg-gray-50 rounded-2xl outline-none font-bold">
-                <button onclick="adicionarMeta()" class="w-full bg-indigo-600 text-white p-4 rounded-2xl font-bold uppercase text-xs">Criar Meta</button>
+        <section id="aba-bancos" class="p-6 space-y-4">
+            <div id="lista-bancos" class="space-y-3"></div>
+            <div class="bg-white p-6 rounded-[32px] border border-gray-100 space-y-4">
+                <input id="nome-banco" type="text" placeholder="Nome do Banco" class="w-full p-4 bg-gray-50 rounded-2xl font-bold">
+                <input id="saldo-inicial" type="number" placeholder="Saldo Atual" class="w-full p-4 bg-gray-50 rounded-2xl font-bold">
+                <input type="color" id="cor-banco" value="#4f46e5" class="h-10 w-full rounded-xl bg-transparent border-0 cursor-pointer">
+                <button onclick="adicionarBanco()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-black uppercase text-xs">Salvar Banco</button>
             </div>
         </section>
-    </div>
 
-    <div id="modal-aporte" class="fixed inset-0 bg-black/70 hidden z-[200] flex items-end backdrop-blur-sm">
-        <div class="bg-white w-full rounded-t-[40px] p-8 pb-12 space-y-4">
-            <h3 id="titulo-aporte" class="text-xl font-black text-center uppercase italic">Aportar</h3>
-            <input id="a-valor" type="number" inputmode="decimal" placeholder="Quanto?" class="w-full p-5 bg-gray-50 rounded-[22px] outline-none font-black text-green-600 text-2xl text-center">
-            <select id="a-origem" class="w-full p-5 bg-gray-50 rounded-[22px] font-bold text-gray-500"></select>
-            <button onclick="confirmarAporte()" class="w-full bg-indigo-600 text-white p-5 rounded-[22px] font-black text-lg">Confirmar</button>
-            <button onclick="fecharModalAporte()" class="w-full text-gray-400 font-bold p-2 text-xs uppercase text-center">Voltar</button>
-        </div>
+        <section id="aba-metas" class="p-6 space-y-4">
+            <h3 class="font-extrabold text-gray-800 text-center italic mb-4">Oráculo dos Objetivos ✨</h3>
+            <div id="lista-metas" class="space-y-12 pb-10"></div>
+            <div class="bg-white p-8 rounded-[36px] border border-gray-100 space-y-4">
+                <input id="nome-meta" type="text" placeholder="Qual o objetivo?" class="w-full p-4 bg-gray-50 rounded-2xl font-bold">
+                <input id="valor-meta" type="number" placeholder="Alvo R$" class="w-full p-4 bg-gray-50 rounded-2xl font-bold">
+                <button onclick="adicionarMeta()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-black uppercase text-xs">Criar Meta</button>
+            </div>
+        </section>
+
+        <button onclick="abrirModal()" class="fixed bottom-8 right-6 w-16 h-16 bg-slate-900 text-white rounded-[22px] shadow-2xl flex items-center justify-center z-50 border-4 border-white"><span class="text-3xl">+</span></button>
     </div>
 
     <div id="modal" class="fixed inset-0 bg-black/70 hidden z-[200] flex items-end backdrop-blur-sm">
-        <div class="bg-white w-full rounded-t-[40px] p-8 pb-12 space-y-4">
-            <input id="m-desc" type="text" placeholder="Descrição" class="w-full p-5 bg-gray-50 rounded-[22px] outline-none font-bold">
-            <input id="m-valor" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-gray-50 rounded-[22px] outline-none font-black text-indigo-600 text-2xl">
+        <div class="bg-white w-full rounded-t-[44px] p-8 pb-14 space-y-4">
+            <input id="m-desc" type="text" placeholder="Descrição" class="w-full p-5 bg-gray-50 rounded-[24px] font-bold">
+            <input id="m-valor" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-gray-50 rounded-[24px] font-black text-indigo-600 text-3xl text-center">
             <div class="grid grid-cols-2 gap-3">
-                <select id="m-tipo" class="p-5 bg-gray-50 rounded-[22px] font-bold text-gray-500"><option value="despesa">➖ Saída</option><option value="receita">➕ Entrada</option></select>
-                <select id="m-banco" class="p-5 bg-gray-50 rounded-[22px] font-bold text-gray-500"></select>
+                <select id="m-tipo" class="p-5 bg-gray-50 rounded-[24px] font-bold"><option value="despesa">➖ Saída</option><option value="receita">➕ Entrada</option></select>
+                <select id="m-categoria" class="p-5 bg-gray-50 rounded-[24px] font-bold">
+                    <option value="Essencial">🏠 Casa</option><option value="Lazer">🍿 Lazer</option><option value="Alimentação">🍔 Comida</option><option value="Assinatura">📅 Assinatura</option><option value="Outros">⚙️ Outros</option>
+                </select>
             </div>
-            <button onclick="confirmarLancamento()" class="w-full bg-slate-900 text-white p-5 rounded-[22px] font-black text-lg">Confirmar</button>
-            <button onclick="fecharModal()" class="w-full text-gray-400 font-bold p-2 text-sm uppercase text-center">Voltar</button>
+            <select id="m-banco" class="p-5 bg-gray-50 rounded-[24px] font-bold w-full"></select>
+            <button onclick="confirmarLancamento()" class="w-full bg-slate-900 text-white p-5 rounded-[24px] font-black text-lg">Confirmar</button>
+            <button onclick="fecharModal()" class="w-full text-gray-400 font-bold p-2 text-center uppercase">Cancelar</button>
+        </div>
+    </div>
+
+    <div id="modal-aporte" class="fixed inset-0 bg-black/70 hidden z-[200] flex items-end backdrop-blur-sm">
+        <div class="bg-white w-full rounded-t-[44px] p-8 pb-14 space-y-4">
+            <h3 id="titulo-aporte" class="text-xl font-black text-center uppercase italic">Aportar</h3>
+            <input id="a-valor" type="number" inputmode="decimal" placeholder="Quanto?" class="w-full p-5 bg-gray-50 rounded-[24px] font-black text-green-600 text-3xl text-center">
+            <select id="a-origem" class="w-full p-5 bg-gray-50 rounded-[24px] font-bold text-gray-500"></select>
+            <button onclick="confirmarAporte()" class="w-full bg-indigo-600 text-white p-5 rounded-[24px] font-black text-lg">Guardar Dinheiro</button>
+            <button onclick="fecharModalAporte()" class="w-full text-gray-400 font-bold p-2 text-center uppercase">Voltar</button>
+        </div>
+    </div>
+
+    <div id="modal-transferencia" class="fixed inset-0 bg-black/70 hidden z-[200] flex items-end backdrop-blur-sm">
+        <div class="bg-white w-full rounded-t-[44px] p-8 pb-14 space-y-4 text-center">
+            <h3 class="text-xl font-black uppercase italic">Mover Patrimônio</h3>
+            <input id="t-valor" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-gray-50 rounded-[24px] font-black text-slate-800 text-3xl text-center">
+            <div class="grid grid-cols-2 gap-3">
+                <div><p class="text-[9px] font-bold text-gray-400 uppercase">Sai de</p><select id="t-origem" class="w-full p-4 bg-gray-50 rounded-2xl font-bold"></select></div>
+                <div><p class="text-[9px] font-bold text-gray-400 uppercase">Para</p><select id="t-destino" class="w-full p-4 bg-gray-50 rounded-2xl font-bold"></select></div>
+            </div>
+            <button onclick="confirmarTransferencia()" class="w-full bg-slate-900 text-white p-5 rounded-[24px] font-black text-lg">Transferir</button>
+            <button onclick="fecharModalTransferencia()" class="w-full text-gray-400 font-bold p-2 uppercase">Voltar</button>
         </div>
     </div>
 
     <script>
-        let u = "";
-        let rawName = ""; 
-        let db = JSON.parse(localStorage.getItem('guima_elite_v13')) || {};
-        let privacidade = false;
-        let idMetaSelecionada = null;
+        let u = ""; let rawName = ""; let idMetaS = null; let privacidade = false;
+        let db = JSON.parse(localStorage.getItem('guima_strategy_final')) || {};
 
         function mudarAba(id) {
-            ['resumo', 'extrato', 'bancos', 'metas'].forEach(a => {
+            ['resumo', 'insights', 'bancos', 'metas'].forEach(a => {
                 document.getElementById('aba-'+a).style.display = 'none';
                 document.getElementById('btn-'+a).classList.remove('tab-active');
             });
@@ -152,57 +204,83 @@
 
         function render() {
             const user = db[u]; if(!user) return;
+            const mes = new Date().getMonth(); const ano = new Date().getFullYear();
+
             const total = user.bancos.reduce((acc, b) => acc + b.saldo, 0);
             const saldoEl = document.getElementById('saldo-geral');
             saldoEl.innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             privacidade ? saldoEl.classList.add('hide-val') : saldoEl.classList.remove('hide-val');
 
-            const movMes = user.historico.filter(h => new Date(h.dataIso).getMonth() === new Date().getMonth());
-            document.getElementById('perf-entradas').innerText = `+ R$ ${movMes.filter(h => h.tipo === 'receita').reduce((a, b) => a + b.valor, 0).toLocaleString('pt-BR')}`;
-            document.getElementById('perf-saidas').innerText = `- R$ ${movMes.filter(h => h.tipo === 'despesa').reduce((a, b) => a + b.valor, 0).toLocaleString('pt-BR')}`;
+            const movMes = user.historico.filter(h => new Date(h.dataIso).getMonth() === mes && new Date(h.dataIso).getFullYear() === ano);
+            const ent = movMes.filter(h => h.tipo === 'receita').reduce((a,b) => a+b.valor, 0);
+            const sai = movMes.filter(h => h.tipo === 'despesa').reduce((a,b) => a+b.valor, 0);
+            document.getElementById('perf-entradas').innerText = `+ R$ ${ent.toLocaleString('pt-BR')}`;
+            document.getElementById('perf-saidas').innerText = `- R$ ${sai.toLocaleString('pt-BR')}`;
 
-            const cardHtml = (h) => `<div class="card-extrato border-l-4" style="border-left-color: ${h.cor}"><div class="flex justify-between items-center"><div><p class="text-sm font-extrabold text-slate-800 leading-none">${h.desc}</p><p class="text-[9px] text-slate-400 font-bold uppercase mt-1 tracking-tighter">${h.data} • ${h.banco}</p></div><span class="font-black text-sm ${privacidade?'hide-val':''} ${h.tipo === 'receita' ? 'text-green-600' : 'text-slate-900'}">R$ ${h.valor.toFixed(2)}</span></div></div>`;
-            document.getElementById('movimentacoes-resumo').innerHTML = user.historico.slice(0, 5).map(cardHtml).join('');
+            let mc = 0;
+            if(user.bancos.length > 0) { document.getElementById('m1').classList.add('medal-active'); mc++; }
+            if(user.historico.some(h => h.desc.includes("Aporte"))) { document.getElementById('m2').classList.add('medal-active'); mc++; }
+            if(user.metas.some(m => (m.atual/m.total) >= 1)) { document.getElementById('m3').classList.add('medal-active'); mc++; }
+            if(ent > sai && movMes.length > 0) { document.getElementById('m4').classList.add('medal-active'); mc++; }
+            if(user.bancos.length >= 3) { document.getElementById('m5').classList.add('medal-active'); mc++; }
+            document.getElementById('txt-progresso-medalha').innerText = `${mc}/5`;
 
-            document.getElementById('lista-bancos').innerHTML = user.bancos.map(b => `<div class="bg-white p-5 rounded-2xl shadow-sm border-l-[10px]" style="border-left-color: ${b.cor}"><div class="flex justify-between items-center"><span class="font-black text-slate-800 uppercase text-[10px] italic">${b.nome}</span><span class="font-black text-lg ${privacidade?'hide-val':''} ${b.saldo < 0 ? 'text-red-500' : ''}">R$ ${b.saldo.toFixed(2)}</span></div></div>`).join('');
+            const cCasa = movMes.filter(h => h.categoria === 'Essencial').reduce((a,b) => a+b.valor, 0);
+            const cLazer = movMes.filter(h => h.categoria === 'Lazer').reduce((a,b) => a+b.valor, 0);
+            const cComida = movMes.filter(h => h.categoria === 'Alimentação').reduce((a,b) => a+b.valor, 0);
+            const cOutros = movMes.filter(h => h.categoria === 'Outros' || h.categoria === 'Assinatura').reduce((a,b) => a+b.valor, 0);
+            const tg = cCasa + cLazer + cComida + cOutros || 1;
+            const p1 = (cCasa/tg)*100, p2 = (cLazer/tg)*100, p3 = (cComida/tg)*100;
+            document.getElementById('perc-casa').innerText = p1.toFixed(0) + '%';
+            document.getElementById('perc-lazer').innerText = p2.toFixed(0) + '%';
+            document.getElementById('perc-comida').innerText = p3.toFixed(0) + '%';
+            document.getElementById('perc-outros').innerText = ((cOutros/tg)*100).toFixed(0) + '%';
+            document.getElementById('grafico-pizza').style.background = `conic-gradient(#4f46e5 0% ${p1}%, #10b981 ${p1}% ${p1+p2}%, #f59e0b ${p1+p2}% ${p1+p2+p3}%, #ef4444 ${p1+p2+p3}% 100%)`;
 
-            // COFRES PERSONALIZADOS
+            const assins = user.historico.filter(h => h.categoria === 'Assinatura' && new Date(h.dataIso).getMonth() === mes);
+            document.getElementById('total-assinaturas').innerText = `R$ ${assins.reduce((a,b)=>a+b.valor,0).toFixed(2)}`;
+            document.getElementById('lista-assinaturas').innerHTML = [...new Set(assins.map(a => a.desc))].map(n => `<div class="flex justify-between items-center text-[10px] font-bold text-indigo-900 border-b border-indigo-100 pb-1"><span>• ${n}</span> <span>Ativa</span></div>`).join('');
+
+            const ch = (h) => `<div class="card-extrato border-l-[6px]" style="border-left-color: ${h.cor}"><div class="flex justify-between items-center"><div><p class="text-sm font-extrabold text-slate-800 leading-none">${h.desc}</p><p class="text-[9px] text-slate-400 font-bold uppercase mt-1.5 tracking-tighter">${h.data} • ${h.banco} • ${h.categoria || 'Geral'}</p></div><span class="font-black text-sm ${privacidade?'hide-val':''} ${h.tipo === 'receita' ? 'text-green-600' : 'text-slate-900'}">R$ ${h.valor.toFixed(2)}</span></div></div>`;
+            document.getElementById('movimentacoes-resumo').innerHTML = user.historico.slice(0, 5).map(ch).join('');
+            const bF = document.getElementById('filtro-banco').value || 'todos'; const busca = (document.getElementById('busca-desc').value || '').toLowerCase();
+            document.getElementById('lista-extrato-full').innerHTML = user.historico.filter(h => (bF === 'todos' || h.banco === bF) && h.desc.toLowerCase().includes(busca)).map(ch).join('');
+
+            const selF = document.getElementById('filtro-banco'); const vAnt = selF.value;
+            selF.innerHTML = '<option value="todos">Todos Bancos</option>' + user.bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
+            selF.value = vAnt || 'todos';
+
+            document.getElementById('lista-bancos').innerHTML = user.bancos.map(b => `<div class="bg-white p-5 rounded-2xl shadow-sm border-l-[12px]" style="border-left-color: ${b.cor}"><div class="flex justify-between items-center"><span class="font-black text-slate-800 uppercase text-[10px] italic">${b.nome}</span><span class="font-black text-lg ${privacidade?'hide-val':''} ${b.saldo < 0 ? 'text-red-500' : ''}">R$ ${b.saldo.toFixed(2)}</span></div></div>`).join('');
+
+            const mediaM = (user.historico.filter(h => h.desc.includes("Aporte")).reduce((a,b)=>a+b.valor,0) / (mes+1)) || 50;
             document.getElementById('lista-metas').innerHTML = user.metas.map(m => {
-                const perc = Math.min(100, (m.atual / m.total) * 100);
-                const isFinished = perc >= 100;
-                const formattedName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+                const p = Math.min(100, (m.atual / m.total) * 100); const iF = p >= 100; const meses = Math.ceil((m.total - m.atual) / mediaM);
                 return `
-                    <div class="bg-white p-6 rounded-[32px] shadow-sm border border-gray-50 space-y-4">
-                        <div class="flex justify-between font-black text-[11px] uppercase"><span>${m.nome}</span><span class="${isFinished ? 'text-green-600' : 'text-indigo-600'}">${perc.toFixed(1)}%</span></div>
-                        <div class="progress-container">
-                            <div class="runner" style="left: calc(${perc}% - 15px)">${isFinished ? '🥳' : '🏃‍♂️'}</div>
-                            <div class="progress-bar ${isFinished ? 'bg-green-500 finished-glow' : 'bg-indigo-600'}" style="width: ${perc}%"></div>
-                        </div>
-                        ${isFinished ? `<p class="text-center text-[10px] font-black text-green-600 animate-bounce uppercase">🎉 VALEU, ${formattedName}! Meta batida!</p>` : ''}
+                    <div class="bg-white p-7 rounded-[36px] shadow-sm border border-gray-50 space-y-4">
+                        <div class="flex justify-between font-black text-[11px] uppercase"><span>${m.nome}</span><span class="${iF ? 'text-green-600' : 'text-indigo-600'}">${p.toFixed(1)}%</span></div>
+                        <div class="progress-container"><div class="runner" style="left: calc(${p}% - 15px)">${iF ? '🥳' : '🏃‍♂️'}</div><div class="progress-bar ${iF ? 'bg-green-500' : 'bg-indigo-600'}" style="width: ${p}%"></div></div>
+                        ${iF ? `<p class="text-center text-[10px] font-black text-green-600 animate-bounce uppercase">🎉 VALEU, ${rawName.toUpperCase()}! META BATIDA!</p>` : 
+                        `<p class="text-[9px] text-center font-bold text-slate-400 italic">✨ Oráculo: Restam aprox. ${meses} meses</p>`}
                         <div class="flex justify-between items-center pt-2">
-                            <p class="text-[9px] text-slate-400 font-black uppercase italic tracking-widest">R$ ${m.atual.toFixed(2)} / ${m.total.toFixed(0)}</p>
-                            <button onclick="abrirModalAporte(${m.id})" class="bg-indigo-600 text-white px-5 py-2 rounded-xl text-[9px] font-black uppercase shadow-lg shadow-indigo-100">Aportar</button>
+                            <p class="text-[9px] text-slate-400 font-black uppercase">R$ ${m.atual.toFixed(0)} / ${m.total.toFixed(0)}</p>
+                            <button onclick="abrirModalAporte(${m.id})" class="bg-indigo-600 text-white px-5 py-2 rounded-xl text-[9px] font-black uppercase shadow-lg">Aportar</button>
                         </div>
                     </div>`;
             }).join('');
-            
-            const selF = document.getElementById('filtro-banco'); const v = selF.value;
-            selF.innerHTML = '<option value="todos">Todos Bancos</option>' + user.bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
-            selF.value = v;
-            const busca = (document.getElementById('busca-desc').value || '').toLowerCase(); const bF = document.getElementById('filtro-banco').value || 'todos';
-            document.getElementById('lista-extrato-full').innerHTML = user.historico.filter(h => (bF === 'todos' || h.banco === bF) && h.desc.toLowerCase().includes(busca)).map(cardHtml).join('');
         }
 
-        function adicionarBanco() { const nome = document.getElementById('nome-banco').value; const saldo = parseFloat(document.getElementById('saldo-inicial').value); if(!nome || isNaN(saldo)) return; db[u].bancos.push({ nome, saldo, cor: document.getElementById('cor-banco').value }); salvar(); }
-        function adicionarMeta() { const nome = document.getElementById('nome-meta').value; const valor = parseFloat(document.getElementById('valor-meta').value); if(!nome || isNaN(valor)) return; db[u].metas.push({ id: Date.now(), nome, total: valor, atual: 0 }); salvar(); }
-        function abrirModalAporte(id) { idMetaSelecionada = id; document.getElementById('a-origem').innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join(''); document.getElementById('modal-aporte').classList.remove('hidden'); }
-        function fecharModalAporte() { document.getElementById('modal-aporte').classList.add('hidden'); }
-        function confirmarAporte() { const valor = parseFloat(document.getElementById('a-valor').value); const de = document.getElementById('a-origem').value; const banco = db[u].bancos.find(b => b.nome === de); const meta = db[u].metas.find(m => m.id === idMetaSelecionada); if(banco.saldo < valor) return alert("Sem saldo"); banco.saldo -= valor; meta.atual += valor; db[u].historico.unshift({ desc: `Aporte: ${meta.nome}`, valor, tipo: 'despesa', banco: de, cor: '#4f46e5', data: new Date().toLocaleDateString('pt-BR'), dataIso: new Date().toISOString() }); document.getElementById('a-valor').value = ""; fecharModalAporte(); salvar(); }
+        function adicionarBanco() { const n = document.getElementById('nome-banco').value; const s = parseFloat(document.getElementById('saldo-inicial').value); if(!n || isNaN(s)) return; db[u].bancos.push({ nome: n, saldo: s, cor: document.getElementById('cor-banco').value }); salvar(); }
+        function adicionarMeta() { const n = document.getElementById('nome-meta').value; const v = parseFloat(document.getElementById('valor-meta').value); if(!n || isNaN(v)) return; db[u].metas.push({ id: Date.now(), nome: n, total: v, atual: 0 }); salvar(); }
         function abrirModal() { document.getElementById('m-banco').innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join(''); document.getElementById('modal').classList.remove('hidden'); }
         function fecharModal() { document.getElementById('modal').classList.add('hidden'); }
-        function confirmarLancamento() { const desc = document.getElementById('m-desc').value; const valor = parseFloat(document.getElementById('m-valor').value); const tipo = document.getElementById('m-tipo').value; const bNome = document.getElementById('m-banco').value; const banco = db[u].bancos.find(b => b.nome === bNome); tipo === 'receita' ? banco.saldo += valor : banco.saldo -= valor; db[u].historico.unshift({ desc, valor, tipo, banco: bNome, cor: banco.cor, data: new Date().toLocaleDateString('pt-BR'), dataIso: new Date().toISOString() }); fecharModal(); salvar(); }
+        function confirmarLancamento() { const desc = document.getElementById('m-desc').value; const v = parseFloat(document.getElementById('m-valor').value); const t = document.getElementById('m-tipo').value; const c = document.getElementById('m-categoria').value; const bN = document.getElementById('m-banco').value; const b = db[u].bancos.find(x => x.nome === bN); t === 'receita' ? b.saldo += v : b.saldo -= v; db[u].historico.unshift({ desc, valor: v, tipo: t, categoria: c, banco: bN, cor: b.cor, data: new Date().toLocaleDateString('pt-BR'), dataIso: new Date().toISOString() }); fecharModal(); salvar(); }
+        function abrirModalAporte(id) { idMetaS = id; document.getElementById('a-origem').innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join(''); document.getElementById('modal-aporte').classList.remove('hidden'); }
+        function fecharModalAporte() { document.getElementById('modal-aporte').classList.add('hidden'); }
+        function confirmarAporte() { const v = parseFloat(document.getElementById('a-valor').value); const de = document.getElementById('a-origem').value; const b = db[u].bancos.find(x => x.nome === de); const m = db[u].metas.find(x => x.id === idMetaS); if(b.saldo < v) return alert("Sem saldo"); b.saldo -= v; m.atual += v; db[u].historico.unshift({ desc: `Aporte: ${m.nome}`, valor: v, tipo: 'despesa', banco: de, cor: '#4f46e5', data: new Date().toLocaleDateString('pt-BR'), dataIso: new Date().toISOString() }); fecharModalAporte(); salvar(); }
         function abrirModalTransferencia() { const h = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join(''); document.getElementById('t-origem').innerHTML = h; document.getElementById('t-destino').innerHTML = h; document.getElementById('modal-transferencia').classList.remove('hidden'); }
-        function salvar() { localStorage.setItem('guima_elite_v13', JSON.stringify(db)); render(); }
+        function fecharModalTransferencia() { document.getElementById('modal-transferencia').classList.add('hidden'); }
+        function confirmarTransferencia() { const v = parseFloat(document.getElementById('t-valor').value); const de = document.getElementById('t-origem').value; const para = document.getElementById('t-destino').value; if(de === para || isNaN(v)) return alert("Inválido"); const bO = db[u].bancos.find(x => x.nome === de); const bD = db[u].bancos.find(x => x.nome === para); if(bO.saldo < v) return alert("Sem saldo"); bO.saldo -= v; bD.saldo += v; db[u].historico.unshift({ desc: `${de} ➔ ${para}`, valor: v, tipo: 'transferencia', banco: de, cor: '#94a3b8', data: new Date().toLocaleDateString('pt-BR'), dataIso: new Date().toISOString() }); fecharModalTransferencia(); salvar(); }
+        function salvar() { localStorage.setItem('guima_strategy_final', JSON.stringify(db)); render(); }
     </script>
 </body>
 </html>
