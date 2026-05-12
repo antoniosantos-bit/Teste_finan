@@ -3,76 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Guima Strategy | Elite v14.2</title>
+    <title>Guima Strategy | Obsidian Elite</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #fcfcfd; padding-bottom: 120px; }
-        .tab-active { color: #4f46e5 !important; border-bottom: 3px solid #4f46e5 !important; opacity: 1 !important; }
-        .dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; }
-        .hide-val { filter: blur(10px); pointer-events: none; }
-        .card-extrato { border-radius: 20px; border: 1px solid #f1f5f9; background: white; padding: 16px; margin-bottom: 10px; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #020617; 
+            color: #f8fafc;
+            padding-bottom: 100px;
+        }
+        /* Efeito de Vidro Profissional */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+        }
+        .tab-active { 
+            color: #6366f1 !important; 
+            position: relative;
+        }
+        .tab-active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 4px;
+            background: #6366f1;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.6);
+        }
+        .hide-val { filter: blur(12px); pointer-events: none; }
         
-        section { display: none; }
-        #aba-resumo { display: block; }
-
-        /* AJUSTE DO CARIOCA RUNNER PARA A DIREITA */
+        /* Runner Ajustado para Direita e Estilizado */
         .runner { 
             position: absolute; 
-            top: -25px; 
-            transition: left 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            font-size: 22px; 
-            z-index: 10;
-            transform: scaleX(-1); /* ISSO INVERTE O EMOJI PARA A DIREITA */
+            top: -28px; 
+            transition: left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            font-size: 24px; 
+            transform: scaleX(-1); /* Correndo para a direita */
+            z-index: 20;
         }
-        
-        .progress-container { position: relative; height: 12px; background: #e2e8f0; border-radius: 100px; margin-top: 35px; }
-        .progress-bar { height: 100%; border-radius: 100px; transition: width 1s ease-in-out; }
-        .chart-donut { width: 140px; height: 140px; border-radius: 50%; position: relative; transition: all 1s; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .chart-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #64748b; text-align: center; }
-        .medal-slot { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; filter: grayscale(1); opacity: 0.2; background: #f8fafc; border: 1px solid #e2e8f0; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        .medal-active { filter: grayscale(0); opacity: 1; transform: scale(1.1); background: white; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-color: #cbd5e1; }
+        .progress-bg { 
+            height: 8px; 
+            background: #1e293b; 
+            border-radius: 100px; 
+            position: relative; 
+            margin-top: 40px; 
+        }
+        .progress-fill { 
+            height: 100%; 
+            border-radius: 100px; 
+            transition: width 1s ease-in-out;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Animação de Entrada */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        section { animation: fadeIn 0.4s ease-out; display: none; }
+
+        /* Scroll Customizado */
+        ::-webkit-scrollbar { width: 0px; }
     </style>
 </head>
 <body>
 
-    <div id="login-screen" class="min-h-screen flex flex-col justify-center px-8 bg-white z-[100] relative text-center">
-        <div class="w-24 h-24 bg-slate-900 rounded-[32px] flex items-center justify-center mx-auto shadow-2xl mb-6 text-white text-4xl font-black italic">G</div>
-        <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase mb-2">Guima Strategy</h1>
-        <p class="text-slate-400 text-xs font-bold uppercase tracking-[0.2em] mb-10">Elite Edition v14.2</p>
-        <input id="user-name" type="text" placeholder="Digite seu nome" class="w-full p-5 rounded-2xl bg-slate-50 border-0 ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-indigo-600 mb-4 font-bold text-lg text-center">
-        <button onclick="fazerLogin()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-black uppercase tracking-widest shadow-xl active:scale-95 transition-all">Acessar Painel</button>
+    <div id="login-screen" class="min-h-screen flex flex-col justify-center px-10 bg-[#020617] z-[100] relative">
+        <div class="mb-12">
+            <div class="w-16 h-16 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-2xl flex items-center justify-center shadow-2xl shadow-indigo-500/20 mb-6 mx-auto">
+                <span class="text-white text-3xl font-extrabold italic">G</span>
+            </div>
+            <h1 class="text-3xl font-extrabold text-white text-center tracking-tight">Guima Strategy</h1>
+            <p class="text-slate-500 text-center text-sm mt-2 font-medium">Gestão de Patrimônio Elite</p>
+        </div>
+        
+        <div class="space-y-4">
+            <input id="user-name" type="text" placeholder="Nome de Acesso" class="w-full p-5 rounded-2xl bg-slate-900/50 border border-slate-800 text-white outline-none focus:border-indigo-500 transition-all text-center font-semibold">
+            <button onclick="fazerLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white p-5 rounded-2xl font-bold uppercase tracking-widest shadow-lg shadow-indigo-600/20 transition-all active:scale-95">Iniciar Sessão</button>
+        </div>
     </div>
 
     <div id="main-app" class="hidden">
-        <nav class="grid grid-cols-4 bg-white border-b sticky top-0 z-[50] shadow-sm text-[9px] font-black uppercase">
-            <button onclick="mudarAba('resumo')" id="btn-resumo" class="p-4 tab-active">Fluxo</button>
-            <button onclick="mudarAba('insights')" id="btn-insights" class="p-4 text-gray-400">Insights</button>
-            <button onclick="mudarAba('bancos')" id="btn-bancos" class="p-4 text-gray-400">Contas</button>
-            <button onclick="mudarAba('metas')" id="btn-metas" class="p-4 text-gray-400">Cofres</button>
+        <nav class="flex justify-around bg-slate-950/80 backdrop-blur-md border-b border-slate-900 sticky top-0 z-[50]">
+            <button onclick="mudarAba('resumo')" id="btn-resumo" class="p-5 text-[10px] font-bold uppercase tracking-wider text-slate-500 tab-active">Fluxo</button>
+            <button onclick="mudarAba('insights')" id="btn-insights" class="p-5 text-[10px] font-bold uppercase tracking-wider text-slate-500">Análise</button>
+            <button onclick="mudarAba('bancos')" id="btn-bancos" class="p-5 text-[10px] font-bold uppercase tracking-wider text-slate-500">Contas</button>
+            <button onclick="mudarAba('metas')" id="btn-metas" class="p-5 text-[10px] font-bold uppercase tracking-wider text-slate-500">Cofres</button>
         </nav>
 
         <section id="aba-resumo" class="p-6 space-y-6">
-            <div class="bg-slate-900 p-8 rounded-[36px] text-white shadow-2xl relative overflow-hidden">
-                <div class="flex justify-between items-start">
+            <div class="glass-card p-8 relative overflow-hidden">
+                <div class="flex justify-between items-start mb-6">
                     <div>
-                        <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest italic mb-1">Estratégia de <span id="display-user-name">...</span></p>
-                        <h2 id="saldo-geral" class="text-4xl font-black tracking-tight val-privacidade">R$ 0,00</h2>
+                        <p class="text-slate-500 text-[10px] font-bold uppercase tracking-[0.2em] mb-1">Patrimônio Líquido</p>
+                        <h2 id="saldo-geral" class="text-4xl font-extrabold tracking-tighter val-privacidade">R$ 0,00</h2>
                     </div>
-                    <button onclick="togglePrivacidade()" class="p-2 bg-white/10 rounded-full"><span id="icon-privacidade">👁️</span></button>
+                    <button onclick="togglePrivacidade()" class="p-3 bg-slate-800/50 rounded-xl border border-slate-700/50">
+                        <span id="icon-privacidade" class="text-lg">👁️</span>
+                    </button>
                 </div>
-                <div class="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-white/10 text-center">
-                    <div><p class="text-[8px] font-bold text-green-400 uppercase tracking-widest">Entradas Mês</p><p id="perf-entradas" class="font-black text-sm val-privacidade">R$ 0,00</p></div>
-                    <div><p class="text-[8px] font-bold text-red-400 uppercase tracking-widest">Saídas Mês</p><p id="perf-saidas" class="font-black text-sm val-privacidade">R$ 0,00</p></div>
+                <div class="flex gap-4 border-t border-slate-800/50 pt-6">
+                    <div class="flex-1">
+                        <p class="text-[9px] font-bold text-slate-500 uppercase mb-1">Entradas</p>
+                        <p id="perf-entradas" class="text-green-400 font-bold text-lg val-privacidade">R$ 0,00</p>
+                    </div>
+                    <div class="w-px bg-slate-800/50"></div>
+                    <div class="flex-1">
+                        <p class="text-[9px] font-bold text-slate-500 uppercase mb-1">Saídas</p>
+                        <p id="perf-saidas" class="text-rose-400 font-bold text-lg val-privacidade">R$ 0,00</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="bg-white p-5 rounded-[28px] border border-gray-100 shadow-sm text-center">
-                <div class="flex justify-between items-center mb-4 px-1">
-                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Conquistas Elite</p>
-                    <span class="text-[9px] font-bold text-indigo-500 italic" id="txt-progresso-medalha">0/5</span>
-                </div>
-                <div class="flex justify-around items-center">
+            <div class="glass-card p-6">
+                <p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-4">Mural de Conquistas</p>
+                <div class="flex justify-between items-center gap-2">
                     <div id="m1" class="medal-slot">🏦</div>
                     <div id="m2" class="medal-slot">📥</div>
                     <div id="m3" class="medal-slot">🏆</div>
@@ -81,108 +129,123 @@
                 </div>
             </div>
 
-            <div class="flex gap-2">
-                <button onclick="abrirModal()" class="flex-1 bg-white border p-4 rounded-2xl font-black text-[10px] uppercase shadow-sm">+ Operação</button>
-                <button onclick="abrirModalTransferencia()" class="flex-1 bg-white border p-4 rounded-2xl font-black text-[10px] uppercase shadow-sm">⇄ Transf.</button>
-            </div>
+            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest px-2">Movimentações Recentes</h3>
             <div id="movimentacoes-resumo" class="space-y-3"></div>
         </section>
 
         <section id="aba-insights" class="p-6 space-y-6">
-            <div class="bg-white p-6 rounded-[32px] border border-gray-100 flex items-center gap-8 shadow-sm">
-                <div id="grafico-pizza" class="chart-donut">
-                    <div class="chart-center">GASTOS<br>POR TIPO</div>
+            <div class="glass-card p-6 flex flex-col items-center">
+                <div id="grafico-pizza" class="w-48 h-48 rounded-full flex items-center justify-center relative mb-6 shadow-2xl">
+                    <div class="w-32 h-32 bg-[#020617] rounded-full flex items-center justify-center text-center">
+                        <span class="text-[8px] font-black text-slate-500 uppercase">Visão por<br>Categoria</span>
+                    </div>
                 </div>
-                <div class="flex-1 space-y-2">
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between text-[10px] font-black"><span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-indigo-600"></span> CASA</span> <span id="perc-casa">0%</span></div>
-                        <div class="flex items-center justify-between text-[10px] font-black"><span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500"></span> LAZER</span> <span id="perc-lazer">0%</span></div>
-                        <div class="flex items-center justify-between text-[10px] font-black"><span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-orange-400"></span> COMIDA</span> <span id="perc-comida">0%</span></div>
-                        <div class="flex items-center justify-between text-[10px] font-black"><span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500"></span> OUTROS</span> <span id="perc-outros">0%</span></div>
+                <div class="grid grid-cols-2 gap-4 w-full">
+                    <div class="bg-slate-900/40 p-3 rounded-2xl border border-slate-800/50">
+                        <p class="text-[8px] font-bold text-indigo-400 mb-1">CASA</p>
+                        <span id="perc-casa" class="text-lg font-bold">0%</span>
+                    </div>
+                    <div class="bg-slate-900/40 p-3 rounded-2xl border border-slate-800/50">
+                        <p class="text-[8px] font-bold text-emerald-400 mb-1">LAZER</p>
+                        <span id="perc-lazer" class="text-lg font-bold">0%</span>
                     </div>
                 </div>
             </div>
-            <div class="bg-indigo-50 p-6 rounded-[32px] border border-indigo-100">
-                <div class="flex justify-between items-center mb-4"><p class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Assinaturas</p><span id="total-assinaturas" class="text-sm font-black text-indigo-700">R$ 0,00</span></div>
-                <div id="lista-assinaturas" class="space-y-2"></div>
+
+            <div class="glass-card p-6 border-l-4 border-indigo-500">
+                <div class="flex justify-between items-center mb-4">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Comprometimento Mensal</p>
+                    <span id="total-assinaturas" class="text-indigo-400 font-bold">R$ 0,00</span>
+                </div>
+                <div id="lista-assinaturas" class="space-y-3"></div>
             </div>
-            <div class="flex gap-2">
-                <select id="filtro-banco" onchange="render()" class="p-4 bg-white border rounded-2xl text-[10px] font-bold outline-none flex-1"></select>
-                <input type="text" id="busca-desc" onkeyup="render()" placeholder="Busca..." class="p-4 bg-white border rounded-2xl text-[10px] font-bold flex-[2]">
+
+            <div class="flex gap-3">
+                <select id="filtro-banco" onchange="render()" class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-xs font-bold outline-none flex-1"></select>
+                <input type="text" id="busca-desc" onkeyup="render()" placeholder="Filtrar..." class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-xs font-bold flex-[2] outline-none">
             </div>
             <div id="lista-extrato-full" class="space-y-3"></div>
         </section>
 
         <section id="aba-bancos" class="p-6 space-y-4">
-            <div id="lista-bancos" class="space-y-3"></div>
-            <div class="bg-white p-6 rounded-[32px] border border-gray-100 space-y-4">
-                <input id="nome-banco" type="text" placeholder="Nome do Banco" class="w-full p-4 bg-gray-50 rounded-2xl font-bold">
-                <input id="saldo-inicial" type="number" placeholder="Saldo Atual" class="w-full p-4 bg-gray-50 rounded-2xl font-bold">
-                <input type="color" id="cor-banco" value="#4f46e5" class="h-10 w-full rounded-xl bg-transparent border-0 cursor-pointer">
-                <button onclick="adicionarBanco()" class="w-full bg-slate-900 text-white p-5 rounded-2xl font-black uppercase text-xs">Salvar Banco</button>
+            <div id="lista-bancos" class="space-y-4"></div>
+            <div class="glass-card p-6 mt-6 space-y-4">
+                <p class="text-[10px] font-bold text-slate-500 uppercase text-center mb-2">Vincular Nova Conta</p>
+                <input id="nome-banco" type="text" placeholder="Nome da Instituição" class="w-full p-4 bg-slate-900/50 border border-slate-800 rounded-2xl text-white font-bold outline-none">
+                <input id="saldo-inicial" type="number" placeholder="Saldo Atual" class="w-full p-4 bg-slate-900/50 border border-slate-800 rounded-2xl text-white font-bold outline-none">
+                <div class="flex items-center justify-between px-2">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase">Cor do Banco</span>
+                    <input type="color" id="cor-banco" value="#6366f1" class="h-10 w-24 rounded-xl bg-transparent border-0 cursor-pointer">
+                </div>
+                <button onclick="adicionarBanco()" class="w-full bg-slate-100 text-slate-900 p-5 rounded-2xl font-black uppercase text-xs tracking-widest">Confirmar Conexão</button>
             </div>
         </section>
 
         <section id="aba-metas" class="p-6 space-y-4">
-            <h3 class="font-extrabold text-gray-800 text-center italic mb-4">Oráculo dos Objetivos ✨</h3>
-            <div id="lista-metas" class="space-y-12 pb-10"></div>
-            <div class="bg-white p-8 rounded-[36px] border border-gray-100 space-y-4">
-                <input id="nome-meta" type="text" placeholder="Qual o objetivo?" class="w-full p-4 bg-gray-50 rounded-2xl font-bold">
-                <input id="valor-meta" type="number" placeholder="Alvo R$" class="w-full p-4 bg-gray-50 rounded-2xl font-bold">
-                <button onclick="adicionarMeta()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-black uppercase text-xs">Criar Meta</button>
+            <h3 class="text-sm font-bold text-slate-500 text-center uppercase tracking-[0.3em] mb-6">Oráculo de Patrimônio</h3>
+            <div id="lista-metas" class="space-y-14"></div>
+            <div class="glass-card p-8 space-y-4">
+                <input id="nome-meta" type="text" placeholder="Título da Meta" class="w-full p-4 bg-slate-900/50 border border-slate-800 rounded-2xl text-white font-bold outline-none">
+                <input id="valor-meta" type="number" placeholder="Valor Alvo" class="w-full p-4 bg-slate-900/50 border border-slate-800 rounded-2xl text-white font-bold outline-none">
+                <button onclick="adicionarMeta()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-indigo-600/10">Criar Objetivo</button>
             </div>
         </section>
 
-        <button onclick="abrirModal()" class="fixed bottom-8 right-6 w-16 h-16 bg-slate-900 text-white rounded-[22px] shadow-2xl flex items-center justify-center z-50 border-4 border-white"><span class="text-3xl">+</span></button>
+        <button onclick="abrirModal()" class="fixed bottom-10 right-6 w-16 h-16 bg-indigo-600 text-white rounded-2xl shadow-2xl shadow-indigo-600/40 flex items-center justify-center z-50 active:scale-90 transition-all">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+        </button>
     </div>
 
-    <div id="modal" class="fixed inset-0 bg-black/70 hidden z-[200] flex items-end backdrop-blur-sm">
-        <div class="bg-white w-full rounded-t-[44px] p-8 pb-14 space-y-4">
-            <input id="m-desc" type="text" placeholder="Descrição" class="w-full p-5 bg-gray-50 rounded-[24px] font-bold">
-            <input id="m-valor" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-gray-50 rounded-[24px] font-black text-indigo-600 text-3xl text-center">
-            <div class="grid grid-cols-2 gap-3">
-                <select id="m-tipo" class="p-5 bg-gray-50 rounded-[24px] font-bold"><option value="despesa">➖ Saída</option><option value="receita">➕ Entrada</option></select>
-                <select id="m-categoria" class="p-5 bg-gray-50 rounded-[24px] font-bold">
+    <div id="modal" class="fixed inset-0 bg-black/90 hidden z-[200] flex items-end backdrop-blur-md">
+        <div class="glass-card w-full rounded-t-[40px] p-8 pb-12 space-y-5 animate-in slide-in-from-bottom duration-300">
+            <div class="w-12 h-1 bg-slate-800 rounded-full mx-auto"></div>
+            <h3 class="text-lg font-bold text-center text-white uppercase tracking-widest">Nova Operação</h3>
+            <input id="m-desc" type="text" placeholder="O que aconteceu?" class="w-full p-5 bg-slate-900/50 border border-slate-800 rounded-2xl text-white font-bold outline-none">
+            <input id="m-valor" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-transparent border-b-2 border-indigo-500 text-white font-extrabold text-4xl text-center outline-none">
+            <div class="grid grid-cols-2 gap-4">
+                <select id="m-tipo" class="p-5 bg-slate-900 border border-slate-800 rounded-2xl font-bold text-slate-300 outline-none"><option value="despesa">➖ Saída</option><option value="receita">➕ Entrada</option></select>
+                <select id="m-categoria" class="p-5 bg-slate-900 border border-slate-800 rounded-2xl font-bold text-slate-300 outline-none">
                     <option value="Essencial">🏠 Casa</option><option value="Lazer">🍿 Lazer</option><option value="Alimentação">🍔 Comida</option><option value="Assinatura">📅 Assinatura</option><option value="Outros">⚙️ Outros</option>
                 </select>
             </div>
-            <select id="m-banco" class="p-5 bg-gray-50 rounded-[24px] font-bold w-full"></select>
-            <button onclick="confirmarLancamento()" class="w-full bg-slate-900 text-white p-5 rounded-[24px] font-black text-lg">Confirmar</button>
-            <button onclick="fecharModal()" class="w-full text-gray-400 font-bold p-2 text-center uppercase">Cancelar</button>
+            <select id="m-banco" class="p-5 bg-slate-900 border border-slate-800 rounded-2xl font-bold text-slate-300 w-full outline-none"></select>
+            <button onclick="confirmarLancamento()" class="w-full bg-indigo-600 text-white p-5 rounded-2xl font-black text-lg">Confirmar Fluxo</button>
+            <button onclick="fecharModal()" class="w-full text-slate-500 font-bold p-2 uppercase text-xs">Cancelar</button>
         </div>
     </div>
 
-    <div id="modal-aporte" class="fixed inset-0 bg-black/70 hidden z-[200] flex items-end backdrop-blur-sm">
-        <div class="bg-white w-full rounded-t-[44px] p-8 pb-14 space-y-4">
-            <h3 id="titulo-aporte" class="text-xl font-black text-center uppercase italic">Aportar</h3>
-            <input id="a-valor" type="number" inputmode="decimal" placeholder="Quanto?" class="w-full p-5 bg-gray-50 rounded-[24px] font-black text-green-600 text-3xl text-center">
-            <select id="a-origem" class="w-full p-5 bg-gray-50 rounded-[24px] font-bold text-gray-500"></select>
-            <button onclick="confirmarAporte()" class="w-full bg-indigo-600 text-white p-5 rounded-[24px] font-black text-lg">Guardar Dinheiro</button>
-            <button onclick="fecharModalAporte()" class="w-full text-gray-400 font-bold p-2 text-center uppercase">Voltar</button>
+    <div id="modal-aporte" class="fixed inset-0 bg-black/90 hidden z-[200] flex items-end backdrop-blur-md">
+        <div class="glass-card w-full rounded-t-[40px] p-8 pb-12 space-y-5">
+            <h3 class="text-white font-bold text-center uppercase tracking-widest">Aportar no Cofre</h3>
+            <input id="a-valor" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-transparent border-b-2 border-emerald-500 text-white font-extrabold text-4xl text-center outline-none">
+            <select id="a-origem" class="w-full p-5 bg-slate-900 border border-slate-800 rounded-2xl font-bold text-white"></select>
+            <button onclick="confirmarAporte()" class="w-full bg-emerald-600 text-white p-5 rounded-2xl font-black text-lg">Confirmar Aporte</button>
+            <button onclick="fecharModalAporte()" class="w-full text-slate-500 font-bold p-2 uppercase text-xs text-center">Voltar</button>
         </div>
     </div>
 
-    <div id="modal-transferencia" class="fixed inset-0 bg-black/70 hidden z-[200] flex items-end backdrop-blur-sm">
-        <div class="bg-white w-full rounded-t-[44px] p-8 pb-14 space-y-4 text-center">
-            <h3 class="text-xl font-black uppercase italic">Mover Patrimônio</h3>
-            <input id="t-valor" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-gray-50 rounded-[24px] font-black text-slate-800 text-3xl text-center">
-            <div class="grid grid-cols-2 gap-3">
-                <div><p class="text-[9px] font-bold text-gray-400 uppercase">Sai de</p><select id="t-origem" class="w-full p-4 bg-gray-50 rounded-2xl font-bold"></select></div>
-                <div><p class="text-[9px] font-bold text-gray-400 uppercase">Para</p><select id="t-destino" class="w-full p-4 bg-gray-50 rounded-2xl font-bold"></select></div>
+    <div id="modal-transferencia" class="fixed inset-0 bg-black/90 hidden z-[200] flex items-end backdrop-blur-md">
+        <div class="glass-card w-full rounded-t-[40px] p-8 pb-12 space-y-5">
+            <h3 class="text-white font-bold text-center uppercase tracking-widest">Transferir</h3>
+            <input id="t-valor" type="number" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-transparent border-b-2 border-slate-500 text-white font-extrabold text-4xl text-center outline-none">
+            <div class="grid grid-cols-2 gap-4">
+                <select id="t-origem" class="p-4 bg-slate-900 border border-slate-800 rounded-2xl text-white"></select>
+                <select id="t-destino" class="p-4 bg-slate-900 border border-slate-800 rounded-2xl text-white"></select>
             </div>
-            <button onclick="confirmarTransferencia()" class="w-full bg-slate-900 text-white p-5 rounded-[24px] font-black text-lg">Transferir</button>
-            <button onclick="fecharModalTransferencia()" class="w-full text-gray-400 font-bold p-2 uppercase">Voltar</button>
+            <button onclick="confirmarTransferencia()" class="w-full bg-slate-100 text-slate-900 p-5 rounded-2xl font-black text-lg">Transferir Agora</button>
+            <button onclick="fecharModalTransferencia()" class="w-full text-slate-500 font-bold p-2 uppercase text-xs text-center">Cancelar</button>
         </div>
     </div>
 
     <script>
         let u = ""; let rawName = ""; let idMetaS = null; let privacidade = false;
-        let db = JSON.parse(localStorage.getItem('guima_strategy_final')) || {};
+        let db = JSON.parse(localStorage.getItem('guima_obsidian_v14')) || {};
 
         function mudarAba(id) {
             ['resumo', 'insights', 'bancos', 'metas'].forEach(a => {
                 document.getElementById('aba-'+a).style.display = 'none';
-                document.getElementById('btn-'+a).classList.remove('tab-active');
+                document.getElementById('btn-'+a).classList.remove('tab-active', 'text-indigo-500');
+                document.getElementById('btn-'+a).classList.add('text-slate-500');
             });
             document.getElementById('aba-'+id).style.display = 'block';
             document.getElementById('btn-'+id).classList.add('tab-active');
@@ -206,6 +269,7 @@
             const user = db[u]; if(!user) return;
             const mes = new Date().getMonth(); const ano = new Date().getFullYear();
 
+            // Patrimonio e Privacidade
             const total = user.bancos.reduce((acc, b) => acc + b.saldo, 0);
             const saldoEl = document.getElementById('saldo-geral');
             saldoEl.innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
@@ -217,14 +281,17 @@
             document.getElementById('perf-entradas').innerText = `+ R$ ${ent.toLocaleString('pt-BR')}`;
             document.getElementById('perf-saidas').innerText = `- R$ ${sai.toLocaleString('pt-BR')}`;
 
+            // Medalhas Profissionais (IDs e Lógica)
             let mc = 0;
+            const mIds = ['m1','m2','m3','m4','m5'];
+            mIds.forEach(id => document.getElementById(id).classList.remove('medal-active'));
             if(user.bancos.length > 0) { document.getElementById('m1').classList.add('medal-active'); mc++; }
             if(user.historico.some(h => h.desc.includes("Aporte"))) { document.getElementById('m2').classList.add('medal-active'); mc++; }
             if(user.metas.some(m => (m.atual/m.total) >= 1)) { document.getElementById('m3').classList.add('medal-active'); mc++; }
             if(ent > sai && movMes.length > 0) { document.getElementById('m4').classList.add('medal-active'); mc++; }
             if(user.bancos.length >= 3) { document.getElementById('m5').classList.add('medal-active'); mc++; }
-            document.getElementById('txt-progresso-medalha').innerText = `${mc}/5`;
 
+            // Insights Dashboard
             const cCasa = movMes.filter(h => h.categoria === 'Essencial').reduce((a,b) => a+b.valor, 0);
             const cLazer = movMes.filter(h => h.categoria === 'Lazer').reduce((a,b) => a+b.valor, 0);
             const cComida = movMes.filter(h => h.categoria === 'Alimentação').reduce((a,b) => a+b.valor, 0);
@@ -233,42 +300,65 @@
             const p1 = (cCasa/tg)*100, p2 = (cLazer/tg)*100, p3 = (cComida/tg)*100;
             document.getElementById('perc-casa').innerText = p1.toFixed(0) + '%';
             document.getElementById('perc-lazer').innerText = p2.toFixed(0) + '%';
-            document.getElementById('perc-comida').innerText = p3.toFixed(0) + '%';
-            document.getElementById('perc-outros').innerText = ((cOutros/tg)*100).toFixed(0) + '%';
-            document.getElementById('grafico-pizza').style.background = `conic-gradient(#4f46e5 0% ${p1}%, #10b981 ${p1}% ${p1+p2}%, #f59e0b ${p1+p2}% ${p1+p2+p3}%, #ef4444 ${p1+p2+p3}% 100%)`;
+            document.getElementById('grafico-pizza').style.background = `conic-gradient(#6366f1 0% ${p1}%, #10b981 ${p1}% ${p1+p2}%, #f59e0b ${p1+p2}% ${p1+p2+p3}%, #f43f5e ${p1+p2+p3}% 100%)`;
 
+            // Assinaturas
             const assins = user.historico.filter(h => h.categoria === 'Assinatura' && new Date(h.dataIso).getMonth() === mes);
             document.getElementById('total-assinaturas').innerText = `R$ ${assins.reduce((a,b)=>a+b.valor,0).toFixed(2)}`;
-            document.getElementById('lista-assinaturas').innerHTML = [...new Set(assins.map(a => a.desc))].map(n => `<div class="flex justify-between items-center text-[10px] font-bold text-indigo-900 border-b border-indigo-100 pb-1"><span>• ${n}</span> <span>Ativa</span></div>`).join('');
+            document.getElementById('lista-assinaturas').innerHTML = [...new Set(assins.map(a => a.desc))].map(n => `<div class="bg-slate-900/50 p-3 rounded-xl border border-slate-800/50 text-[10px] font-bold text-slate-300 flex justify-between"><span>${n}</span><span class="text-indigo-400">ATIVO</span></div>`).join('');
 
-            const ch = (h) => `<div class="card-extrato border-l-[6px]" style="border-left-color: ${h.cor}"><div class="flex justify-between items-center"><div><p class="text-sm font-extrabold text-slate-800 leading-none">${h.desc}</p><p class="text-[9px] text-slate-400 font-bold uppercase mt-1.5 tracking-tighter">${h.data} • ${h.banco} • ${h.categoria || 'Geral'}</p></div><span class="font-black text-sm ${privacidade?'hide-val':''} ${h.tipo === 'receita' ? 'text-green-600' : 'text-slate-900'}">R$ ${h.valor.toFixed(2)}</span></div></div>`;
+            // Cards de Extrato Obsidian
+            const ch = (h) => `
+                <div class="glass-card p-5 border-l-4" style="border-left-color: ${h.cor}">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm font-bold text-white mb-1">${h.desc}</p>
+                            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">${h.data} • ${h.banco}</p>
+                        </div>
+                        <span class="font-black text-sm ${privacidade?'hide-val':''} ${h.tipo === 'receita' ? 'text-emerald-400' : 'text-rose-400'}">
+                            R$ ${h.valor.toFixed(2)}
+                        </span>
+                    </div>
+                </div>`;
             document.getElementById('movimentacoes-resumo').innerHTML = user.historico.slice(0, 5).map(ch).join('');
             const bF = document.getElementById('filtro-banco').value || 'todos'; const busca = (document.getElementById('busca-desc').value || '').toLowerCase();
             document.getElementById('lista-extrato-full').innerHTML = user.historico.filter(h => (bF === 'todos' || h.banco === bF) && h.desc.toLowerCase().includes(busca)).map(ch).join('');
 
+            // Bancos
             const selF = document.getElementById('filtro-banco'); const vAnt = selF.value;
             selF.innerHTML = '<option value="todos">Todos Bancos</option>' + user.bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
             selF.value = vAnt || 'todos';
 
-            document.getElementById('lista-bancos').innerHTML = user.bancos.map(b => `<div class="bg-white p-5 rounded-2xl shadow-sm border-l-[12px]" style="border-left-color: ${b.cor}"><div class="flex justify-between items-center"><span class="font-black text-slate-800 uppercase text-[10px] italic">${b.nome}</span><span class="font-black text-lg ${privacidade?'hide-val':''} ${b.saldo < 0 ? 'text-red-500' : ''}">R$ ${b.saldo.toFixed(2)}</span></div></div>`).join('');
+            document.getElementById('lista-bancos').innerHTML = user.bancos.map(b => `
+                <div class="glass-card p-6 border-l-[12px] relative overflow-hidden" style="border-left-color: ${b.cor}">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-slate-400 uppercase text-[10px] tracking-widest">${b.nome}</span>
+                        <span class="font-extrabold text-xl ${privacidade?'hide-val':''} ${b.saldo < 0 ? 'text-rose-400' : 'text-white'}">R$ ${b.saldo.toFixed(2)}</span>
+                    </div>
+                </div>`).join('');
 
+            // COFRES PROFISSIONAIS
             const mediaM = (user.historico.filter(h => h.desc.includes("Aporte")).reduce((a,b)=>a+b.valor,0) / (mes+1)) || 50;
             document.getElementById('lista-metas').innerHTML = user.metas.map(m => {
                 const p = Math.min(100, (m.atual / m.total) * 100); const iF = p >= 100; const meses = Math.ceil((m.total - m.atual) / mediaM);
                 return `
-                    <div class="bg-white p-7 rounded-[36px] shadow-sm border border-gray-50 space-y-4">
-                        <div class="flex justify-between font-black text-[11px] uppercase"><span>${m.nome}</span><span class="${iF ? 'text-green-600' : 'text-indigo-600'}">${p.toFixed(1)}%</span></div>
-                        <div class="progress-container"><div class="runner" style="left: calc(${p}% - 15px)">${iF ? '🥳' : '🏃‍♂️'}</div><div class="progress-bar ${iF ? 'bg-green-500' : 'bg-indigo-600'}" style="width: ${p}%"></div></div>
-                        ${iF ? `<p class="text-center text-[10px] font-black text-green-600 animate-bounce uppercase">🎉 VALEU, ${rawName.toUpperCase()}! META BATIDA!</p>` : 
-                        `<p class="text-[9px] text-center font-bold text-slate-400 italic">✨ Oráculo: Restam aprox. ${meses} meses</p>`}
-                        <div class="flex justify-between items-center pt-2">
-                            <p class="text-[9px] text-slate-400 font-black uppercase">R$ ${m.atual.toFixed(0)} / ${m.total.toFixed(0)}</p>
-                            <button onclick="abrirModalAporte(${m.id})" class="bg-indigo-600 text-white px-5 py-2 rounded-xl text-[9px] font-black uppercase shadow-lg">Aportar</button>
+                    <div class="glass-card p-8 space-y-4">
+                        <div class="flex justify-between font-bold text-[11px] uppercase tracking-widest"><span>${m.nome}</span><span class="${iF ? 'text-emerald-400' : 'text-indigo-400'}">${p.toFixed(1)}%</span></div>
+                        <div class="progress-bg">
+                            <div class="runner" style="left: calc(${p}% - 15px)">${iF ? '🥳' : '🏃‍♂️'}</div>
+                            <div class="progress-fill ${iF ? 'bg-emerald-500' : 'bg-indigo-500'}" style="width: ${p}%"></div>
                         </div>
+                        <div class="flex justify-between items-center pt-2">
+                            <p class="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">Acumulado: R$ ${m.atual.toFixed(0)}</p>
+                            <button onclick="abrirModalAporte(${m.id})" class="bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 px-5 py-2 rounded-xl text-[9px] font-bold uppercase hover:bg-indigo-600 hover:text-white transition-all">Aportar</button>
+                        </div>
+                        ${iF ? `<p class="text-center text-[10px] font-bold text-emerald-400 animate-pulse mt-4">META CONCLUÍDA: VALEU ${rawName.toUpperCase()}!</p>` : 
+                        `<p class="text-[8px] text-center font-medium text-slate-600 uppercase tracking-widest">Oráculo: Conclusão estimada em ${meses} meses</p>`}
                     </div>`;
             }).join('');
         }
 
+        // FUNÇÕES OPERACIONAIS
         function adicionarBanco() { const n = document.getElementById('nome-banco').value; const s = parseFloat(document.getElementById('saldo-inicial').value); if(!n || isNaN(s)) return; db[u].bancos.push({ nome: n, saldo: s, cor: document.getElementById('cor-banco').value }); salvar(); }
         function adicionarMeta() { const n = document.getElementById('nome-meta').value; const v = parseFloat(document.getElementById('valor-meta').value); if(!n || isNaN(v)) return; db[u].metas.push({ id: Date.now(), nome: n, total: v, atual: 0 }); salvar(); }
         function abrirModal() { document.getElementById('m-banco').innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join(''); document.getElementById('modal').classList.remove('hidden'); }
@@ -276,11 +366,11 @@
         function confirmarLancamento() { const desc = document.getElementById('m-desc').value; const v = parseFloat(document.getElementById('m-valor').value); const t = document.getElementById('m-tipo').value; const c = document.getElementById('m-categoria').value; const bN = document.getElementById('m-banco').value; const b = db[u].bancos.find(x => x.nome === bN); t === 'receita' ? b.saldo += v : b.saldo -= v; db[u].historico.unshift({ desc, valor: v, tipo: t, categoria: c, banco: bN, cor: b.cor, data: new Date().toLocaleDateString('pt-BR'), dataIso: new Date().toISOString() }); fecharModal(); salvar(); }
         function abrirModalAporte(id) { idMetaS = id; document.getElementById('a-origem').innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join(''); document.getElementById('modal-aporte').classList.remove('hidden'); }
         function fecharModalAporte() { document.getElementById('modal-aporte').classList.add('hidden'); }
-        function confirmarAporte() { const v = parseFloat(document.getElementById('a-valor').value); const de = document.getElementById('a-origem').value; const b = db[u].bancos.find(x => x.nome === de); const m = db[u].metas.find(x => x.id === idMetaS); if(b.saldo < v) return alert("Sem saldo"); b.saldo -= v; m.atual += v; db[u].historico.unshift({ desc: `Aporte: ${m.nome}`, valor: v, tipo: 'despesa', banco: de, cor: '#4f46e5', data: new Date().toLocaleDateString('pt-BR'), dataIso: new Date().toISOString() }); fecharModalAporte(); salvar(); }
+        function confirmarAporte() { const v = parseFloat(document.getElementById('a-valor').value); const de = document.getElementById('a-origem').value; const b = db[u].bancos.find(x => x.nome === de); const m = db[u].metas.find(x => x.id === idMetaS); if(b.saldo < v) return alert("Sem saldo"); b.saldo -= v; m.atual += v; db[u].historico.unshift({ desc: `Aporte: ${m.nome}`, valor: v, tipo: 'despesa', banco: de, cor: '#6366f1', data: new Date().toLocaleDateString('pt-BR'), dataIso: new Date().toISOString() }); fecharModalAporte(); salvar(); }
         function abrirModalTransferencia() { const h = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join(''); document.getElementById('t-origem').innerHTML = h; document.getElementById('t-destino').innerHTML = h; document.getElementById('modal-transferencia').classList.remove('hidden'); }
         function fecharModalTransferencia() { document.getElementById('modal-transferencia').classList.add('hidden'); }
         function confirmarTransferencia() { const v = parseFloat(document.getElementById('t-valor').value); const de = document.getElementById('t-origem').value; const para = document.getElementById('t-destino').value; if(de === para || isNaN(v)) return alert("Inválido"); const bO = db[u].bancos.find(x => x.nome === de); const bD = db[u].bancos.find(x => x.nome === para); if(bO.saldo < v) return alert("Sem saldo"); bO.saldo -= v; bD.saldo += v; db[u].historico.unshift({ desc: `${de} ➔ ${para}`, valor: v, tipo: 'transferencia', banco: de, cor: '#94a3b8', data: new Date().toLocaleDateString('pt-BR'), dataIso: new Date().toISOString() }); fecharModalTransferencia(); salvar(); }
-        function salvar() { localStorage.setItem('guima_strategy_final', JSON.stringify(db)); render(); }
+        function salvar() { localStorage.setItem('guima_obsidian_v14', JSON.stringify(db)); render(); }
     </script>
 </body>
 </html>
