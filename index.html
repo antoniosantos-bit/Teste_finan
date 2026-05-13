@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Guima Strategy | Master v24.1</title>
+    <title>Guima Strategy | Master v25</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         /* BASE E TIPOGRAFIA */
         body { 
@@ -24,15 +26,21 @@
             position: relative; 
         }
         
-        /* CORES DE FLUXO (USADAS NO EXTRATO) */
-        .text-entrada { color: #10b981; } 
-        .text-saida { color: #ef4444; }   
+        /* CORES DE FLUXO E FEEDBACK */
+        .text-entrada { 
+            color: #10b981; 
+        } 
+        
+        .text-saida { 
+            color: #ef4444; 
+        }   
         
         /* MENU DE NAVEGAÇÃO */
         .tab-active { 
             color: #ffffff !important; 
             font-weight: 800; 
         }
+        
         .tab-active::after { 
             content: ''; 
             position: absolute; 
@@ -61,6 +69,7 @@
             transform: scaleX(-1); 
             z-index: 20; 
         }
+        
         .progress-track { 
             height: 6px; 
             background: #141414; 
@@ -68,6 +77,7 @@
             position: relative; 
             margin-top: 45px; 
         }
+        
         .progress-bar-fintech { 
             height: 100%; 
             border-radius: 100px; 
@@ -80,12 +90,19 @@
             display: none; 
             animation: slideUp 0.4s ease; 
         }
+        
         @keyframes slideUp { 
-            from { opacity: 0; transform: translateY(15px); } 
-            to { opacity: 1; transform: translateY(0); } 
+            from { 
+                opacity: 0; 
+                transform: translateY(15px); 
+            } 
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            } 
         }
 
-        /* ESTILO DOS CAMPOS DE TEXTO E SELEÇÃO (Corrigido para permitir cores dinâmicas) */
+        /* ESTILO DOS CAMPOS DE TEXTO E SELEÇÃO */
         input, select { 
             background: #0a0a0a; 
             border: 1px solid #1a1a1a; 
@@ -103,6 +120,7 @@
             font-size: 8px; 
             font-weight: 800; 
         }
+        
         .btn-action { 
             background: rgba(255,255,255,0.05); 
             padding: 8px; 
@@ -117,7 +135,9 @@
         <div class="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl">
             <span class="text-black text-4xl font-black italic">G</span>
         </div>
+        
         <h1 class="text-3xl font-extrabold uppercase italic">Guima Strategy</h1>
+        
         <div class="mt-12 space-y-4">
             <input id="user-name" type="text" placeholder="ID DE ACESSO" class="w-full p-5 rounded-2xl text-center font-bold">
             <button onclick="fazerLogin()" class="w-full bg-white text-black p-5 rounded-2xl font-black uppercase active:scale-95 transition-all">Acessar</button>
@@ -178,6 +198,7 @@
             
             <div class="premium-card p-8 space-y-4 mt-6">
                 <p class="text-[10px] font-black text-zinc-500 text-center uppercase tracking-widest">Nova Conta</p>
+                
                 <input id="nome-banco" type="text" placeholder="Nome" class="w-full p-4 rounded-xl font-bold">
                 <input id="saldo-inicial" type="number" placeholder="Saldo R$" class="w-full p-4 rounded-xl font-bold">
                 
@@ -195,8 +216,10 @@
             
             <div class="premium-card p-10 space-y-4 mt-10">
                 <p class="text-[10px] font-black text-zinc-500 text-center uppercase tracking-widest">Criar Objetivo</p>
+                
                 <input id="nome-meta" type="text" placeholder="Nome do Objetivo" class="w-full p-4 rounded-xl font-bold">
                 <input id="valor-meta" type="number" placeholder="Alvo Final R$" class="w-full p-4 rounded-xl font-bold">
+                
                 <button onclick="adicionarMeta()" class="w-full bg-white text-black p-4 rounded-xl font-black uppercase text-xs">Criar Cofre</button>
             </div>
         </section>
@@ -207,6 +230,7 @@
     <div id="modal-edit-geral" class="fixed inset-0 bg-black/95 hidden z-[300] flex items-end backdrop-blur-2xl">
         <div class="premium-card w-full rounded-t-[50px] p-10 pb-16 space-y-6">
             <h3 id="edit-titulo" class="text-white font-black text-center uppercase text-xs">Editar</h3>
+            
             <input id="edit-nome" type="text" class="w-full p-5 rounded-2xl font-bold">
             <input id="edit-v1" type="number" class="w-full p-5 rounded-2xl font-bold">
             <input id="edit-v2" type="number" class="w-full p-5 rounded-2xl font-bold">
@@ -227,6 +251,7 @@
             
             <div class="relative">
                 <input id="m-valor" type="number" oninput="simularImpacto()" step="0.01" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-transparent border-b-2 font-black text-5xl text-center outline-none">
+                
                 <div id="simulador-box" class="hidden p-4 mt-4 bg-indigo-950/20 border border-indigo-900/50 rounded-2xl text-[9px] font-bold text-indigo-400 uppercase tracking-widest text-center"></div>
             </div>
 
@@ -235,6 +260,7 @@
                     <option value="despesa">SAÍDA (-)</option>
                     <option value="receita">ENTRADA (+)</option>
                 </select>
+                
                 <select id="m-parcelas" class="p-5 rounded-2xl font-bold" onchange="simularImpacto()">
                     <option value="1">À vista</option>
                     <option value="2">2x</option>
@@ -254,60 +280,95 @@
     <div id="modal-aporte" class="fixed inset-0 bg-black/95 hidden z-[200] flex items-end backdrop-blur-2xl">
         <div class="premium-card w-full rounded-t-[50px] p-10 pb-16 space-y-6 text-center">
             <h3 class="text-emerald-500 font-black text-center uppercase text-xs tracking-widest">Aportar no Cofre</h3>
+            
             <input id="a-valor" type="number" placeholder="R$ 0,00" class="w-full p-5 bg-transparent border-b-2 border-emerald-500 text-emerald-500 font-black text-5xl text-center outline-none">
+            
             <select id="a-origem" class="w-full p-5 rounded-2xl font-bold"></select>
+            
             <button onclick="confirmarAporte()" class="w-full bg-emerald-500 text-black p-6 rounded-2xl font-black text-lg uppercase">Guardar Dinheiro</button>
             <button onclick="fecharModalAporte()" class="w-full text-zinc-600 font-bold p-2 text-[10px] uppercase">Voltar</button>
         </div>
     </div>
 
     <script>
+        // Variáveis Globais
         let u = ""; 
         let idMetaS = null; 
         let editType = ""; 
         let editIdx = null; 
         let privacidade = false;
-        let db = JSON.parse(localStorage.getItem('guima_v24_1_fix')) || {};
+        
+        // Inicialização do Banco de Dados
+        let db = JSON.parse(localStorage.getItem('guima_v25_expanded_real'));
+        if (!db) {
+            db = {};
+        }
 
-        // NAVEGAÇÃO DE ABAS
+        // FUNÇÃO: Navegação entre abas
         function mudarAba(id) {
             const abas = ['resumo', 'insights', 'bancos', 'metas'];
-            abas.forEach(aba => {
+            
+            for (let i = 0; i < abas.length; i++) {
+                let aba = abas[i];
                 document.getElementById('aba-' + aba).style.display = 'none';
                 document.getElementById('btn-' + aba).classList.remove('tab-active');
-            });
+            }
+            
             document.getElementById('aba-' + id).style.display = 'block';
             document.getElementById('btn-' + id).classList.add('tab-active');
+            
             render();
         }
 
-        // LOGIN
+        // FUNÇÃO: Sistema de Login
         function fazerLogin() {
-            const rawName = document.getElementById('user-name').value.trim();
-            if (!rawName) return;
+            const inputNome = document.getElementById('user-name');
+            const rawName = inputNome.value.trim();
+            
+            if (rawName === "") {
+                return;
+            }
+            
             u = rawName.toLowerCase();
-            if (!db[u]) db[u] = { bancos: [], historico: [], metas: [] };
+            
+            if (!db[u]) {
+                db[u] = { 
+                    bancos: [], 
+                    historico: [], 
+                    metas: [] 
+                };
+            }
+            
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('main-app').classList.remove('hidden');
+            
             mudarAba('resumo');
         }
 
-        // PRIVACIDADE
+        // FUNÇÃO: Alternar Privacidade
         function togglePrivacidade() { 
             privacidade = !privacidade; 
-            document.getElementById('btn-privacidade-ui').innerText = privacidade ? "MOSTRAR" : "OCULTAR";
+            
+            const btnUi = document.getElementById('btn-privacidade-ui');
+            
+            if (privacidade) {
+                btnUi.innerText = "MOSTRAR";
+            } else {
+                btnUi.innerText = "OCULTAR";
+            }
+            
             render(); 
         }
 
-        // LÓGICA DE CORES DINÂMICAS DO MODAL
+        // FUNÇÃO: Atualizar Cores do Modal Dinamicamente
         function atualizarEstiloModal() {
-            const tipoSelecionado = document.getElementById('m-tipo').value;
-            const inputValor = document.getElementById('m-valor');
             const selectTipo = document.getElementById('m-tipo');
+            const tipoSelecionado = selectTipo.value;
+            
+            const inputValor = document.getElementById('m-valor');
             const btnConfirmar = document.getElementById('btn-confirmar');
 
             if (tipoSelecionado === 'receita') {
-                // Estilo para ENTRADA (Verde)
                 inputValor.style.color = '#10b981';
                 inputValor.style.borderBottomColor = '#10b981';
                 
@@ -317,7 +378,6 @@
                 btnConfirmar.style.backgroundColor = '#10b981';
                 btnConfirmar.style.color = '#000000';
             } else {
-                // Estilo para SAÍDA (Vermelho)
                 inputValor.style.color = '#ef4444';
                 inputValor.style.borderBottomColor = '#ef4444';
                 
@@ -331,11 +391,14 @@
             simularImpacto();
         }
 
-        // SIMULADOR
+        // FUNÇÃO: Simular Impacto Financeiro
         function simularImpacto() {
-            const valorInput = document.getElementById('m-valor').value;
-            const valor = parseFloat(valorInput) || 0;
-            const parcelas = parseInt(document.getElementById('m-parcelas').value);
+            const inputValor = document.getElementById('m-valor');
+            const valor = parseFloat(inputValor.value) || 0;
+            
+            const selectParcelas = document.getElementById('m-parcelas');
+            const parcelas = parseInt(selectParcelas.value);
+            
             const box = document.getElementById('simulador-box');
             
             if (valor <= 0) {
@@ -346,34 +409,63 @@
             box.classList.remove('hidden');
             
             if (parcelas > 1) {
-                box.innerText = `Impacto: R$ ${(valor / parcelas).toFixed(2)} por mês durante ${parcelas} meses.`;
+                const valorParcela = valor / parcelas;
+                box.innerText = `Impacto: R$ ${valorParcela.toFixed(2)} por mês durante ${parcelas} meses.`;
             } else {
                 box.innerText = `Impacto imediato no saldo da conta.`;
             }
         }
 
-        // RENDERIZAÇÃO
+        // FUNÇÃO PRINCIPAL: Renderizar toda a Interface
         function render() {
             const user = db[u]; 
-            if (!user) return;
             
-            const mesAtual = new Date().getMonth(); 
-            const anoAtual = new Date().getFullYear();
+            if (!user) {
+                return;
+            }
+            
+            const dataHoje = new Date();
+            const mesAtual = dataHoje.getMonth(); 
+            const anoAtual = dataHoje.getFullYear();
 
-            // Saldo
-            const totalSaldo = user.bancos.reduce((acc, b) => acc + b.saldo, 0);
+            // Renderizar Saldo Total
+            let totalSaldo = 0;
+            for (let i = 0; i < user.bancos.length; i++) {
+                totalSaldo = totalSaldo + user.bancos[i].saldo;
+            }
+            
             const elementoSaldo = document.getElementById('saldo-geral');
             elementoSaldo.innerText = `R$ ${totalSaldo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            if (privacidade) elementoSaldo.classList.add('hide-val');
-            else elementoSaldo.classList.remove('hide-val');
+            
+            if (privacidade) {
+                elementoSaldo.classList.add('hide-val');
+            } else {
+                elementoSaldo.classList.remove('hide-val');
+            }
 
-            // Ganhos e Gastos
-            const movMes = user.historico.filter(h => h.mes === mesAtual && h.ano === anoAtual);
-            const totalEntradas = movMes.filter(h => h.tipo === 'receita').reduce((a, b) => a + b.valor, 0);
-            const totalSaidas = movMes.filter(h => h.tipo === 'despesa').reduce((a, b) => a + b.valor, 0);
+            // Filtrar Movimentos do Mês Atual
+            const movMes = [];
+            for (let i = 0; i < user.historico.length; i++) {
+                if (user.historico[i].mes === mesAtual && user.historico[i].ano === anoAtual) {
+                    movMes.push(user.historico[i]);
+                }
+            }
+            
+            // Calcular Ganhos e Gastos
+            let totalEntradas = 0;
+            let totalSaidas = 0;
+            
+            for (let i = 0; i < movMes.length; i++) {
+                if (movMes[i].tipo === 'receita') {
+                    totalEntradas = totalEntradas + movMes[i].valor;
+                } else {
+                    totalSaidas = totalSaidas + movMes[i].valor;
+                }
+            }
             
             const displayEntradas = document.getElementById('perf-entradas');
             const displaySaidas = document.getElementById('perf-saidas');
+            
             displayEntradas.innerText = `+ R$ ${totalEntradas.toLocaleString('pt-BR')}`;
             displaySaidas.innerText = `- R$ ${totalSaidas.toLocaleString('pt-BR')}`;
             
@@ -385,15 +477,35 @@
                 displaySaidas.classList.remove('hide-val'); 
             }
 
-            // Dívidas Futuras
-            const dividasFuturas = user.historico.filter(h => (h.ano > anoAtual) || (h.ano === anoAtual && h.mes > mesAtual)).reduce((a, b) => a + b.valor, 0);
+            // Calcular Dívidas Futuras (Projeção)
+            let dividasFuturas = 0;
+            for (let i = 0; i < user.historico.length; i++) {
+                let h = user.historico[i];
+                if ((h.ano > anoAtual) || (h.ano === anoAtual && h.mes > mesAtual)) {
+                    dividasFuturas = dividasFuturas + h.valor;
+                }
+            }
+            
             document.getElementById('total-parcelas-futuras').innerText = `R$ ${dividasFuturas.toLocaleString('pt-BR')}`;
 
-            // Template Historico
-            const criarCartaoHistorico = (h) => {
-                let badge = h.totalP > 1 ? `<span class="bg-parcela">${h.nP}/${h.totalP}</span>` : "";
-                let corClasse = h.tipo === 'receita' ? 'text-entrada' : 'text-saida';
-                let sinal = h.tipo === 'receita' ? '+' : '-';
+            // Criar Função Auxiliar para Template do Histórico
+            function criarCartaoHistorico(h) {
+                let badge = "";
+                if (h.totalP > 1) {
+                    badge = `<span class="bg-parcela">${h.nP}/${h.totalP}</span>`;
+                }
+                
+                let corClasse = "";
+                let sinal = "";
+                
+                if (h.tipo === 'receita') {
+                    corClasse = 'text-entrada';
+                    sinal = '+';
+                } else {
+                    corClasse = 'text-saida';
+                    sinal = '-';
+                }
+                
                 return `
                 <div class="premium-card p-6 border-l-4" style="border-color: ${h.cor}">
                     <div class="flex justify-between items-center">
@@ -401,142 +513,323 @@
                             <p class="text-sm font-bold text-white mb-1">${h.desc} ${badge}</p>
                             <p class="text-[9px] font-black text-zinc-600 uppercase">${h.data} • ${h.banco}</p>
                         </div>
-                        <span class="font-black text-sm ${corClasse}">${sinal} R$ ${h.valor.toFixed(2)}</span>
+                        <span class="font-black text-sm ${corClasse}">
+                            ${sinal} R$ ${h.valor.toFixed(2)}
+                        </span>
                     </div>
                 </div>`;
-            };
+            }
 
-            // Extrato
-            const limit = user.historico.filter(h => h.mes === mesAtual).slice(0, 5);
-            document.getElementById('movimentacoes-resumo').innerHTML = limit.map(criarCartaoHistorico).join('');
+            // Renderizar Histórico Resumido (Até 5 itens)
+            const historicoRecenteHTML = [];
+            let count = 0;
+            for (let i = 0; i < user.historico.length; i++) {
+                if (user.historico[i].mes === mesAtual) {
+                    historicoRecenteHTML.push(criarCartaoHistorico(user.historico[i]));
+                    count++;
+                }
+                if (count >= 5) break;
+            }
+            document.getElementById('movimentacoes-resumo').innerHTML = historicoRecenteHTML.join('');
             
+            // Renderizar Extrato Completo com Filtros
             const fBanco = document.getElementById('filtro-banco').value || 'todos';
             const fBusca = (document.getElementById('busca-desc').value || '').toLowerCase();
-            const filtHist = user.historico.filter(h => (fBanco === 'todos' || h.banco === fBanco) && h.desc.toLowerCase().includes(fBusca));
-            document.getElementById('lista-extrato-full').innerHTML = filtHist.map(criarCartaoHistorico).join('');
+            
+            const extratoFiltradoHTML = [];
+            for (let i = 0; i < user.historico.length; i++) {
+                let h = user.historico[i];
+                let condicaoBanco = (fBanco === 'todos' || h.banco === fBanco);
+                let condicaoBusca = h.desc.toLowerCase().includes(fBusca);
+                
+                if (condicaoBanco && condicaoBusca) {
+                    extratoFiltradoHTML.push(criarCartaoHistorico(h));
+                }
+            }
+            document.getElementById('lista-extrato-full').innerHTML = extratoFiltradoHTML.join('');
 
-            // Bancos
-            document.getElementById('lista-bancos').innerHTML = user.bancos.map((b, i) => `
+            // Renderizar Lista de Bancos
+            const bancosHTML = [];
+            for (let i = 0; i < user.bancos.length; i++) {
+                let b = user.bancos[i];
+                let hideClass = privacidade ? 'hide-val' : '';
+                
+                bancosHTML.push(`
                 <div class="premium-card p-7 border-l-[14px]" style="border-color: ${b.cor}">
                     <div class="flex justify-between items-center">
                         <div>
                             <span class="text-[9px] font-black text-zinc-600 uppercase mb-2 block tracking-widest">${b.nome}</span>
-                            <span class="font-black text-2xl text-white ${privacidade ? 'hide-val' : ''}">R$ ${b.saldo.toFixed(2)}</span>
+                            <span class="font-black text-2xl text-white ${hideClass}">R$ ${b.saldo.toFixed(2)}</span>
                         </div>
                         <div class="flex gap-2">
                             <button onclick="abrirEdit('banco', ${i})" class="btn-action text-zinc-400 text-xs">✎</button>
                             <button onclick="excluirItem('banco', ${i})" class="btn-action text-rose-900 text-xs">✕</button>
                         </div>
                     </div>
-                </div>`).join('');
+                </div>`);
+            }
+            document.getElementById('lista-bancos').innerHTML = bancosHTML.join('');
 
-            // Cofres
-            document.getElementById('lista-metas').innerHTML = user.metas.map((m, i) => {
-                const progresso = Math.min(100, (m.atual / m.total) * 100);
-                const concluido = progresso >= 100;
-                return `
+            // Renderizar Lista de Cofres
+            const metasHTML = [];
+            for (let i = 0; i < user.metas.length; i++) {
+                let m = user.metas[i];
+                
+                let percentualCalculado = (m.atual / m.total) * 100;
+                let progresso = Math.min(100, percentualCalculado);
+                let concluido = false;
+                
+                if (progresso >= 100) {
+                    concluido = true;
+                }
+                
+                let emoji = concluido ? '🥳' : '🏃‍♂️';
+                let corPercentual = concluido ? 'text-emerald-500' : 'text-white';
+                
+                metasHTML.push(`
                 <div class="premium-card p-10 space-y-4">
                     <div class="flex justify-between font-black text-[11px] text-zinc-500 uppercase">
                         <span>${m.nome}</span>
                         <div class="flex gap-3">
                             <button onclick="abrirEdit('meta', ${i})" class="text-zinc-500">✎</button>
                             <button onclick="excluirItem('meta', ${i})" class="text-rose-950">✕</button>
-                            <span class="${concluido ? 'text-emerald-500' : 'text-white'}">${progresso.toFixed(1)}%</span>
+                            <span class="${corPercentual}">${progresso.toFixed(1)}%</span>
                         </div>
                     </div>
-                    <div class="progress-track"><div class="runner" style="left: calc(${progresso}% - 15px)">${concluido ? '🥳' : '🏃‍♂️'}</div><div class="progress-bar-fintech" style="width: ${progresso}%"></div></div>
-                    <div class="flex justify-between items-center pt-4"><p class="text-[10px] font-black">R$ ${m.atual.toFixed(0)} / ${m.total.toFixed(0)}</p><button onclick="abrirAporte(${m.id})" class="text-[10px] font-black border-b border-white pb-1">APORTAR</button></div>
-                </div>`;
-            }).join('');
+                    <div class="progress-track">
+                        <div class="runner" style="left: calc(${progresso}% - 15px)">${emoji}</div>
+                        <div class="progress-bar-fintech" style="width: ${progresso}%"></div>
+                    </div>
+                    <div class="flex justify-between items-center pt-4">
+                        <p class="text-[10px] font-black">R$ ${m.atual.toFixed(0)} / ${m.total.toFixed(0)}</p>
+                        <button onclick="abrirAporte(${m.id})" class="text-[10px] font-black border-b border-white pb-1">APORTAR</button>
+                    </div>
+                </div>`);
+            }
+            document.getElementById('lista-metas').innerHTML = metasHTML.join('');
 
-            // Filtros
-            let opcoes = '<option value="todos">Todas as Contas</option>';
-            user.bancos.forEach(b => { opcoes += `<option value="${b.nome}">${b.nome}</option>`; });
-            document.getElementById('filtro-banco').innerHTML = opcoes;
-            const fAtual = document.getElementById('filtro-banco').value;
-            if(fAtual) document.getElementById('filtro-banco').value = fAtual;
+            // Atualizar Filtros de Banco no Extrato
+            let opcoesFiltro = '<option value="todos">Todas as Contas</option>';
+            for (let i = 0; i < user.bancos.length; i++) {
+                let bancoNome = user.bancos[i].nome;
+                opcoesFiltro += `<option value="${bancoNome}">${bancoNome}</option>`;
+            }
+            
+            const selectFiltro = document.getElementById('filtro-banco');
+            selectFiltro.innerHTML = opcoesFiltro;
+            
+            if (fBanco !== 'todos') {
+                selectFiltro.value = fBanco;
+            }
         }
 
-        // EDIÇÃO
-        function abrirEdit(tipo, idx) {
-            editType = tipo; editIdx = idx;
-            let item = db[u][tipo === 'banco' ? 'bancos' : 'metas'][idx];
-            document.getElementById('edit-titulo').innerText = "Editar " + (tipo === 'banco' ? 'Conta' : 'Cofre');
-            document.getElementById('edit-nome').value = item.nome;
+        // FUNÇÃO: Abrir Modal de Edição Universal
+        function abrirEdit(tipo, index) {
+            editType = tipo; 
+            editIdx = index;
+            
+            const tituloModal = document.getElementById('edit-titulo');
+            const inputNome = document.getElementById('edit-nome');
+            const inputV1 = document.getElementById('edit-v1');
+            const inputV2 = document.getElementById('edit-v2');
+            const colorWrapper = document.getElementById('edit-cor-wrapper');
+            const inputColor = document.getElementById('edit-cor');
+            
+            let item;
+            
             if (tipo === 'banco') {
-                document.getElementById('edit-v1').value = item.saldo;
-                document.getElementById('edit-v2').style.display = 'none';
-                document.getElementById('edit-cor-wrapper').style.display = 'flex';
-                document.getElementById('edit-cor').value = item.cor;
+                item = db[u].bancos[index];
+                tituloModal.innerText = "Editar Conta";
+                inputNome.value = item.nome;
+                inputV1.value = item.saldo;
+                inputV2.style.display = 'none';
+                colorWrapper.style.display = 'flex';
+                inputColor.value = item.cor;
             } else {
-                document.getElementById('edit-v1').value = item.atual;
-                document.getElementById('edit-v2').value = item.total;
-                document.getElementById('edit-v2').style.display = 'block';
-                document.getElementById('edit-cor-wrapper').style.display = 'none';
+                item = db[u].metas[index];
+                tituloModal.innerText = "Editar Cofre";
+                inputNome.value = item.nome;
+                inputV1.value = item.atual;
+                inputV2.value = item.total;
+                inputV2.style.display = 'block';
+                colorWrapper.style.display = 'none';
             }
+            
             document.getElementById('modal-edit-geral').classList.remove('hidden');
         }
 
+        // FUNÇÃO: Salvar Edição
         function salvarEdicaoGeral() {
-            let item = db[u][editType === 'banco' ? 'bancos' : 'metas'][editIdx];
-            item.nome = document.getElementById('edit-nome').value;
+            const inputNome = document.getElementById('edit-nome').value;
+            
             if (editType === 'banco') {
-                item.saldo = parseFloat(document.getElementById('edit-v1').value);
-                item.cor = document.getElementById('edit-cor').value;
+                let itemBanco = db[u].bancos[editIdx];
+                itemBanco.nome = inputNome;
+                itemBanco.saldo = parseFloat(document.getElementById('edit-v1').value);
+                itemBanco.cor = document.getElementById('edit-cor').value;
             } else {
-                item.atual = parseFloat(document.getElementById('edit-v1').value);
-                item.total = parseFloat(document.getElementById('edit-v2').value);
+                let itemMeta = db[u].metas[editIdx];
+                itemMeta.nome = inputNome;
+                itemMeta.atual = parseFloat(document.getElementById('edit-v1').value);
+                itemMeta.total = parseFloat(document.getElementById('edit-v2').value);
             }
-            fecharModalEdit(); salvar();
+            
+            fecharModalEdit(); 
+            salvar();
         }
 
-        function excluirItem(tipo, idx) { 
-            if (confirm("Remover item permanentemente?")) { 
-                db[u][tipo === 'banco' ? 'bancos' : 'metas'].splice(idx, 1); 
+        // FUNÇÃO: Excluir Item
+        function excluirItem(tipo, index) { 
+            const resposta = confirm("Remover item permanentemente?");
+            
+            if (resposta) { 
+                if (tipo === 'banco') {
+                    db[u].bancos.splice(index, 1);
+                } else {
+                    db[u].metas.splice(index, 1);
+                }
                 salvar(); 
             } 
         }
 
-        function fecharModalEdit() { document.getElementById('modal-edit-geral').classList.add('hidden'); }
+        function fecharModalEdit() { 
+            document.getElementById('modal-edit-geral').classList.add('hidden'); 
+        }
 
-        // CADASTROS E LANÇAMENTOS
+        // FUNÇÃO: Criar Nova Conta
         function adicionarBanco() {
-            const n = document.getElementById('nome-banco').value; const s = parseFloat(document.getElementById('saldo-inicial').value); const c = document.getElementById('cor-banco').value;
-            if (!n || isNaN(s)) return;
-            db[u].bancos.push({ nome: n, saldo: s, cor: c });
-            document.getElementById('nome-banco').value = ""; document.getElementById('saldo-inicial').value = "";
-            salvar();
-        }
-
-        function adicionarMeta() {
-            const n = document.getElementById('nome-meta').value; const v = parseFloat(document.getElementById('valor-meta').value);
-            if (!n || isNaN(v)) return;
-            db[u].metas.push({ id: Date.now(), nome: n, total: v, atual: 0 });
-            document.getElementById('nome-meta').value = ""; document.getElementById('valor-meta').value = "";
-            salvar();
-        }
-
-        function confirmarLancamento() {
-            const d = document.getElementById('m-desc').value; const v = parseFloat(document.getElementById('m-valor').value);
-            const t = document.getElementById('m-tipo').value; const p = parseInt(document.getElementById('m-parcelas').value);
-            const bNome = document.getElementById('m-banco').value; const banco = db[u].bancos.find(x => x.nome === bNome);
+            const inputNome = document.getElementById('nome-banco');
+            const inputSaldo = document.getElementById('saldo-inicial');
+            const inputCor = document.getElementById('cor-banco');
             
-            if (!banco || isNaN(v) || d === "") { alert("Preencha todos os campos."); return; }
+            const nome = inputNome.value;
+            const saldo = parseFloat(inputSaldo.value);
+            const cor = inputCor.value;
             
-            const vP = v / p; const hoje = new Date();
-            for (let i = 0; i < p; i++) {
-                let dP = new Date(hoje.getFullYear(), hoje.getMonth() + i, hoje.getDate());
-                db[u].historico.unshift({ desc: d, valor: vP, tipo: t, banco: bNome, cor: banco.cor, data: dP.toLocaleDateString('pt-BR'), mes: dP.getMonth(), ano: dP.getFullYear(), nP: i + 1, totalP: p });
-                if (i === 0) { t === 'receita' ? banco.saldo += vP : banco.saldo -= vP; }
+            if (nome === "" || isNaN(saldo)) {
+                return;
             }
-            fecharModal(); salvar();
+            
+            db[u].bancos.push({ 
+                nome: nome, 
+                saldo: saldo, 
+                cor: cor 
+            });
+            
+            inputNome.value = ""; 
+            inputSaldo.value = "";
+            
+            salvar();
         }
 
-        function abrirModal() { 
-            let opcoes = '';
-            db[u].bancos.forEach(b => { opcoes += `<option value="${b.nome}">${b.nome}</option>`; });
-            document.getElementById('m-banco').innerHTML = opcoes; 
+        // FUNÇÃO: Criar Nova Meta
+        function adicionarMeta() {
+            const inputNome = document.getElementById('nome-meta');
+            const inputValor = document.getElementById('valor-meta');
             
+            const nome = inputNome.value;
+            const valorTotal = parseFloat(inputValor.value);
+            
+            if (nome === "" || isNaN(valorTotal)) {
+                return;
+            }
+            
+            db[u].metas.push({ 
+                id: Date.now(), 
+                nome: nome, 
+                total: valorTotal, 
+                atual: 0 
+            });
+            
+            inputNome.value = ""; 
+            inputValor.value = "";
+            
+            salvar();
+        }
+
+        // FUNÇÃO: Confirmar Nova Transação (Lançamento ou Parcelamento)
+        function confirmarLancamento() {
+            const inputDesc = document.getElementById('m-desc');
+            const inputValor = document.getElementById('m-valor');
+            const selectTipo = document.getElementById('m-tipo');
+            const selectParcelas = document.getElementById('m-parcelas');
+            const selectBanco = document.getElementById('m-banco');
+            
+            const desc = inputDesc.value;
+            const valorTotal = parseFloat(inputValor.value);
+            const tipo = selectTipo.value;
+            const parcelas = parseInt(selectParcelas.value);
+            const nomeBanco = selectBanco.value;
+            
+            let bancoDestino = null;
+            for (let i = 0; i < db[u].bancos.length; i++) {
+                if (db[u].bancos[i].nome === nomeBanco) {
+                    bancoDestino = db[u].bancos[i];
+                    break;
+                }
+            }
+            
+            if (bancoDestino === null || isNaN(valorTotal) || desc === "") { 
+                alert("Por favor, preencha todos os campos do lançamento.");
+                return; 
+            }
+            
+            const valorDaParcela = valorTotal / parcelas; 
+            const dataDeHoje = new Date();
+            
+            // Loop de criação de parcelas
+            for (let i = 0; i < parcelas; i++) {
+                let dataDaParcela = new Date(
+                    dataDeHoje.getFullYear(), 
+                    dataDeHoje.getMonth() + i, 
+                    dataDeHoje.getDate()
+                );
+                
+                db[u].historico.unshift({ 
+                    desc: desc, 
+                    valor: valorDaParcela, 
+                    tipo: tipo, 
+                    banco: nomeBanco, 
+                    cor: bancoDestino.cor, 
+                    data: dataDaParcela.toLocaleDateString('pt-BR'), 
+                    mes: dataDaParcela.getMonth(), 
+                    ano: dataDaParcela.getFullYear(), 
+                    nP: i + 1, 
+                    totalP: parcelas 
+                });
+                
+                // Aplica impacto no saldo bancário apenas para a primeira parcela (mês atual)
+                if (i === 0) { 
+                    if (tipo === 'receita') {
+                        bancoDestino.saldo = bancoDestino.saldo + valorDaParcela;
+                    } else {
+                        bancoDestino.saldo = bancoDestino.saldo - valorDaParcela;
+                    }
+                }
+            }
+            
+            // Limpa o formulário do modal
+            inputDesc.value = ""; 
+            inputValor.value = "";
+            selectParcelas.value = "1";
+            selectTipo.value = "despesa";
+            
+            fecharModal(); 
+            salvar();
+        }
+
+        // FUNÇÃO: Abrir Modal Lançamento
+        function abrirModal() { 
+            let opcoesBancos = '';
+            
+            for (let i = 0; i < db[u].bancos.length; i++) {
+                let nomeBanco = db[u].bancos[i].nome;
+                opcoesBancos += `<option value="${nomeBanco}">${nomeBanco}</option>`; 
+            }
+            
+            document.getElementById('m-banco').innerHTML = opcoesBancos; 
+            
+            // Limpa campos residuais antes de abrir
             document.getElementById('m-valor').value = "";
             document.getElementById('m-desc').value = "";
             document.getElementById('m-parcelas').value = "1";
@@ -544,38 +837,93 @@
             
             document.getElementById('modal').classList.remove('hidden'); 
             
-            // FORÇA A ATUALIZAÇÃO DA COR LOGO AO ABRIR
+            // Aplica a cor correta inicial
             atualizarEstiloModal(); 
         }
 
-        function fecharModal() { document.getElementById('modal').classList.add('hidden'); }
+        function fecharModal() { 
+            document.getElementById('modal').classList.add('hidden'); 
+        }
 
-        function abrirAporte(id) { 
-            idMetaS = id; 
-            let opcoes = '';
-            db[u].bancos.forEach(b => { opcoes += `<option value="${b.nome}">${b.nome}</option>`; });
-            document.getElementById('a-origem').innerHTML = opcoes; 
+        // FUNÇÃO: Abrir Modal de Aporte
+        function abrirAporte(idDoCofre) { 
+            idMetaS = idDoCofre; 
+            
+            let opcoesBancos = '';
+            for (let i = 0; i < db[u].bancos.length; i++) {
+                let nomeBanco = db[u].bancos[i].nome;
+                opcoesBancos += `<option value="${nomeBanco}">${nomeBanco}</option>`; 
+            }
+            
+            document.getElementById('a-origem').innerHTML = opcoesBancos; 
             document.getElementById('modal-aporte').classList.remove('hidden'); 
         }
 
-        function fecharModalAporte() { document.getElementById('modal-aporte').classList.add('hidden'); }
-
-        function confirmarAporte() {
-            const v = parseFloat(document.getElementById('a-valor').value); 
-            const b = db[u].bancos.find(x => x.nome === document.getElementById('a-origem').value);
-            const m = db[u].metas.find(x => x.id === idMetaS); 
-            
-            if (!b || !m || isNaN(v)) return;
-            if (b.saldo < v) { alert("Saldo insuficiente."); return; }
-
-            b.saldo -= v; m.atual += v; const dt = new Date();
-            db[u].historico.unshift({ desc: `Aporte: ${m.nome}`, valor: v, tipo: 'despesa', banco: b.nome, cor: '#ffffff', data: dt.toLocaleDateString('pt-BR'), mes: dt.getMonth(), ano: dt.getFullYear(), nP: 1, totalP: 1 });
-            
-            document.getElementById('a-valor').value = ""; 
-            fecharModalAporte(); salvar();
+        function fecharModalAporte() { 
+            document.getElementById('modal-aporte').classList.add('hidden'); 
         }
 
-        function salvar() { localStorage.setItem('guima_v24_1_fix', JSON.stringify(db)); render(); }
+        // FUNÇÃO: Efetivar Aporte
+        function confirmarAporte() {
+            const inputAporteValor = document.getElementById('a-valor');
+            const valor = parseFloat(inputAporteValor.value); 
+            
+            const nomeBancoOrigem = document.getElementById('a-origem').value;
+            
+            let bancoOrigem = null;
+            for (let i = 0; i < db[u].bancos.length; i++) {
+                if (db[u].bancos[i].nome === nomeBancoOrigem) {
+                    bancoOrigem = db[u].bancos[i];
+                    break;
+                }
+            }
+            
+            let cofreDestino = null;
+            for (let i = 0; i < db[u].metas.length; i++) {
+                if (db[u].metas[i].id === idMetaS) {
+                    cofreDestino = db[u].metas[i];
+                    break;
+                }
+            }
+            
+            if (bancoOrigem === null || cofreDestino === null || isNaN(valor)) {
+                return;
+            }
+            
+            if (bancoOrigem.saldo < valor) { 
+                alert("Saldo insuficiente na conta selecionada."); 
+                return; 
+            }
+
+            bancoOrigem.saldo = bancoOrigem.saldo - valor; 
+            cofreDestino.atual = cofreDestino.atual + valor; 
+            
+            const dataHoje = new Date();
+            
+            db[u].historico.unshift({ 
+                desc: `Aporte: ${cofreDestino.nome}`, 
+                valor: valor, 
+                tipo: 'despesa', 
+                banco: bancoOrigem.nome, 
+                cor: '#ffffff', 
+                data: dataHoje.toLocaleDateString('pt-BR'), 
+                mes: dataHoje.getMonth(), 
+                ano: dataHoje.getFullYear(), 
+                nP: 1, 
+                totalP: 1 
+            });
+            
+            inputAporteValor.value = ""; 
+            
+            fecharModalAporte(); 
+            salvar();
+        }
+
+        // FUNÇÃO: Salvar Banco de Dados
+        function salvar() { 
+            localStorage.setItem('guima_v25_expanded_real', JSON.stringify(db)); 
+            render(); 
+        }
     </script>
 </body>
 </html>
