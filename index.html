@@ -3,536 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Guima Strategy | Elite v21</title>
+    <title>Guima Strategy | Ultimate v22</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* CONFIGURAÇÕES GERAIS */
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #000; 
-            color: #fff; 
-            padding-bottom: 110px; 
-            letter-spacing: -0.01em; 
-            overflow-x: hidden;
-        }
-
-        /* DESIGN PREMIUM OLED */
-        .premium-card { 
-            background: linear-gradient(145deg, #0a0a0a 0%, #111111 100%); 
-            border: 1px solid #1a1a1a; 
-            border-radius: 28px; 
-            transition: transform 0.2s;
-        }
-
-        /* NAVEGAÇÃO */
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #000; color: #fff; padding-bottom: 110px; letter-spacing: -0.01em; }
+        .premium-card { background: linear-gradient(145deg, #0a0a0a 0%, #111111 100%); border: 1px solid #1a1a1a; border-radius: 28px; position: relative; }
         .tab-active { color: #fff !important; font-weight: 800; }
-        .tab-active::after { 
-            content: ''; 
-            position: absolute; 
-            bottom: 8px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            width: 4px; 
-            height: 4px; 
-            background: #fff; 
-            border-radius: 50%; 
-        }
-
-        /* SEGURANÇA E PRIVACIDADE */
+        .tab-active::after { content: ''; position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background: #fff; border-radius: 50%; }
         .hide-val { filter: blur(15px); pointer-events: none; }
-
-        /* TERMÔMETRO DE SAÚDE */
-        .health-ring { 
-            width: 100px; 
-            height: 100px; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            position: relative; 
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
-        .health-inner { 
-            width: 85px; 
-            height: 85px; 
-            background: #000; 
-            border-radius: 50%; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-        }
-
-        /* COFRES E RUNNER */
-        .runner { 
-            position: absolute; 
-            top: -30px; 
-            transition: left 0.8s cubic-bezier(0.23, 1, 0.32, 1); 
-            font-size: 24px; 
-            transform: scaleX(-1); 
-            z-index: 20; 
-        }
-        .progress-track { 
-            height: 8px; 
-            background: #141414; 
-            border-radius: 100px; 
-            position: relative; 
-            margin-top: 45px; 
-        }
-        .progress-bar-fintech { 
-            height: 100%; 
-            border-radius: 100px; 
-            transition: width 1s ease-in-out; 
-        }
-
-        /* ANIMAÇÕES */
-        section { display: none; animation: slideUp 0.5s ease; }
-        @keyframes slideUp { 
-            from { opacity: 0; transform: translateY(20px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-
-        /* INPUTS */
-        input, select { 
-            background: #0a0a0a !important; 
-            border: 1px solid #1a1a1a !important; 
-            color: white !important; 
-            outline: none; 
-        }
-        input:focus { border-color: #3b82f6 !important; }
-
-        /* UTILITÁRIOS */
+        .runner { position: absolute; top: -30px; transition: left 0.8s cubic-bezier(0.23, 1, 0.32, 1); font-size: 24px; transform: scaleX(-1); z-index: 20; }
+        .progress-track { height: 6px; background: #141414; border-radius: 100px; position: relative; margin-top: 45px; }
+        .progress-bar-fintech { height: 100%; border-radius: 100px; transition: width 1s; }
+        section { display: none; animation: slideUp 0.4s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        input, select { background: #0a0a0a !important; border: 1px solid #1a1a1a !important; color: white !important; outline: none; }
         .text-entrada { color: #10b981 !important; }
         .text-saida { color: #ef4444 !important; }
-        .bg-parcela { background: #1e1b4b; color: #818cf8; padding: 2px 6px; border-radius: 6px; font-size: 9px; font-weight: 800; }
-        .impact-box { background: rgba(99, 102, 241, 0.1); border: 1px dashed #4f46e5; padding: 12px; border-radius: 16px; }
+        .bg-parcela { background: #1e1b4b; color: #818cf8; padding: 2px 6px; border-radius: 6px; font-size: 8px; font-weight: 800; }
+        .btn-edit { background: rgba(255,255,255,0.05); padding: 8px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
     </style>
 </head>
 <body>
 
     <div id="login-screen" class="min-h-screen flex flex-col justify-center px-10 bg-black z-[100] relative text-center">
-        <div class="w-24 h-24 bg-white rounded-[32px] flex items-center justify-center mx-auto mb-8 shadow-[0_0_50px_rgba(255,255,255,0.15)]">
-            <span class="text-black text-5xl font-black italic">G</span>
-        </div>
-        <h1 class="text-3xl font-extrabold tracking-tighter uppercase italic text-white">Guima Strategy</h1>
-        <p class="text-zinc-500 text-[10px] font-bold tracking-[0.4em] mt-3 uppercase">Private Intelligence v21.0</p>
-        <div class="mt-14 space-y-4">
-            <input id="user-name" type="text" placeholder="ID DE ACESSO" class="w-full p-5 rounded-2xl text-center font-bold border border-zinc-800 tracking-widest">
-            <button onclick="fazerLogin()" class="w-full bg-white text-black p-5 rounded-2xl font-black uppercase tracking-widest active:scale-95 transition-all shadow-lg">Entrar no Sistema</button>
+        <div class="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl"><span class="text-black text-4xl font-black italic">G</span></div>
+        <h1 class="text-3xl font-extrabold uppercase italic">Guima Strategy</h1>
+        <div class="mt-12 space-y-4">
+            <input id="user-name" type="text" placeholder="ID DE ACESSO" class="w-full p-5 rounded-2xl text-center font-bold">
+            <button onclick="fazerLogin()" class="w-full bg-white text-black p-5 rounded-2xl font-black uppercase active:scale-95 transition-all">Desbloquear</button>
         </div>
     </div>
 
     <div id="main-app" class="hidden">
-        
-        <nav class="flex justify-around bg-black/80 backdrop-blur-2xl border-b border-zinc-900 sticky top-0 z-[50]">
-            <button onclick="mudarAba('resumo')" id="btn-resumo" class="p-6 text-[10px] font-bold uppercase text-zinc-600 tab-active">Wallet</button>
+        <nav class="flex justify-around bg-black/80 backdrop-blur-xl border-b border-zinc-900 sticky top-0 z-[50]">
+            <button onclick="mudarAba('resumo')" id="btn-resumo" class="p-6 text-[10px] font-bold uppercase text-zinc-600 tab-active">Fluxo</button>
             <button onclick="mudarAba('insights')" id="btn-insights" class="p-6 text-[10px] font-bold uppercase text-zinc-600">Estratégia</button>
             <button onclick="mudarAba('bancos')" id="btn-bancos" class="p-6 text-[10px] font-bold uppercase text-zinc-600">Contas</button>
             <button onclick="mudarAba('metas')" id="btn-metas" class="p-6 text-[10px] font-bold uppercase text-zinc-600">Cofres</button>
         </nav>
 
-        <section id="aba-resumo">
-            <div class="p-6 space-y-6">
-                <div class="premium-card p-6 flex items-center justify-between">
+        <section id="aba-resumo" class="p-6 space-y-6">
+            <div class="premium-card p-10 relative">
+                <div class="flex justify-between items-start mb-8">
                     <div>
-                        <p class="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-1">Status Mensal</p>
-                        <h3 id="txt-status-saude" class="text-xl font-black italic text-emerald-500">Otimizado</h3>
-                        <p id="msg-oraculo" class="text-[9px] text-zinc-400 mt-1 uppercase font-semibold">Oráculo: Tudo sob controle.</p>
+                        <p class="text-zinc-500 text-[10px] font-black uppercase mb-2">Disponível Total</p>
+                        <h2 id="saldo-geral" class="text-5xl font-extrabold tracking-tighter">R$ 0,00</h2>
                     </div>
-                    <div id="health-ring" class="health-ring">
-                        <div class="health-inner">
-                            <span id="perc-saude" class="text-lg font-black italic">0%</span>
-                        </div>
-                    </div>
+                    <button onclick="togglePrivacidade()" id="btn-privacidade-ui" class="p-3 bg-zinc-900/50 rounded-xl border border-zinc-800 text-[9px] font-black uppercase">Ocultar</button>
                 </div>
-
-                <div class="premium-card p-10 relative overflow-hidden">
-                    <div class="flex justify-between items-start mb-8">
-                        <div>
-                            <p class="text-zinc-500 text-[10px] font-black uppercase tracking-[0.2em] mb-2">Patrimônio Líquido</p>
-                            <h2 id="saldo-geral" class="text-5xl font-extrabold tracking-tighter val-privacidade">R$ 0,00</h2>
-                        </div>
-                        <button onclick="togglePrivacidade()" class="p-3 bg-zinc-900/50 rounded-xl border border-zinc-800 text-[9px] font-black">HIDE</button>
-                    </div>
-                    <div class="grid grid-cols-2 gap-8 pt-8 border-t border-zinc-900">
-                        <div>
-                            <p class="text-[9px] font-black uppercase mb-1 text-zinc-600 tracking-widest">Entradas</p>
-                            <p id="perf-entradas" class="text-entrada font-bold text-xl val-privacidade">R$ 0,00</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-[9px] font-black uppercase mb-1 text-zinc-600 tracking-widest">Saídas</p>
-                            <p id="perf-saidas" class="text-saida font-bold text-xl val-privacidade">R$ 0,00</p>
-                        </div>
-                    </div>
+                <div class="grid grid-cols-2 gap-8 pt-8 border-t border-zinc-900">
+                    <div><p class="text-[9px] font-black text-zinc-500 uppercase mb-1">Ganhos</p><p id="perf-entradas" class="text-entrada font-bold text-xl">R$ 0,00</p></div>
+                    <div class="text-right"><p class="text-[9px] font-black text-zinc-500 uppercase mb-1">Gastos</p><p id="perf-saidas" class="text-saida font-bold text-xl">R$ 0,00</p></div>
                 </div>
+            </div>
+            <div id="movimentacoes-resumo" class="space-y-4"></div>
+        </section>
 
-                <h3 class="text-[10px] font-black uppercase text-zinc-500 tracking-widest px-2">Fluxo de Caixa Recente</h3>
-                <div id="movimentacoes-resumo" class="space-y-4"></div>
+        <section id="aba-insights" class="p-6 space-y-6">
+            <div class="premium-card p-8 border-l-8 border-indigo-600">
+                <p class="text-[10px] font-black text-zinc-500 uppercase mb-1">Dívidas Futuras (Parcelas)</p>
+                <h3 id="total-parcelas-futuras" class="text-3xl font-black text-white">R$ 0,00</h3>
+            </div>
+            <div class="flex gap-4">
+                <select id="filtro-banco" onchange="render()" class="p-5 rounded-2xl text-[10px] font-bold flex-1"></select>
+                <input type="text" id="busca-desc" onkeyup="render()" placeholder="Buscar..." class="p-5 rounded-2xl text-[10px] font-bold flex-[2]">
+            </div>
+            <div id="lista-extrato-full" class="space-y-4"></div>
+        </section>
+
+        <section id="aba-bancos" class="p-6 space-y-4">
+            <div id="lista-bancos" class="space-y-4"></div>
+            <div class="premium-card p-8 space-y-4">
+                <p class="text-[10px] font-black text-zinc-500 text-center uppercase tracking-widest">Nova Conta</p>
+                <input id="nome-banco" type="text" placeholder="Nome" class="w-full p-4 rounded-xl font-bold">
+                <input id="saldo-inicial" type="number" placeholder="Valor R$" class="w-full p-4 rounded-xl font-bold">
+                <input type="color" id="cor-banco" value="#ffffff" class="h-10 w-full bg-transparent border-0 cursor-pointer">
+                <button onclick="adicionarBanco()" class="w-full bg-white text-black p-4 rounded-xl font-black uppercase text-xs">Salvar</button>
             </div>
         </section>
 
-        <section id="aba-insights">
-            <div class="p-6 space-y-6">
-                <div class="premium-card p-8 border-l-8 border-indigo-600">
-                    <p class="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">Dívidas em Aberto (Parcelas)</p>
-                    <h3 id="total-parcelas-futuras" class="text-3xl font-black text-white">R$ 0,00</h3>
-                    <p class="text-[9px] text-zinc-500 mt-2 italic uppercase font-bold">Comprometimento de meses futuros.</p>
-                </div>
-                
-                <div id="lista-extrato-full" class="space-y-4"></div>
+        <section id="aba-metas" class="p-6 space-y-6">
+            <div id="lista-metas" class="space-y-16"></div>
+            <div class="premium-card p-10 space-y-4">
+                <input id="nome-meta" type="text" placeholder="Objetivo" class="w-full p-4 rounded-xl font-bold">
+                <input id="valor-meta" type="number" placeholder="Alvo R$" class="w-full p-4 rounded-xl font-bold">
+                <button onclick="adicionarMeta()" class="w-full bg-white text-black p-4 rounded-xl font-black uppercase text-xs">Criar Cofre</button>
             </div>
         </section>
 
-        <section id="aba-bancos">
-            <div class="p-6 space-y-4">
-                <div id="lista-bancos" class="space-y-4"></div>
-                
-                <div class="premium-card p-8 space-y-6 mt-6">
-                    <p class="text-[10px] font-black text-zinc-500 uppercase text-center tracking-[0.3em]">Adicionar Nova Instituição</p>
-                    <input id="nome-banco" type="text" placeholder="NOME DO BANCO" class="w-full p-5 rounded-2xl font-bold">
-                    <input id="saldo-inicial" type="number" placeholder="SALDO ATUAL R$" class="w-full p-5 rounded-2xl font-bold">
-                    <div class="flex justify-between items-center p-2">
-                        <span class="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Cor de Destaque</span>
-                        <input type="color" id="cor-banco" value="#ffffff" class="h-10 w-24 bg-transparent border-0 cursor-pointer">
-                    </div>
-                    <button onclick="adicionarBanco()" class="w-full bg-white text-black p-5 rounded-2xl font-black uppercase tracking-widest text-xs">Vincular Conta</button>
-                </div>
-            </div>
-        </section>
+        <button onclick="abrirModal()" class="fixed bottom-12 right-8 w-16 h-16 bg-white text-black rounded-3xl shadow-2xl flex items-center justify-center z-50 text-3xl font-black">+</button>
+    </div>
 
-        <section id="aba-metas">
-            <div class="p-6 space-y-12">
-                <div id="lista-metas" class="space-y-16"></div>
-                
-                <div class="premium-card p-10 space-y-6">
-                    <p class="text-[10px] font-black text-zinc-500 uppercase text-center tracking-[0.3em]">Novo Objetivo Estratégico</p>
-                    <input id="nome-meta" type="text" placeholder="TÍTULO DO COFRE" class="w-full p-5 rounded-2xl font-bold">
-                    <input id="valor-meta" type="number" placeholder="META FINAL R$" class="w-full p-5 rounded-2xl font-bold">
-                    <button onclick="adicionarMeta()" class="w-full bg-white text-black p-5 rounded-2xl font-black uppercase tracking-widest text-xs">Criar Vault</button>
-                </div>
+    <div id="modal-edit-geral" class="fixed inset-0 bg-black/95 hidden z-[300] flex items-end backdrop-blur-2xl">
+        <div class="premium-card w-full rounded-t-[50px] p-10 pb-16 space-y-6">
+            <h3 id="edit-titulo" class="text-white font-black text-center uppercase tracking-widest text-xs">Editar</h3>
+            <input id="edit-nome" type="text" class="w-full p-5 rounded-2xl font-bold">
+            <input id="edit-v1" type="number" placeholder="Valor 1" class="w-full p-5 rounded-2xl font-bold">
+            <input id="edit-v2" type="number" placeholder="Valor 2" class="w-full p-5 rounded-2xl font-bold">
+            <div id="edit-cor-wrapper" class="flex justify-between items-center p-2">
+                <span class="text-[10px] font-black text-zinc-600 uppercase">Cor</span>
+                <input type="color" id="edit-cor" class="h-10 w-20 bg-transparent border-0">
             </div>
-        </section>
-
-        <button onclick="abrirModal()" class="fixed bottom-10 right-8 w-16 h-16 bg-white text-black rounded-[22px] shadow-2xl flex items-center justify-center z-50 active:scale-90 transition-all font-black text-4xl shadow-white/10">+</button>
+            <button onclick="salvarEdicaoGeral()" class="w-full bg-white text-black p-5 rounded-2xl font-black uppercase">Confirmar Alteração</button>
+            <button onclick="fecharModalEdit()" class="w-full text-zinc-600 font-bold p-2 text-xs uppercase">Sair</button>
+        </div>
     </div>
 
     <div id="modal" class="fixed inset-0 bg-black/95 hidden z-[200] flex items-end backdrop-blur-2xl">
         <div class="premium-card w-full rounded-t-[50px] p-10 pb-16 space-y-6">
-            <input id="m-desc" type="text" placeholder="REFERÊNCIA" class="w-full p-5 rounded-2xl font-bold">
-            
-            <div class="space-y-4">
-                <input id="m-valor" type="number" oninput="simularImpacto()" step="0.01" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-transparent border-b border-zinc-800 text-white font-black text-5xl text-center outline-none">
-                
-                <div id="simulador-box" class="impact-box hidden">
-                    <p class="text-indigo-400 font-bold mb-1 uppercase tracking-tighter">🧠 SIMULADOR ORÁCULO:</p>
-                    <span id="txt-simulador" class="text-xs text-zinc-300">...</span>
-                </div>
-            </div>
-
+            <input id="m-desc" type="text" placeholder="O que foi?" class="w-full p-5 rounded-2xl font-bold">
+            <input id="m-valor" type="number" oninput="simularImpacto()" step="0.01" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-transparent border-b border-zinc-800 text-white font-black text-5xl text-center outline-none">
+            <div id="simulador-box" class="hidden p-4 bg-indigo-950/20 border border-indigo-900/50 rounded-2xl text-[9px] font-bold text-indigo-400 uppercase tracking-widest"></div>
             <div class="grid grid-cols-2 gap-4">
-                <div class="space-y-1">
-                    <p class="text-[8px] font-black text-zinc-600 uppercase px-2">Natureza</p>
-                    <select id="m-tipo" class="w-full p-5 rounded-2xl font-bold">
-                        <option value="despesa">SAÍDA (-)</option>
-                        <option value="receita">ENTRADA (+)</option>
-                    </select>
-                </div>
-                <div class="space-y-1">
-                    <p class="text-[8px] font-black text-zinc-600 uppercase px-2">Ciclo</p>
-                    <select id="m-parcelas" onchange="simularImpacto()" class="w-full p-5 rounded-2xl font-bold">
-                        <option value="1">À VISTA</option>
-                        <option value="2">2X</option><option value="3">3X</option><option value="6">6X</option><option value="10">10X</option><option value="12">12X</option>
-                    </select>
-                </div>
+                <select id="m-tipo" class="p-5 rounded-2xl font-bold"><option value="despesa">Saída (-)</option><option value="receita">Entrada (+)</option></select>
+                <select id="m-parcelas" class="p-5 rounded-2xl font-bold"><option value="1">À vista</option><option value="2">2x</option><option value="3">3x</option><option value="6">6x</option><option value="10">10x</option><option value="12">12x</option></select>
             </div>
-
-            <div class="space-y-1">
-                <p class="text-[8px] font-black text-zinc-600 uppercase px-2">Origem / Destino</p>
-                <select id="m-banco" class="w-full p-5 rounded-2xl font-bold"></select>
-            </div>
-
-            <button onclick="confirmarLancamento()" class="w-full bg-white text-black p-6 rounded-2xl font-black text-lg uppercase shadow-xl">Processar Lançamento</button>
-            <button onclick="fecharModal()" class="w-full text-zinc-600 font-bold p-2 text-center text-[10px] uppercase">Cancelar</button>
+            <select id="m-banco" class="p-5 rounded-2xl font-bold w-full"></select>
+            <button onclick="confirmarLancamento()" class="w-full bg-white text-black p-6 rounded-2xl font-black text-lg uppercase">Confirmar</button>
+            <button onclick="fecharModal()" class="w-full text-zinc-600 font-bold p-2 text-center text-[10px]">Cancelar</button>
         </div>
     </div>
 
     <div id="modal-aporte" class="fixed inset-0 bg-black/95 hidden z-[200] flex items-end backdrop-blur-2xl">
         <div class="premium-card w-full rounded-t-[50px] p-10 pb-16 space-y-6 text-center">
-            <h3 class="text-white font-black uppercase tracking-widest text-xs">Mover para o Vault</h3>
-            <input id="a-valor" type="number" placeholder="R$ 0,00" class="w-full p-5 bg-transparent border-b border-white text-white font-black text-6xl text-center outline-none">
-            <div class="space-y-1 text-left">
-                <p class="text-[8px] font-black text-zinc-600 uppercase px-2">Conta de Origem</p>
-                <select id="a-origem" class="w-full p-5 rounded-2xl font-bold"></select>
-            </div>
-            <button onclick="confirmarAporte()" class="w-full bg-white text-black p-6 rounded-2xl font-black text-lg uppercase">Efetuar Aporte</button>
-            <button onclick="fecharModalAporte()" class="w-full text-zinc-600 font-bold p-2 text-center text-[10px] uppercase">Voltar</button>
+            <input id="a-valor" type="number" placeholder="R$ 0,00" class="w-full p-5 bg-transparent border-b border-white text-white font-black text-5xl text-center outline-none">
+            <select id="a-origem" class="w-full p-5 rounded-2xl font-bold"></select>
+            <button onclick="confirmarAporte()" class="w-full bg-white text-black p-6 rounded-2xl font-black text-lg uppercase">Aportar</button>
+            <button onclick="fecharModalAporte()" class="w-full text-zinc-600 font-bold p-2 text-[10px]">Voltar</button>
         </div>
     </div>
 
     <script>
-        let u = ""; 
-        let idMetaS = null; 
-        let privacidade = false;
-        let db = JSON.parse(localStorage.getItem('guima_master_engine_v21')) || {};
+        let u = ""; let idMetaS = null; let editType = ""; let editIdx = null; let privacidade = false;
+        let db = JSON.parse(localStorage.getItem('guima_ultimate_v22')) || {};
 
-        // 1. SISTEMA DE NAVEGAÇÃO
         function mudarAba(id) {
-            const abas = ['resumo', 'insights', 'bancos', 'metas'];
-            abas.forEach(aba => {
-                document.getElementById('aba-' + aba).style.display = 'none';
-                document.getElementById('btn-' + aba).classList.remove('tab-active');
+            ['resumo', 'insights', 'bancos', 'metas'].forEach(a => {
+                document.getElementById('aba-'+a).style.display = 'none';
+                document.getElementById('btn-'+a).classList.remove('tab-active');
             });
-            document.getElementById('aba-' + id).style.display = 'block';
-            document.getElementById('btn-' + id).classList.add('tab-active');
+            document.getElementById('aba-'+id).style.display = 'block';
+            document.getElementById('btn-'+id).classList.add('tab-active');
             render();
         }
 
-        // 2. SISTEMA DE LOGIN
         function fazerLogin() {
             const raw = document.getElementById('user-name').value.trim();
             if (!raw) return;
             u = raw.toLowerCase();
-            if (!db[u]) {
-                db[u] = { bancos: [], historico: [], metas: [] };
-            }
+            if (!db[u]) db[u] = { bancos: [], historico: [], metas: [] };
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('main-app').classList.remove('hidden');
             mudarAba('resumo');
         }
 
-        // 3. SIMULADOR INTELIGENTE "E SE?"
-        function simularImpacto() {
-            const valor = parseFloat(document.getElementById('m-valor').value) || 0;
-            const parcelas = parseInt(document.getElementById('m-parcelas').value);
-            const box = document.getElementById('simulador-box');
-            
-            if (valor <= 0) {
-                box.classList.add('hidden');
-                return;
-            }
-            
-            box.classList.remove('hidden');
-            const valorParcela = valor / parcelas;
-            
-            if (parcelas > 1) {
-                document.getElementById('txt-simulador').innerText = `ISSO COMPROMETERÁ R$ ${valorParcela.toFixed(2)} DO SEU ORÇAMENTO PELOS PRÓXIMOS ${parcelas} MESES.`;
-            } else {
-                const totalAtual = db[u].bancos.reduce((acc, b) => acc + b.saldo, 0);
-                const perc = ((valor / (totalAtual || 1)) * 100).toFixed(1);
-                document.getElementById('txt-simulador').innerText = `ESSA COMPRA À VISTA REPRESENTA ${perc}% DO SEU PATRIMÔNIO TOTAL HOJE.`;
-            }
+        function togglePrivacidade() { 
+            privacidade = !privacidade; 
+            document.getElementById('btn-privacidade-ui').innerText = privacidade ? "MOSTRAR" : "OCULTAR";
+            render(); 
         }
 
-        // 4. MOTOR DE RENDERIZAÇÃO VISUAL
+        function simularImpacto() {
+            const v = parseFloat(document.getElementById('m-valor').value) || 0;
+            const p = parseInt(document.getElementById('m-parcelas').value);
+            const box = document.getElementById('simulador-box');
+            if(v <= 0) { box.classList.add('hidden'); return; }
+            box.classList.remove('hidden');
+            box.innerText = p > 1 ? `Parcelas de R$ ${(v/p).toFixed(2)} pelos próximos ${p} meses.` : `Impacto imediato no saldo total.`;
+        }
+
         function render() {
-            const user = db[u];
-            if (!user) return;
+            const user = db[u]; if(!user) return;
+            const mesA = new Date().getMonth(); const anoA = new Date().getFullYear();
 
-            const mesAtual = new Date().getMonth();
-            const anoAtual = new Date().getFullYear();
+            // Saldo e Privacidade
+            const total = user.bancos.reduce((acc, b) => acc + b.saldo, 0);
+            const sGeral = document.getElementById('saldo-geral');
+            sGeral.innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            privacidade ? sGeral.classList.add('hide-val') : sGeral.classList.remove('hide-val');
 
-            // Saldo Total
-            const totalSaldo = user.bancos.reduce((acc, b) => acc + b.saldo, 0);
-            const saldoEl = document.getElementById('saldo-geral');
-            saldoEl.innerText = `R$ ${totalSaldo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            if (privacidade) saldoEl.classList.add('hide-val');
-            else saldoEl.classList.remove('hide-val');
-
-            // Ganhos e Gastos (Mês Atual)
-            const movMes = user.historico.filter(h => h.mes === mesAtual && h.ano === anoAtual);
+            // Ganhos/Gastos
+            const movMes = user.historico.filter(h => h.mes === mesA && h.ano === anoA);
             const ent = movMes.filter(h => h.tipo === 'receita').reduce((a,b) => a+b.valor, 0);
             const sai = movMes.filter(h => h.tipo === 'despesa').reduce((a,b) => a+b.valor, 0);
             document.getElementById('perf-entradas').innerText = `+ R$ ${ent.toLocaleString('pt-BR')}`;
             document.getElementById('perf-saidas').innerText = `- R$ ${sai.toLocaleString('pt-BR')}`;
+            privacidade ? (document.getElementById('perf-entradas').classList.add('hide-val'), document.getElementById('perf-saidas').classList.add('hide-val')) : (document.getElementById('perf-entradas').classList.remove('hide-val'), document.getElementById('perf-saidas').classList.remove('hide-val'));
 
-            // Termômetro de Saúde
-            const ratio = ent > 0 ? (sai / ent) * 100 : (sai > 0 ? 100 : 0);
-            const ring = document.getElementById('health-ring');
-            document.getElementById('perc-saude').innerText = Math.round(ratio) + '%';
+            // Dívidas Futuras
+            const fut = user.historico.filter(h => (h.ano > anoA) || (h.ano === anoA && h.mes > mesA)).reduce((a,b) => a+b.valor, 0);
+            document.getElementById('total-parcelas-futuras').innerText = `R$ ${fut.toLocaleString('pt-BR')}`;
+
+            // Listas
+            const cardH = (h) => `<div class="premium-card p-6 border-l-4" style="border-color: ${h.cor}"><div class="flex justify-between items-center"><div><p class="text-sm font-bold text-white">${h.desc} ${h.totalP > 1 ? `<span class="bg-parcela">${h.nP}/${h.totalP}</span>` : ''}</p><p class="text-[9px] font-black text-zinc-600 uppercase">${h.data} • ${h.banco}</p></div><span class="font-black text-sm ${h.tipo === 'receita' ? 'text-entrada' : 'text-saida'}">${h.tipo === 'receita'?'+':'-'} R$ ${h.valor.toFixed(2)}</span></div></div>`;
+            document.getElementById('movimentacoes-resumo').innerHTML = user.historico.filter(h => h.mes === mesA).slice(0, 5).map(cardH).join('');
             
-            let colorSaude = '#10b981';
-            let txtSaude = 'Saudável';
-            if (ratio > 50) { colorSaude = '#f59e0b'; txtSaude = 'Atenção'; }
-            if (ratio > 85) { colorSaude = '#ef4444'; txtSaude = 'Crítico'; }
-            
-            ring.style.background = `conic-gradient(${colorSaude} ${ratio}%, #141414 ${ratio}% 100%)`;
-            document.getElementById('txt-status-saude').innerText = txtSaude;
-            document.getElementById('txt-status-saude').style.color = colorSaude;
-
-            // Projeção de Parcelas Futuras
-            const totalFuturo = user.historico.filter(h => {
-                const dataH = new Date(h.ano, h.mes);
-                const dataA = new Date(anoAtual, mesAtual);
-                return dataH > dataA;
-            }).reduce((a,b) => a + b.valor, 0);
-            document.getElementById('total-parcelas-futuras').innerText = `R$ ${totalFuturo.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
-
-            // Histórico (Cards OLED)
-            const templateCard = (h) => `
-                <div class="premium-card p-6 border-l-4" style="border-color: ${h.cor}">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <div class="flex items-center">
-                                <p class="text-sm font-bold text-white">${h.desc}</p>
-                                ${h.totalParcelas > 1 ? `<span class="bg-parcela">${h.nParcela}/${h.totalParcelas}</span>` : ''}
-                            </div>
-                            <p class="text-[9px] font-black text-zinc-600 uppercase mt-1">${h.data} • ${h.banco}</p>
-                        </div>
-                        <span class="font-black text-sm ${h.tipo === 'receita' ? 'text-entrada' : 'text-saida'}">
-                            ${h.tipo === 'receita' ? '+' : '-'} R$ ${h.valor.toFixed(2)}
-                        </span>
-                    </div>
-                </div>`;
-
-            document.getElementById('movimentacoes-resumo').innerHTML = user.historico.filter(h => h.mes === mesAtual).slice(0, 5).map(templateCard).join('');
-            document.getElementById('lista-extrato-full').innerHTML = user.historico.map(templateCard).join('');
+            const bF = document.getElementById('filtro-banco').value || 'todos';
+            const busca = (document.getElementById('busca-desc').value || '').toLowerCase();
+            document.getElementById('lista-extrato-full').innerHTML = user.historico.filter(h => (bF === 'todos' || h.banco === bF) && h.desc.toLowerCase().includes(busca)).map(cardH).join('');
 
             // Bancos
-            document.getElementById('lista-bancos').innerHTML = user.bancos.map(b => `
+            document.getElementById('lista-bancos').innerHTML = user.bancos.map((b, i) => `
                 <div class="premium-card p-7 border-l-[14px]" style="border-color: ${b.cor}">
                     <div class="flex justify-between items-center">
-                        <div>
-                            <span class="text-[9px] font-black text-zinc-600 uppercase mb-2 block tracking-widest">${b.nome}</span>
-                            <span class="font-black text-2xl text-white">R$ ${b.saldo.toFixed(2)}</span>
+                        <div><span class="text-[9px] font-black text-zinc-600 uppercase mb-2 block tracking-widest">${b.nome}</span><span class="font-black text-2xl text-white ${privacidade?'hide-val':''}">R$ ${b.saldo.toFixed(2)}</span></div>
+                        <div class="flex gap-2">
+                            <button onclick="abrirEdit('banco', ${i})" class="btn-edit text-zinc-400">✎</button>
+                            <button onclick="excluirItem('banco', ${i})" class="btn-edit text-rose-900">✕</button>
                         </div>
                     </div>
                 </div>`).join('');
 
-            // Cofres (Com Runner Direita)
-            document.getElementById('lista-metas').innerHTML = user.metas.map(m => {
+            // Cofres
+            document.getElementById('lista-metas').innerHTML = user.metas.map((m, i) => {
                 const p = Math.min(100, (m.atual / m.total) * 100);
-                const finalizado = p >= 100;
-                return `
-                    <div class="premium-card p-10 space-y-4">
-                        <div class="flex justify-between font-black text-[11px] text-zinc-500 uppercase tracking-widest">
-                            <span>${m.nome}</span>
-                            <span class="${finalizado?'text-emerald-500':'text-white'}">${p.toFixed(1)}%</span>
+                return `<div class="premium-card p-10 space-y-4">
+                    <div class="flex justify-between font-black text-[11px] text-zinc-500 uppercase">
+                        <span>${m.nome}</span>
+                        <div class="flex gap-3">
+                            <button onclick="abrirEdit('meta', ${i})">✎</button>
+                            <button onclick="excluirItem('meta', ${i})">✕</button>
+                            <span>${p.toFixed(1)}%</span>
                         </div>
-                        <div class="progress-track">
-                            <div class="runner" style="left: calc(${p}% - 15px)">${finalizado?'🥳':'🏃‍♂️'}</div>
-                            <div class="progress-bar-fintech bg-white" style="width: ${p}%"></div>
-                        </div>
-                        <div class="flex justify-between items-center pt-4">
-                            <p class="text-[10px] font-black text-zinc-400">R$ ${m.atual.toFixed(0)} / ${m.total.toFixed(0)}</p>
-                            <button onclick="abrirModalAporte(${m.id})" class="text-[10px] font-black border-b border-white pb-1 uppercase">Aportar</button>
-                        </div>
-                        ${finalizado ? `<p class="text-center text-[10px] font-black text-emerald-500 uppercase mt-4 animate-pulse">Meta Batida! Parabéns!</p>` : ''}
-                    </div>`;
+                    </div>
+                    <div class="progress-track"><div class="runner" style="left: calc(${p}% - 15px)">${p>=100?'🥳':'🏃‍♂️'}</div><div class="progress-bar-fintech bg-white" style="width: ${p}%"></div></div>
+                    <div class="flex justify-between items-center pt-4"><p class="text-[10px] font-black">R$ ${m.atual.toFixed(0)} / ${m.total.toFixed(0)}</p><button onclick="abrirAporte(${m.id})" class="text-[10px] font-black border-b border-white pb-1">APORTAR</button></div>
+                </div>`;
             }).join('');
+
+            document.getElementById('filtro-banco').innerHTML = '<option value="todos">Todos</option>' + user.bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
         }
 
-        // 5. FUNÇÕES DE OPERAÇÃO
-        function confirmarLancamento() {
-            const desc = document.getElementById('m-desc').value;
-            const valorTotal = parseFloat(document.getElementById('m-valor').value);
-            const tipo = document.getElementById('m-tipo').value;
-            const parcelas = parseInt(document.getElementById('m-parcelas').value);
-            const bancoNome = document.getElementById('m-banco').value;
-            
-            const banco = db[u].bancos.find(b => b.nome === bancoNome);
-            if (!banco || isNaN(valorTotal)) return;
-
-            const valorParcela = valorTotal / parcelas;
-            const hoje = new Date();
-
-            for (let i = 0; i < parcelas; i++) {
-                let dataP = new Date(hoje.getFullYear(), hoje.getMonth() + i, hoje.getDate());
-                db[u].historico.unshift({
-                    desc: desc,
-                    valor: valorParcela,
-                    tipo: tipo,
-                    banco: bancoNome,
-                    cor: banco.cor,
-                    data: dataP.toLocaleDateString('pt-BR'),
-                    dataIso: dataP.toISOString(),
-                    mes: dataP.getMonth(),
-                    ano: dataP.getFullYear(),
-                    nParcela: i + 1,
-                    totalParcelas: parcelas
-                });
-
-                if (i === 0) {
-                    if (tipo === 'receita') banco.saldo += valorParcela;
-                    else banco.saldo -= valorParcela;
-                }
+        // FUNÇÕES MANAGEMENT (EDITAR/EXCLUIR)
+        function abrirEdit(tipo, idx) {
+            editType = tipo; editIdx = idx;
+            const item = db[u][tipo === 'banco' ? 'bancos' : 'metas'][idx];
+            document.getElementById('edit-titulo').innerText = "Editar " + tipo;
+            document.getElementById('edit-nome').value = item.nome;
+            if(tipo === 'banco') {
+                document.getElementById('edit-v1').value = item.saldo;
+                document.getElementById('edit-v2').classList.add('hidden');
+                document.getElementById('edit-cor-wrapper').classList.remove('hidden');
+                document.getElementById('edit-cor').value = item.cor;
+            } else {
+                document.getElementById('edit-v1').value = item.atual;
+                document.getElementById('edit-v2').value = item.total;
+                document.getElementById('edit-v2').classList.remove('hidden');
+                document.getElementById('edit-cor-wrapper').classList.add('hidden');
             }
-
-            // Resetar formulário
-            document.getElementById('m-desc').value = "";
-            document.getElementById('m-valor').value = "";
-            document.getElementById('m-parcelas').value = "1";
-            
-            fecharModal();
-            salvar();
+            document.getElementById('modal-edit-geral').classList.remove('hidden');
         }
-
-        function confirmarAporte() {
-            const valor = parseFloat(document.getElementById('a-valor').value);
-            const bancoOrigem = document.getElementById('a-origem').value;
-            const banco = db[u].bancos.find(b => b.nome === bancoOrigem);
-            const meta = db[u].metas.find(m => m.id === idMetaS);
-
-            if (!banco || !meta || isNaN(valor)) return;
-            if (banco.saldo < valor) { alert("Saldo insuficiente."); return; }
-
-            banco.saldo -= valor;
-            meta.atual += valor;
-
-            const d = new Date();
-            db[u].historico.unshift({
-                desc: `Aporte: ${meta.nome}`,
-                valor: valor,
-                tipo: 'despesa',
-                banco: banco.nome,
-                cor: '#fff',
-                data: d.toLocaleDateString('pt-BR'),
-                dataIso: d.toISOString(),
-                mes: d.getMonth(),
-                ano: d.getFullYear(),
-                totalParcelas: 1
-            });
-
-            document.getElementById('a-valor').value = "";
-            fecharModalAporte();
-            salvar();
+        function salvarEdicaoGeral() {
+            const item = db[u][editType === 'banco' ? 'bancos' : 'metas'][editIdx];
+            item.nome = document.getElementById('edit-nome').value;
+            if(editType === 'banco') {
+                item.saldo = parseFloat(document.getElementById('edit-v1').value);
+                item.cor = document.getElementById('edit-cor').value;
+            } else {
+                item.atual = parseFloat(document.getElementById('edit-v1').value);
+                item.total = parseFloat(document.getElementById('edit-v2').value);
+            }
+            fecharModalEdit(); salvar();
         }
+        function excluirItem(tipo, idx) { if(confirm("Deseja excluir?")) { db[u][tipo === 'banco' ? 'bancos' : 'metas'].splice(idx, 1); salvar(); } }
+        function fecharModalEdit() { document.getElementById('modal-edit-geral').classList.add('hidden'); }
 
-        // 6. FUNÇÕES AUXILIARES
+        // OPERAÇÕES
         function adicionarBanco() {
-            const n = document.getElementById('nome-banco').value;
-            const s = parseFloat(document.getElementById('saldo-inicial').value);
-            if (!n || isNaN(s)) return;
+            const n = document.getElementById('nome-banco').value; const s = parseFloat(document.getElementById('saldo-inicial').value);
+            if(!n || isNaN(s)) return;
             db[u].bancos.push({ nome: n, saldo: s, cor: document.getElementById('cor-banco').value });
-            document.getElementById('nome-banco').value = "";
-            document.getElementById('saldo-inicial').value = "";
+            document.getElementById('nome-banco').value = ""; document.getElementById('saldo-inicial').value = "";
             salvar();
         }
-
         function adicionarMeta() {
-            const n = document.getElementById('nome-meta').value;
-            const v = parseFloat(document.getElementById('valor-meta').value);
-            if (!n || isNaN(v)) return;
+            const n = document.getElementById('nome-meta').value; const v = parseFloat(document.getElementById('valor-meta').value);
+            if(!n || isNaN(v)) return;
             db[u].metas.push({ id: Date.now(), nome: n, total: v, atual: 0 });
-            document.getElementById('nome-meta').value = "";
-            document.getElementById('valor-meta').value = "";
+            document.getElementById('nome-meta').value = ""; document.getElementById('valor-meta').value = "";
             salvar();
         }
-
-        function togglePrivacidade() { privacidade = !privacidade; render(); }
-        function abrirModal() { 
-            document.getElementById('m-banco').innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
-            document.getElementById('modal').classList.remove('hidden'); 
-            document.getElementById('simulador-box').classList.add('hidden');
+        function confirmarLancamento() {
+            const d = document.getElementById('m-desc').value; const vT = parseFloat(document.getElementById('m-valor').value);
+            const t = document.getElementById('m-tipo').value; const pT = parseInt(document.getElementById('m-parcelas').value);
+            const bN = document.getElementById('m-banco').value; const b = db[u].bancos.find(x => x.nome === bN);
+            if(!b || isNaN(vT)) return;
+            const vP = vT / pT; const hoje = new Date();
+            for(let i=0; i<pT; i++) {
+                let dt = new Date(hoje.getFullYear(), hoje.getMonth() + i, hoje.getDate());
+                db[u].historico.unshift({ desc: d, valor: vP, tipo: t, banco: bN, cor: b.cor, data: dt.toLocaleDateString('pt-BR'), mes: dt.getMonth(), ano: dt.getFullYear(), nP: i+1, totalP: pT });
+                if(i===0) t === 'receita' ? b.saldo += vP : b.saldo -= vP;
+            }
+            document.getElementById('m-desc').value = ""; document.getElementById('m-valor').value = "";
+            fecharModal(); salvar();
         }
+        function abrirModal() { document.getElementById('m-banco').innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join(''); document.getElementById('modal').classList.remove('hidden'); }
         function fecharModal() { document.getElementById('modal').classList.add('hidden'); }
-        function abrirModalAporte(id) { 
-            idMetaS = id; 
-            document.getElementById('a-origem').innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
-            document.getElementById('modal-aporte').classList.remove('hidden'); 
-        }
+        function abrirAporte(id) { idMetaS = id; document.getElementById('a-origem').innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join(''); document.getElementById('modal-aporte').classList.remove('hidden'); }
         function fecharModalAporte() { document.getElementById('modal-aporte').classList.add('hidden'); }
-        function salvar() { localStorage.setItem('guima_master_engine_v21', JSON.stringify(db)); render(); }
+        function confirmarAporte() {
+            const v = parseFloat(document.getElementById('a-valor').value); const b = db[u].bancos.find(x => x.nome === document.getElementById('a-origem').value);
+            const m = db[u].metas.find(x => x.id === idMetaS); if(!b || !m || isNaN(v)) return;
+            b.saldo -= v; m.atual += v; const dt = new Date();
+            db[u].historico.unshift({ desc: `Aporte: ${m.nome}`, valor: v, tipo: 'despesa', banco: b.nome, cor: '#fff', data: dt.toLocaleDateString('pt-BR'), mes: dt.getMonth(), ano: dt.getFullYear(), nP: 1, totalP: 1 });
+            document.getElementById('a-valor').value = ""; fecharModalAporte(); salvar();
+        }
+        function salvar() { localStorage.setItem('guima_ultimate_v22', JSON.stringify(db)); render(); }
     </script>
 </body>
 </html>
