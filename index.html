@@ -3,39 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Guima Strategy | Ultimate v22</title>
+    <title>Guima Strategy | Master v24</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #000; color: #fff; padding-bottom: 110px; letter-spacing: -0.01em; }
-        .premium-card { background: linear-gradient(145deg, #0a0a0a 0%, #111111 100%); border: 1px solid #1a1a1a; border-radius: 28px; position: relative; }
-        .tab-active { color: #fff !important; font-weight: 800; }
-        .tab-active::after { content: ''; position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background: #fff; border-radius: 50%; }
-        .hide-val { filter: blur(15px); pointer-events: none; }
-        .runner { position: absolute; top: -30px; transition: left 0.8s cubic-bezier(0.23, 1, 0.32, 1); font-size: 24px; transform: scaleX(-1); z-index: 20; }
-        .progress-track { height: 6px; background: #141414; border-radius: 100px; position: relative; margin-top: 45px; }
-        .progress-bar-fintech { height: 100%; border-radius: 100px; transition: width 1s; }
-        section { display: none; animation: slideUp 0.4s ease; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        input, select { background: #0a0a0a !important; border: 1px solid #1a1a1a !important; color: white !important; outline: none; }
-        .text-entrada { color: #10b981 !important; }
-        .text-saida { color: #ef4444 !important; }
-        .bg-parcela { background: #1e1b4b; color: #818cf8; padding: 2px 6px; border-radius: 6px; font-size: 8px; font-weight: 800; }
-        .btn-edit { background: rgba(255,255,255,0.05); padding: 8px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        /* BASE E TIPOGRAFIA */
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #000000; 
+            color: #ffffff; 
+            padding-bottom: 110px; 
+            letter-spacing: -0.01em; 
+        }
+        
+        /* CARDS PREMIUM OLED */
+        .premium-card { 
+            background: linear-gradient(145deg, #0a0a0a 0%, #111111 100%); 
+            border: 1px solid #1a1a1a; 
+            border-radius: 28px; 
+            position: relative; 
+        }
+        
+        /* CORES DE FLUXO E FEEDBACK */
+        .text-entrada { 
+            color: #10b981 !important; 
+        } 
+        .text-saida { 
+            color: #ef4444 !important; 
+        }   
+        
+        /* MENU DE NAVEGAÇÃO */
+        .tab-active { 
+            color: #ffffff !important; 
+            font-weight: 800; 
+        }
+        .tab-active::after { 
+            content: ''; 
+            position: absolute; 
+            bottom: 8px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: 4px; 
+            height: 4px; 
+            background: #ffffff; 
+            border-radius: 50%; 
+        }
+
+        /* MODO PRIVACIDADE */
+        .hide-val { 
+            filter: blur(15px); 
+            pointer-events: none; 
+            opacity: 0.3; 
+        }
+
+        /* ANIMAÇÃO DO COFRE E BONECO */
+        .runner { 
+            position: absolute; 
+            top: -30px; 
+            transition: left 0.8s cubic-bezier(0.23, 1, 0.32, 1); 
+            font-size: 24px; 
+            transform: scaleX(-1); /* Garante que corra para a direita */
+            z-index: 20; 
+        }
+        .progress-track { 
+            height: 6px; 
+            background: #141414; 
+            border-radius: 100px; 
+            position: relative; 
+            margin-top: 45px; 
+        }
+        .progress-bar-fintech { 
+            height: 100%; 
+            border-radius: 100px; 
+            transition: width 1s; 
+            background-color: #ffffff; 
+        }
+
+        /* ANIMAÇÕES DE TELA */
+        section { 
+            display: none; 
+            animation: slideUp 0.4s ease; 
+        }
+        @keyframes slideUp { 
+            from { opacity: 0; transform: translateY(15px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        /* ESTILO DOS CAMPOS DE TEXTO E SELEÇÃO */
+        input, select { 
+            background: #0a0a0a !important; 
+            border: 1px solid #1a1a1a !important; 
+            color: white !important; 
+            outline: none; 
+        }
+        
+        /* ETIQUETAS E BOTÕES */
+        .bg-parcela { 
+            background: #1e1b4b; 
+            color: #818cf8; 
+            padding: 2px 6px; 
+            border-radius: 6px; 
+            font-size: 8px; 
+            font-weight: 800; 
+        }
+        .btn-action { 
+            background: rgba(255,255,255,0.05); 
+            padding: 8px; 
+            border-radius: 12px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+        }
     </style>
 </head>
 <body>
 
     <div id="login-screen" class="min-h-screen flex flex-col justify-center px-10 bg-black z-[100] relative text-center">
-        <div class="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl"><span class="text-black text-4xl font-black italic">G</span></div>
+        <div class="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl">
+            <span class="text-black text-4xl font-black italic">G</span>
+        </div>
         <h1 class="text-3xl font-extrabold uppercase italic">Guima Strategy</h1>
         <div class="mt-12 space-y-4">
             <input id="user-name" type="text" placeholder="ID DE ACESSO" class="w-full p-5 rounded-2xl text-center font-bold">
-            <button onclick="fazerLogin()" class="w-full bg-white text-black p-5 rounded-2xl font-black uppercase active:scale-95 transition-all">Desbloquear</button>
+            <button onclick="fazerLogin()" class="w-full bg-white text-black p-5 rounded-2xl font-black uppercase active:scale-95 transition-all">Acessar</button>
         </div>
     </div>
 
     <div id="main-app" class="hidden">
+        
         <nav class="flex justify-around bg-black/80 backdrop-blur-xl border-b border-zinc-900 sticky top-0 z-[50]">
             <button onclick="mudarAba('resumo')" id="btn-resumo" class="p-6 text-[10px] font-bold uppercase text-zinc-600 tab-active">Fluxo</button>
             <button onclick="mudarAba('insights')" id="btn-insights" class="p-6 text-[10px] font-bold uppercase text-zinc-600">Estratégia</button>
@@ -47,47 +140,66 @@
             <div class="premium-card p-10 relative">
                 <div class="flex justify-between items-start mb-8">
                     <div>
-                        <p class="text-zinc-500 text-[10px] font-black uppercase mb-2">Disponível Total</p>
+                        <p class="text-zinc-500 text-[10px] font-black uppercase mb-2">Total Disponível</p>
                         <h2 id="saldo-geral" class="text-5xl font-extrabold tracking-tighter">R$ 0,00</h2>
                     </div>
-                    <button onclick="togglePrivacidade()" id="btn-privacidade-ui" class="p-3 bg-zinc-900/50 rounded-xl border border-zinc-800 text-[9px] font-black uppercase">Ocultar</button>
+                    <button onclick="togglePrivacidade()" id="btn-privacidade-ui" class="p-3 bg-zinc-900/50 rounded-xl border border-zinc-800 text-[9px] font-black">OCULTAR</button>
                 </div>
+                
                 <div class="grid grid-cols-2 gap-8 pt-8 border-t border-zinc-900">
-                    <div><p class="text-[9px] font-black text-zinc-500 uppercase mb-1">Ganhos</p><p id="perf-entradas" class="text-entrada font-bold text-xl">R$ 0,00</p></div>
-                    <div class="text-right"><p class="text-[9px] font-black text-zinc-500 uppercase mb-1">Gastos</p><p id="perf-saidas" class="text-saida font-bold text-xl">R$ 0,00</p></div>
+                    <div>
+                        <p class="text-[9px] font-black text-zinc-500 uppercase mb-1">Entradas</p>
+                        <p id="perf-entradas" class="text-entrada font-bold text-xl">R$ 0,00</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[9px] font-black text-zinc-500 uppercase mb-1">Saídas</p>
+                        <p id="perf-saidas" class="text-saida font-bold text-xl">R$ 0,00</p>
+                    </div>
                 </div>
             </div>
+            
             <div id="movimentacoes-resumo" class="space-y-4"></div>
         </section>
 
         <section id="aba-insights" class="p-6 space-y-6">
             <div class="premium-card p-8 border-l-8 border-indigo-600">
-                <p class="text-[10px] font-black text-zinc-500 uppercase mb-1">Dívidas Futuras (Parcelas)</p>
+                <p class="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">Comprometimento Futuro</p>
                 <h3 id="total-parcelas-futuras" class="text-3xl font-black text-white">R$ 0,00</h3>
+                <p class="text-[9px] text-zinc-500 mt-2">Dívidas parceladas para os próximos meses.</p>
             </div>
+            
             <div class="flex gap-4">
                 <select id="filtro-banco" onchange="render()" class="p-5 rounded-2xl text-[10px] font-bold flex-1"></select>
-                <input type="text" id="busca-desc" onkeyup="render()" placeholder="Buscar..." class="p-5 rounded-2xl text-[10px] font-bold flex-[2]">
+                <input type="text" id="busca-desc" onkeyup="render()" placeholder="Buscar lançamentos..." class="p-5 rounded-2xl text-[10px] font-bold flex-[2]">
             </div>
+            
             <div id="lista-extrato-full" class="space-y-4"></div>
         </section>
 
         <section id="aba-bancos" class="p-6 space-y-4">
             <div id="lista-bancos" class="space-y-4"></div>
-            <div class="premium-card p-8 space-y-4">
+            
+            <div class="premium-card p-8 space-y-4 mt-6">
                 <p class="text-[10px] font-black text-zinc-500 text-center uppercase tracking-widest">Nova Conta</p>
                 <input id="nome-banco" type="text" placeholder="Nome" class="w-full p-4 rounded-xl font-bold">
-                <input id="saldo-inicial" type="number" placeholder="Valor R$" class="w-full p-4 rounded-xl font-bold">
-                <input type="color" id="cor-banco" value="#ffffff" class="h-10 w-full bg-transparent border-0 cursor-pointer">
-                <button onclick="adicionarBanco()" class="w-full bg-white text-black p-4 rounded-xl font-black uppercase text-xs">Salvar</button>
+                <input id="saldo-inicial" type="number" placeholder="Saldo R$" class="w-full p-4 rounded-xl font-bold">
+                
+                <div class="flex items-center justify-between p-2">
+                    <span class="text-[10px] font-black text-zinc-500 uppercase">Cor da Instituição</span>
+                    <input type="color" id="cor-banco" value="#ffffff" class="h-10 w-full bg-transparent border-0 cursor-pointer">
+                </div>
+                
+                <button onclick="adicionarBanco()" class="w-full bg-white text-black p-4 rounded-xl font-black uppercase text-xs">Vincular</button>
             </div>
         </section>
 
         <section id="aba-metas" class="p-6 space-y-6">
             <div id="lista-metas" class="space-y-16"></div>
-            <div class="premium-card p-10 space-y-4">
-                <input id="nome-meta" type="text" placeholder="Objetivo" class="w-full p-4 rounded-xl font-bold">
-                <input id="valor-meta" type="number" placeholder="Alvo R$" class="w-full p-4 rounded-xl font-bold">
+            
+            <div class="premium-card p-10 space-y-4 mt-10">
+                <p class="text-[10px] font-black text-zinc-500 text-center uppercase tracking-widest">Criar Objetivo</p>
+                <input id="nome-meta" type="text" placeholder="Nome do Objetivo" class="w-full p-4 rounded-xl font-bold">
+                <input id="valor-meta" type="number" placeholder="Alvo Final R$" class="w-full p-4 rounded-xl font-bold">
                 <button onclick="adicionarMeta()" class="w-full bg-white text-black p-4 rounded-xl font-black uppercase text-xs">Criar Cofre</button>
             </div>
         </section>
@@ -97,219 +209,539 @@
 
     <div id="modal-edit-geral" class="fixed inset-0 bg-black/95 hidden z-[300] flex items-end backdrop-blur-2xl">
         <div class="premium-card w-full rounded-t-[50px] p-10 pb-16 space-y-6">
-            <h3 id="edit-titulo" class="text-white font-black text-center uppercase tracking-widest text-xs">Editar</h3>
+            <h3 id="edit-titulo" class="text-white font-black text-center uppercase text-xs">Editar</h3>
+            
             <input id="edit-nome" type="text" class="w-full p-5 rounded-2xl font-bold">
-            <input id="edit-v1" type="number" placeholder="Valor 1" class="w-full p-5 rounded-2xl font-bold">
-            <input id="edit-v2" type="number" placeholder="Valor 2" class="w-full p-5 rounded-2xl font-bold">
+            <input id="edit-v1" type="number" class="w-full p-5 rounded-2xl font-bold">
+            <input id="edit-v2" type="number" class="w-full p-5 rounded-2xl font-bold">
+            
             <div id="edit-cor-wrapper" class="flex justify-between items-center p-2">
-                <span class="text-[10px] font-black text-zinc-600 uppercase">Cor</span>
+                <span class="text-[10px] font-black text-zinc-600 uppercase">Cor da Instituição</span>
                 <input type="color" id="edit-cor" class="h-10 w-20 bg-transparent border-0">
             </div>
-            <button onclick="salvarEdicaoGeral()" class="w-full bg-white text-black p-5 rounded-2xl font-black uppercase">Confirmar Alteração</button>
-            <button onclick="fecharModalEdit()" class="w-full text-zinc-600 font-bold p-2 text-xs uppercase">Sair</button>
+            
+            <button onclick="salvarEdicaoGeral()" class="w-full bg-white text-black p-5 rounded-2xl font-black uppercase">Salvar Alterações</button>
+            <button onclick="fecharModalEdit()" class="w-full text-zinc-600 font-bold p-2 text-xs uppercase text-center">Cancelar</button>
         </div>
     </div>
 
     <div id="modal" class="fixed inset-0 bg-black/95 hidden z-[200] flex items-end backdrop-blur-2xl">
         <div class="premium-card w-full rounded-t-[50px] p-10 pb-16 space-y-6">
-            <input id="m-desc" type="text" placeholder="O que foi?" class="w-full p-5 rounded-2xl font-bold">
-            <input id="m-valor" type="number" oninput="simularImpacto()" step="0.01" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-transparent border-b border-zinc-800 text-white font-black text-5xl text-center outline-none">
-            <div id="simulador-box" class="hidden p-4 bg-indigo-950/20 border border-indigo-900/50 rounded-2xl text-[9px] font-bold text-indigo-400 uppercase tracking-widest"></div>
-            <div class="grid grid-cols-2 gap-4">
-                <select id="m-tipo" class="p-5 rounded-2xl font-bold"><option value="despesa">Saída (-)</option><option value="receita">Entrada (+)</option></select>
-                <select id="m-parcelas" class="p-5 rounded-2xl font-bold"><option value="1">À vista</option><option value="2">2x</option><option value="3">3x</option><option value="6">6x</option><option value="10">10x</option><option value="12">12x</option></select>
+            <input id="m-desc" type="text" placeholder="O que foi o gasto ou ganho?" class="w-full p-5 rounded-2xl font-bold">
+            
+            <div class="relative">
+                <input id="m-valor" type="number" oninput="simularImpacto()" step="0.01" inputmode="decimal" placeholder="R$ 0,00" class="w-full p-5 bg-transparent border-b border-zinc-800 text-white font-black text-5xl text-center outline-none">
+                <div id="simulador-box" class="hidden p-4 mt-4 bg-indigo-950/20 border border-indigo-900/50 rounded-2xl text-[9px] font-bold text-indigo-400 uppercase tracking-widest text-center"></div>
             </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <select id="m-tipo" class="p-5 rounded-2xl font-bold">
+                    <option value="despesa">Saída (-)</option>
+                    <option value="receita">Entrada (+)</option>
+                </select>
+                <select id="m-parcelas" class="p-5 rounded-2xl font-bold">
+                    <option value="1">À vista</option>
+                    <option value="2">2x</option>
+                    <option value="3">3x</option>
+                    <option value="6">6x</option>
+                    <option value="12">12x</option>
+                </select>
+            </div>
+            
             <select id="m-banco" class="p-5 rounded-2xl font-bold w-full"></select>
-            <button onclick="confirmarLancamento()" class="w-full bg-white text-black p-6 rounded-2xl font-black text-lg uppercase">Confirmar</button>
-            <button onclick="fecharModal()" class="w-full text-zinc-600 font-bold p-2 text-center text-[10px]">Cancelar</button>
+            
+            <button onclick="confirmarLancamento()" class="w-full bg-white text-black p-6 rounded-2xl font-black text-lg uppercase">Confirmar Lançamento</button>
+            <button onclick="fecharModal()" class="w-full text-zinc-600 font-bold p-2 text-center text-[10px] uppercase">Fechar</button>
         </div>
     </div>
 
     <div id="modal-aporte" class="fixed inset-0 bg-black/95 hidden z-[200] flex items-end backdrop-blur-2xl">
         <div class="premium-card w-full rounded-t-[50px] p-10 pb-16 space-y-6 text-center">
+            <h3 class="text-white font-black text-center uppercase text-xs tracking-widest">Aportar no Cofre</h3>
             <input id="a-valor" type="number" placeholder="R$ 0,00" class="w-full p-5 bg-transparent border-b border-white text-white font-black text-5xl text-center outline-none">
             <select id="a-origem" class="w-full p-5 rounded-2xl font-bold"></select>
-            <button onclick="confirmarAporte()" class="w-full bg-white text-black p-6 rounded-2xl font-black text-lg uppercase">Aportar</button>
-            <button onclick="fecharModalAporte()" class="w-full text-zinc-600 font-bold p-2 text-[10px]">Voltar</button>
+            <button onclick="confirmarAporte()" class="w-full bg-white text-black p-6 rounded-2xl font-black text-lg uppercase">Confirmar Aporte</button>
+            <button onclick="fecharModalAporte()" class="w-full text-zinc-600 font-bold p-2 text-[10px] uppercase">Voltar</button>
         </div>
     </div>
 
     <script>
-        let u = ""; let idMetaS = null; let editType = ""; let editIdx = null; let privacidade = false;
-        let db = JSON.parse(localStorage.getItem('guima_ultimate_v22')) || {};
+        // VARIÁVEIS GLOBAIS
+        let u = ""; 
+        let idMetaS = null; 
+        let editType = ""; 
+        let editIdx = null; 
+        let privacidade = false;
+        
+        // CARREGA BANCO DE DADOS
+        let db = JSON.parse(localStorage.getItem('guima_v24_uncompressed')) || {};
 
+        // SISTEMA DE NAVEGAÇÃO DE ABAS
         function mudarAba(id) {
-            ['resumo', 'insights', 'bancos', 'metas'].forEach(a => {
-                document.getElementById('aba-'+a).style.display = 'none';
-                document.getElementById('btn-'+a).classList.remove('tab-active');
+            const abas = ['resumo', 'insights', 'bancos', 'metas'];
+            
+            // Esconde todas as abas primeiro
+            abas.forEach(aba => {
+                const elementoAba = document.getElementById('aba-' + aba);
+                const botaoAba = document.getElementById('btn-' + aba);
+                
+                elementoAba.style.display = 'none';
+                botaoAba.classList.remove('tab-active');
             });
-            document.getElementById('aba-'+id).style.display = 'block';
-            document.getElementById('btn-'+id).classList.add('tab-active');
+            
+            // Mostra apenas a aba selecionada
+            document.getElementById('aba-' + id).style.display = 'block';
+            document.getElementById('btn-' + id).classList.add('tab-active');
+            
             render();
         }
 
+        // SISTEMA DE LOGIN E INICIALIZAÇÃO
         function fazerLogin() {
-            const raw = document.getElementById('user-name').value.trim();
-            if (!raw) return;
-            u = raw.toLowerCase();
-            if (!db[u]) db[u] = { bancos: [], historico: [], metas: [] };
+            const rawName = document.getElementById('user-name').value.trim();
+            
+            if (rawName === "") {
+                return; // Impede login sem nome
+            }
+            
+            u = rawName.toLowerCase();
+            
+            // Cria usuário se não existir
+            if (!db[u]) {
+                db[u] = { bancos: [], historico: [], metas: [] };
+            }
+            
+            // Esconde tela de login e mostra o app
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('main-app').classList.remove('hidden');
+            
+            // Vai para a aba inicial
             mudarAba('resumo');
         }
 
+        // SISTEMA DE PRIVACIDADE
         function togglePrivacidade() { 
             privacidade = !privacidade; 
-            document.getElementById('btn-privacidade-ui').innerText = privacidade ? "MOSTRAR" : "OCULTAR";
+            
+            const btnUi = document.getElementById('btn-privacidade-ui');
+            if (privacidade) {
+                btnUi.innerText = "MOSTRAR";
+            } else {
+                btnUi.innerText = "OCULTAR";
+            }
+            
             render(); 
         }
 
+        // SIMULADOR DE IMPACTO NO MODAL
         function simularImpacto() {
-            const v = parseFloat(document.getElementById('m-valor').value) || 0;
-            const p = parseInt(document.getElementById('m-parcelas').value);
+            const valorInput = document.getElementById('m-valor').value;
+            const valor = parseFloat(valorInput) || 0;
+            const parcelas = parseInt(document.getElementById('m-parcelas').value);
             const box = document.getElementById('simulador-box');
-            if(v <= 0) { box.classList.add('hidden'); return; }
+            
+            if (valor <= 0) {
+                box.classList.add('hidden');
+                return;
+            }
+            
             box.classList.remove('hidden');
-            box.innerText = p > 1 ? `Parcelas de R$ ${(v/p).toFixed(2)} pelos próximos ${p} meses.` : `Impacto imediato no saldo total.`;
+            
+            if (parcelas > 1) {
+                const valorParcela = valor / parcelas;
+                box.innerText = `Impacto: R$ ${valorParcela.toFixed(2)} por mês durante ${parcelas} meses.`;
+            } else {
+                box.innerText = `Impacto imediato no saldo da conta selecionada.`;
+            }
         }
 
+        // RENDERIZAÇÃO DO APLICATIVO
         function render() {
-            const user = db[u]; if(!user) return;
-            const mesA = new Date().getMonth(); const anoA = new Date().getFullYear();
-
-            // Saldo e Privacidade
-            const total = user.bancos.reduce((acc, b) => acc + b.saldo, 0);
-            const sGeral = document.getElementById('saldo-geral');
-            sGeral.innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            privacidade ? sGeral.classList.add('hide-val') : sGeral.classList.remove('hide-val');
-
-            // Ganhos/Gastos
-            const movMes = user.historico.filter(h => h.mes === mesA && h.ano === anoA);
-            const ent = movMes.filter(h => h.tipo === 'receita').reduce((a,b) => a+b.valor, 0);
-            const sai = movMes.filter(h => h.tipo === 'despesa').reduce((a,b) => a+b.valor, 0);
-            document.getElementById('perf-entradas').innerText = `+ R$ ${ent.toLocaleString('pt-BR')}`;
-            document.getElementById('perf-saidas').innerText = `- R$ ${sai.toLocaleString('pt-BR')}`;
-            privacidade ? (document.getElementById('perf-entradas').classList.add('hide-val'), document.getElementById('perf-saidas').classList.add('hide-val')) : (document.getElementById('perf-entradas').classList.remove('hide-val'), document.getElementById('perf-saidas').classList.remove('hide-val'));
-
-            // Dívidas Futuras
-            const fut = user.historico.filter(h => (h.ano > anoA) || (h.ano === anoA && h.mes > mesA)).reduce((a,b) => a+b.valor, 0);
-            document.getElementById('total-parcelas-futuras').innerText = `R$ ${fut.toLocaleString('pt-BR')}`;
-
-            // Listas
-            const cardH = (h) => `<div class="premium-card p-6 border-l-4" style="border-color: ${h.cor}"><div class="flex justify-between items-center"><div><p class="text-sm font-bold text-white">${h.desc} ${h.totalP > 1 ? `<span class="bg-parcela">${h.nP}/${h.totalP}</span>` : ''}</p><p class="text-[9px] font-black text-zinc-600 uppercase">${h.data} • ${h.banco}</p></div><span class="font-black text-sm ${h.tipo === 'receita' ? 'text-entrada' : 'text-saida'}">${h.tipo === 'receita'?'+':'-'} R$ ${h.valor.toFixed(2)}</span></div></div>`;
-            document.getElementById('movimentacoes-resumo').innerHTML = user.historico.filter(h => h.mes === mesA).slice(0, 5).map(cardH).join('');
+            const user = db[u]; 
+            if (!user) return;
             
-            const bF = document.getElementById('filtro-banco').value || 'todos';
-            const busca = (document.getElementById('busca-desc').value || '').toLowerCase();
-            document.getElementById('lista-extrato-full').innerHTML = user.historico.filter(h => (bF === 'todos' || h.banco === bF) && h.desc.toLowerCase().includes(busca)).map(cardH).join('');
+            const mesAtual = new Date().getMonth(); 
+            const anoAtual = new Date().getFullYear();
 
-            // Bancos
-            document.getElementById('lista-bancos').innerHTML = user.bancos.map((b, i) => `
-                <div class="premium-card p-7 border-l-[14px]" style="border-color: ${b.cor}">
+            // 1. Cálculos de Saldo e Privacidade
+            const totalSaldo = user.bancos.reduce((acumulador, banco) => acumulador + banco.saldo, 0);
+            const elementoSaldo = document.getElementById('saldo-geral');
+            
+            elementoSaldo.innerText = `R$ ${totalSaldo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            
+            if (privacidade) {
+                elementoSaldo.classList.add('hide-val');
+            } else {
+                elementoSaldo.classList.remove('hide-val');
+            }
+
+            // 2. Ganhos e Gastos do Mês Atual
+            const movimentosMes = user.historico.filter(h => h.mes === mesAtual && h.ano === anoAtual);
+            
+            const totalEntradas = movimentosMes.filter(h => h.tipo === 'receita').reduce((a, b) => a + b.valor, 0);
+            const totalSaidas = movimentosMes.filter(h => h.tipo === 'despesa').reduce((a, b) => a + b.valor, 0);
+            
+            const displayEntradas = document.getElementById('perf-entradas');
+            const displaySaidas = document.getElementById('perf-saidas');
+            
+            displayEntradas.innerText = `+ R$ ${totalEntradas.toLocaleString('pt-BR')}`;
+            displaySaidas.innerText = `- R$ ${totalSaidas.toLocaleString('pt-BR')}`;
+            
+            if (privacidade) { 
+                displayEntradas.classList.add('hide-val'); 
+                displaySaidas.classList.add('hide-val'); 
+            } else { 
+                displayEntradas.classList.remove('hide-val'); 
+                displaySaidas.classList.remove('hide-val'); 
+            }
+
+            // 3. Projeção de Dívidas Futuras (Aba Estratégia)
+            const dividasFuturas = user.historico.filter(h => {
+                return (h.ano > anoAtual) || (h.ano === anoAtual && h.mes > mesAtual);
+            }).reduce((a, b) => a + b.valor, 0);
+            
+            document.getElementById('total-parcelas-futuras').innerText = `R$ ${dividasFuturas.toLocaleString('pt-BR')}`;
+
+            // 4. Construtor de Cartões de Histórico
+            const criarCartaoHistorico = (h) => {
+                let badgeParcela = "";
+                if (h.totalP > 1) {
+                    badgeParcela = `<span class="bg-parcela">${h.nP}/${h.totalP}</span>`;
+                }
+
+                let classeCorValor = h.tipo === 'receita' ? 'text-entrada' : 'text-saida';
+                let sinalValor = h.tipo === 'receita' ? '+' : '-';
+                
+                return `
+                <div class="premium-card p-6 border-l-4" style="border-color: ${h.cor}">
                     <div class="flex justify-between items-center">
-                        <div><span class="text-[9px] font-black text-zinc-600 uppercase mb-2 block tracking-widest">${b.nome}</span><span class="font-black text-2xl text-white ${privacidade?'hide-val':''}">R$ ${b.saldo.toFixed(2)}</span></div>
-                        <div class="flex gap-2">
-                            <button onclick="abrirEdit('banco', ${i})" class="btn-edit text-zinc-400">✎</button>
-                            <button onclick="excluirItem('banco', ${i})" class="btn-edit text-rose-900">✕</button>
+                        <div>
+                            <p class="text-sm font-bold text-white mb-1">${h.desc} ${badgeParcela}</p>
+                            <p class="text-[9px] font-black text-zinc-600 uppercase">${h.data} • ${h.banco}</p>
                         </div>
+                        <span class="font-black text-sm ${classeCorValor}">
+                            ${sinalValor} R$ ${h.valor.toFixed(2)}
+                        </span>
                     </div>
-                </div>`).join('');
+                </div>`;
+            };
 
-            // Cofres
-            document.getElementById('lista-metas').innerHTML = user.metas.map((m, i) => {
-                const p = Math.min(100, (m.atual / m.total) * 100);
-                return `<div class="premium-card p-10 space-y-4">
-                    <div class="flex justify-between font-black text-[11px] text-zinc-500 uppercase">
-                        <span>${m.nome}</span>
-                        <div class="flex gap-3">
-                            <button onclick="abrirEdit('meta', ${i})">✎</button>
-                            <button onclick="excluirItem('meta', ${i})">✕</button>
-                            <span>${p.toFixed(1)}%</span>
+            // 5. Renderizar Listas de Extrato
+            const historicoLimitado = user.historico.filter(h => h.mes === mesAtual).slice(0, 5);
+            document.getElementById('movimentacoes-resumo').innerHTML = historicoLimitado.map(criarCartaoHistorico).join('');
+            
+            const filtroBancoSelecionado = document.getElementById('filtro-banco').value || 'todos';
+            const termoBusca = (document.getElementById('busca-desc').value || '').toLowerCase();
+            
+            const historicoFiltrado = user.historico.filter(h => {
+                const passaFiltroBanco = (filtroBancoSelecionado === 'todos' || h.banco === filtroBancoSelecionado);
+                const passaFiltroBusca = h.desc.toLowerCase().includes(termoBusca);
+                return passaFiltroBanco && passaFiltroBusca;
+            });
+            
+            document.getElementById('lista-extrato-full').innerHTML = historicoFiltrado.map(criarCartaoHistorico).join('');
+
+            // 6. Renderizar Bancos
+            document.getElementById('lista-bancos').innerHTML = user.bancos.map((banco, index) => {
+                let classeHide = privacidade ? 'hide-val' : '';
+                return `
+                <div class="premium-card p-7 border-l-[14px]" style="border-color: ${banco.cor}">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="text-[9px] font-black text-zinc-600 uppercase mb-2 block tracking-widest">${banco.nome}</span>
+                            <span class="font-black text-2xl text-white ${classeHide}">R$ ${banco.saldo.toFixed(2)}</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="abrirEdit('banco', ${index})" class="btn-action text-zinc-400 text-xs">✎</button>
+                            <button onclick="excluirItem('banco', ${index})" class="btn-action text-rose-900 text-xs">✕</button>
                         </div>
                     </div>
-                    <div class="progress-track"><div class="runner" style="left: calc(${p}% - 15px)">${p>=100?'🥳':'🏃‍♂️'}</div><div class="progress-bar-fintech bg-white" style="width: ${p}%"></div></div>
-                    <div class="flex justify-between items-center pt-4"><p class="text-[10px] font-black">R$ ${m.atual.toFixed(0)} / ${m.total.toFixed(0)}</p><button onclick="abrirAporte(${m.id})" class="text-[10px] font-black border-b border-white pb-1">APORTAR</button></div>
                 </div>`;
             }).join('');
 
-            document.getElementById('filtro-banco').innerHTML = '<option value="todos">Todos</option>' + user.bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join('');
+            // 7. Renderizar Cofres / Metas
+            document.getElementById('lista-metas').innerHTML = user.metas.map((meta, index) => {
+                const progressoBruto = (meta.atual / meta.total) * 100;
+                const progresso = Math.min(100, progressoBruto);
+                const concluido = progresso >= 100;
+                
+                let emojiRunner = concluido ? '🥳' : '🏃‍♂️';
+                let corPercentual = concluido ? 'text-emerald-500' : 'text-white';
+                
+                return `
+                <div class="premium-card p-10 space-y-4">
+                    <div class="flex justify-between font-black text-[11px] text-zinc-500 uppercase">
+                        <span>${meta.nome}</span>
+                        <div class="flex gap-3">
+                            <button onclick="abrirEdit('meta', ${index})" class="text-zinc-500">✎</button>
+                            <button onclick="excluirItem('meta', ${index})" class="text-rose-950">✕</button>
+                            <span class="${corPercentual}">${progresso.toFixed(1)}%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-track">
+                        <div class="runner" style="left: calc(${progresso}% - 15px)">${emojiRunner}</div>
+                        <div class="progress-bar-fintech" style="width: ${progresso}%"></div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center pt-4">
+                        <p class="text-[10px] font-black">R$ ${meta.atual.toFixed(0)} / ${meta.total.toFixed(0)}</p>
+                        <button onclick="abrirAporte(${meta.id})" class="text-[10px] font-black border-b border-white pb-1">APORTAR</button>
+                    </div>
+                </div>`;
+            }).join('');
+
+            // 8. Atualizar Opções de Filtro de Bancos
+            let opcoesFiltro = '<option value="todos">Todas as Contas</option>';
+            user.bancos.forEach(banco => {
+                opcoesFiltro += `<option value="${banco.nome}">${banco.nome}</option>`;
+            });
+            document.getElementById('filtro-banco').innerHTML = opcoesFiltro;
+            
+            // Mantém a seleção anterior se houver
+            const filtroAtual = document.getElementById('filtro-banco').value;
+            if(filtroAtual) {
+                document.getElementById('filtro-banco').value = filtroAtual;
+            }
         }
 
-        // FUNÇÕES MANAGEMENT (EDITAR/EXCLUIR)
-        function abrirEdit(tipo, idx) {
-            editType = tipo; editIdx = idx;
-            const item = db[u][tipo === 'banco' ? 'bancos' : 'metas'][idx];
-            document.getElementById('edit-titulo').innerText = "Editar " + tipo;
-            document.getElementById('edit-nome').value = item.nome;
-            if(tipo === 'banco') {
+        // SISTEMA DE EDIÇÃO
+        function abrirEdit(tipoStr, indexArray) {
+            editType = tipoStr; 
+            editIdx = indexArray;
+            
+            let item;
+            if (tipoStr === 'banco') {
+                item = db[u].bancos[indexArray];
+                document.getElementById('edit-titulo').innerText = "Editar Conta";
                 document.getElementById('edit-v1').value = item.saldo;
-                document.getElementById('edit-v2').classList.add('hidden');
-                document.getElementById('edit-cor-wrapper').classList.remove('hidden');
+                document.getElementById('edit-v2').style.display = 'none';
+                document.getElementById('edit-cor-wrapper').style.display = 'flex';
                 document.getElementById('edit-cor').value = item.cor;
             } else {
+                item = db[u].metas[indexArray];
+                document.getElementById('edit-titulo').innerText = "Editar Cofre";
                 document.getElementById('edit-v1').value = item.atual;
                 document.getElementById('edit-v2').value = item.total;
-                document.getElementById('edit-v2').classList.remove('hidden');
-                document.getElementById('edit-cor-wrapper').classList.add('hidden');
+                document.getElementById('edit-v2').style.display = 'block';
+                document.getElementById('edit-cor-wrapper').style.display = 'none';
             }
+            
+            document.getElementById('edit-nome').value = item.nome;
             document.getElementById('modal-edit-geral').classList.remove('hidden');
         }
-        function salvarEdicaoGeral() {
-            const item = db[u][editType === 'banco' ? 'bancos' : 'metas'][editIdx];
-            item.nome = document.getElementById('edit-nome').value;
-            if(editType === 'banco') {
-                item.saldo = parseFloat(document.getElementById('edit-v1').value);
-                item.cor = document.getElementById('edit-cor').value;
-            } else {
-                item.atual = parseFloat(document.getElementById('edit-v1').value);
-                item.total = parseFloat(document.getElementById('edit-v2').value);
-            }
-            fecharModalEdit(); salvar();
-        }
-        function excluirItem(tipo, idx) { if(confirm("Deseja excluir?")) { db[u][tipo === 'banco' ? 'bancos' : 'metas'].splice(idx, 1); salvar(); } }
-        function fecharModalEdit() { document.getElementById('modal-edit-geral').classList.add('hidden'); }
 
-        // OPERAÇÕES
-        function adicionarBanco() {
-            const n = document.getElementById('nome-banco').value; const s = parseFloat(document.getElementById('saldo-inicial').value);
-            if(!n || isNaN(s)) return;
-            db[u].bancos.push({ nome: n, saldo: s, cor: document.getElementById('cor-banco').value });
-            document.getElementById('nome-banco').value = ""; document.getElementById('saldo-inicial').value = "";
-            salvar();
-        }
-        function adicionarMeta() {
-            const n = document.getElementById('nome-meta').value; const v = parseFloat(document.getElementById('valor-meta').value);
-            if(!n || isNaN(v)) return;
-            db[u].metas.push({ id: Date.now(), nome: n, total: v, atual: 0 });
-            document.getElementById('nome-meta').value = ""; document.getElementById('valor-meta').value = "";
-            salvar();
-        }
-        function confirmarLancamento() {
-            const d = document.getElementById('m-desc').value; const vT = parseFloat(document.getElementById('m-valor').value);
-            const t = document.getElementById('m-tipo').value; const pT = parseInt(document.getElementById('m-parcelas').value);
-            const bN = document.getElementById('m-banco').value; const b = db[u].bancos.find(x => x.nome === bN);
-            if(!b || isNaN(vT)) return;
-            const vP = vT / pT; const hoje = new Date();
-            for(let i=0; i<pT; i++) {
-                let dt = new Date(hoje.getFullYear(), hoje.getMonth() + i, hoje.getDate());
-                db[u].historico.unshift({ desc: d, valor: vP, tipo: t, banco: bN, cor: b.cor, data: dt.toLocaleDateString('pt-BR'), mes: dt.getMonth(), ano: dt.getFullYear(), nP: i+1, totalP: pT });
-                if(i===0) t === 'receita' ? b.saldo += vP : b.saldo -= vP;
+        function salvarEdicaoGeral() {
+            let itemAtual;
+            const nomeAlterado = document.getElementById('edit-nome').value;
+
+            if (editType === 'banco') {
+                itemAtual = db[u].bancos[editIdx];
+                itemAtual.nome = nomeAlterado;
+                itemAtual.saldo = parseFloat(document.getElementById('edit-v1').value);
+                itemAtual.cor = document.getElementById('edit-cor').value;
+            } else {
+                itemAtual = db[u].metas[editIdx];
+                itemAtual.nome = nomeAlterado;
+                itemAtual.atual = parseFloat(document.getElementById('edit-v1').value);
+                itemAtual.total = parseFloat(document.getElementById('edit-v2').value);
             }
-            document.getElementById('m-desc').value = ""; document.getElementById('m-valor').value = "";
-            fecharModal(); salvar();
+            
+            fecharModalEdit(); 
+            salvar();
         }
-        function abrirModal() { document.getElementById('m-banco').innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join(''); document.getElementById('modal').classList.remove('hidden'); }
-        function fecharModal() { document.getElementById('modal').classList.add('hidden'); }
-        function abrirAporte(id) { idMetaS = id; document.getElementById('a-origem').innerHTML = db[u].bancos.map(b => `<option value="${b.nome}">${b.nome}</option>`).join(''); document.getElementById('modal-aporte').classList.remove('hidden'); }
-        function fecharModalAporte() { document.getElementById('modal-aporte').classList.add('hidden'); }
+
+        function excluirItem(tipoStr, indexArray) { 
+            const confirmacao = confirm("Deseja realmente remover permanentemente este item?");
+            if (confirmacao) { 
+                if (tipoStr === 'banco') {
+                    db[u].bancos.splice(indexArray, 1); 
+                } else {
+                    db[u].metas.splice(indexArray, 1); 
+                }
+                salvar(); 
+            } 
+        }
+
+        function fecharModalEdit() { 
+            document.getElementById('modal-edit-geral').classList.add('hidden'); 
+        }
+
+        // SISTEMA DE CRIAÇÃO E LANÇAMENTOS
+        function adicionarBanco() {
+            const nomeBanco = document.getElementById('nome-banco').value; 
+            const saldoBanco = parseFloat(document.getElementById('saldo-inicial').value);
+            const corBanco = document.getElementById('cor-banco').value;
+            
+            if (nomeBanco === "" || isNaN(saldoBanco)) {
+                alert("Preencha todos os campos corretamente.");
+                return;
+            }
+            
+            db[u].bancos.push({ 
+                nome: nomeBanco, 
+                saldo: saldoBanco, 
+                cor: corBanco 
+            });
+            
+            // Limpa os campos
+            document.getElementById('nome-banco').value = ""; 
+            document.getElementById('saldo-inicial').value = "";
+            
+            salvar();
+        }
+
+        function adicionarMeta() {
+            const nomeCofre = document.getElementById('nome-meta').value; 
+            const valorCofre = parseFloat(document.getElementById('valor-meta').value);
+            
+            if (nomeCofre === "" || isNaN(valorCofre)) {
+                alert("Preencha todos os campos do cofre.");
+                return;
+            }
+            
+            db[u].metas.push({ 
+                id: Date.now(), 
+                nome: nomeCofre, 
+                total: valorCofre, 
+                atual: 0 
+            });
+            
+            // Limpa os campos
+            document.getElementById('nome-meta').value = ""; 
+            document.getElementById('valor-meta').value = "";
+            
+            salvar();
+        }
+
+        function confirmarLancamento() {
+            const descLanca = document.getElementById('m-desc').value; 
+            const valorLanca = parseFloat(document.getElementById('m-valor').value);
+            const tipoLanca = document.getElementById('m-tipo').value; 
+            const parcelasLanca = parseInt(document.getElementById('m-parcelas').value);
+            const nomeBancoSelecionado = document.getElementById('m-banco').value; 
+            
+            const bancoEncontrado = db[u].bancos.find(b => b.nome === nomeBancoSelecionado);
+            
+            if (!bancoEncontrado || isNaN(valorLanca) || descLanca === "") {
+                alert("Preencha a descrição e o valor corretamente.");
+                return;
+            }
+            
+            const valorPorParcela = valorLanca / parcelasLanca; 
+            const dataHoje = new Date();
+            
+            // Cria um lançamento para cada parcela
+            for (let i = 0; i < parcelasLanca; i++) {
+                let dataParcela = new Date(dataHoje.getFullYear(), dataHoje.getMonth() + i, dataHoje.getDate());
+                
+                db[u].historico.unshift({ 
+                    desc: descLanca, 
+                    valor: valorPorParcela, 
+                    tipo: tipoLanca, 
+                    banco: nomeBancoSelecionado, 
+                    cor: bancoEncontrado.cor, 
+                    data: dataParcela.toLocaleDateString('pt-BR'), 
+                    mes: dataParcela.getMonth(), 
+                    ano: dataParcela.getFullYear(), 
+                    nP: i + 1, 
+                    totalP: parcelasLanca 
+                });
+                
+                // Deduz ou adiciona ao saldo do banco apenas na primeira parcela (agora)
+                if (i === 0) {
+                    if (tipoLanca === 'receita') {
+                        bancoEncontrado.saldo += valorPorParcela;
+                    } else {
+                        bancoEncontrado.saldo -= valorPorParcela;
+                    }
+                }
+            }
+            
+            // Limpa os campos do modal
+            document.getElementById('m-desc').value = ""; 
+            document.getElementById('m-valor').value = "";
+            document.getElementById('m-parcelas').value = "1";
+            
+            fecharModal(); 
+            salvar();
+        }
+
+        // FUNÇÕES DE MANIPULAÇÃO DE MODAIS
+        function abrirModal() { 
+            let opcoesBancos = '';
+            db[u].bancos.forEach(banco => {
+                opcoesBancos += `<option value="${banco.nome}">${banco.nome}</option>`;
+            });
+            document.getElementById('m-banco').innerHTML = opcoesBancos; 
+            
+            // Reseta a simulação
+            document.getElementById('simulador-box').classList.add('hidden');
+            
+            document.getElementById('modal').classList.remove('hidden'); 
+        }
+
+        function fecharModal() { 
+            document.getElementById('modal').classList.add('hidden'); 
+        }
+
+        function abrirAporte(idCofre) { 
+            idMetaS = idCofre; 
+            let opcoesBancos = '';
+            db[u].bancos.forEach(banco => {
+                opcoesBancos += `<option value="${banco.nome}">${banco.nome}</option>`;
+            });
+            document.getElementById('a-origem').innerHTML = opcoesBancos; 
+            document.getElementById('modal-aporte').classList.remove('hidden'); 
+        }
+
+        function fecharModalAporte() { 
+            document.getElementById('modal-aporte').classList.add('hidden'); 
+        }
+
         function confirmarAporte() {
-            const v = parseFloat(document.getElementById('a-valor').value); const b = db[u].bancos.find(x => x.nome === document.getElementById('a-origem').value);
-            const m = db[u].metas.find(x => x.id === idMetaS); if(!b || !m || isNaN(v)) return;
-            b.saldo -= v; m.atual += v; const dt = new Date();
-            db[u].historico.unshift({ desc: `Aporte: ${m.nome}`, valor: v, tipo: 'despesa', banco: b.nome, cor: '#fff', data: dt.toLocaleDateString('pt-BR'), mes: dt.getMonth(), ano: dt.getFullYear(), nP: 1, totalP: 1 });
-            document.getElementById('a-valor').value = ""; fecharModalAporte(); salvar();
+            const valorAporte = parseFloat(document.getElementById('a-valor').value); 
+            const nomeBancoAporte = document.getElementById('a-origem').value;
+            
+            const bancoAporte = db[u].bancos.find(b => b.nome === nomeBancoAporte);
+            const cofreAlvo = db[u].metas.find(m => m.id === idMetaS); 
+            
+            if (!bancoAporte || !cofreAlvo || isNaN(valorAporte)) {
+                return;
+            }
+            
+            if (bancoAporte.saldo < valorAporte) {
+                alert("Saldo insuficiente neste banco para realizar o aporte.");
+                return;
+            }
+
+            bancoAporte.saldo -= valorAporte; 
+            cofreAlvo.atual += valorAporte; 
+            
+            const dataHoje = new Date();
+            db[u].historico.unshift({ 
+                desc: `Aporte: ${cofreAlvo.nome}`, 
+                valor: valorAporte, 
+                tipo: 'despesa', 
+                banco: bancoAporte.nome, 
+                cor: '#ffffff', 
+                data: dataHoje.toLocaleDateString('pt-BR'), 
+                mes: dataHoje.getMonth(), 
+                ano: dataHoje.getFullYear(), 
+                nP: 1, 
+                totalP: 1 
+            });
+            
+            document.getElementById('a-valor').value = ""; 
+            fecharModalAporte(); 
+            salvar();
         }
-        function salvar() { localStorage.setItem('guima_ultimate_v22', JSON.stringify(db)); render(); }
+
+        // SALVAMENTO NO LOCALSTORAGE
+        function salvar() { 
+            localStorage.setItem('guima_v24_uncompressed', JSON.stringify(db)); 
+            render(); 
+        }
     </script>
 </body>
 </html>
